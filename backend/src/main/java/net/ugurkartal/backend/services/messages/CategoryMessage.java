@@ -5,4 +5,5 @@ public class CategoryMessage {
     }
 
     public static final String CATEGORY_NOT_FOUND = "Kategorie nicht gefunden";
+    public static final String CATEGORY_NAME_EXISTS = "Kategorie Name existiert bereits";
 }

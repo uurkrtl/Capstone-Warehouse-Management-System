@@ -1,5 +1,7 @@
 package net.ugurkartal.backend.services.concretes;
 
+import net.ugurkartal.backend.core.mappers.ModelMapperService;
+import net.ugurkartal.backend.services.abstracts.IdService;
 import net.ugurkartal.backend.services.dtos.requests.ProductCreateRequest;
 import net.ugurkartal.backend.services.dtos.responses.ProductCreatedResponse;
 import net.ugurkartal.backend.models.Category;
@@ -13,7 +15,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.modelmapper.ModelMapper;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -24,6 +28,7 @@ class ProductManagerTest {
 
     @InjectMocks
     private ProductManager productManager;
+    private ModelMapper modelMapper;
 
     @Mock
     private ProductRepository productRepository;
@@ -37,41 +42,99 @@ class ProductManagerTest {
     @Mock
     private ProductBusinessRules productBusinessRules;
 
+    @Mock
+    private ModelMapperService modelMapperService;
+
+    @Mock
+    private IdService idService;
+
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
+        modelMapper = mock(ModelMapper.class);
     }
 
     @Test
     void addProductReturnsCreatedResponseWhenProductIsValid() {
-        ProductCreateRequest request = new ProductCreateRequest();
-        // Fill the request with valid data
-        Product product = new Product();
-        // Fill the product with valid data
-        Category category = new Category();
-        // Fill the category with valid data
+        Product product = Product.builder()
+                .id("1")
+                .name("Test")
+                .description("Test")
+                .salePrice(10.0)
+                .stock(10)
+                .criticalStock(5)
+                .imageUrl("https://test.com")
+                .category(Category.builder().id("1").build())
+                .build();
 
-        when(categoryRepository.findById(anyString())).thenReturn(Optional.of(category));
-        when(productRepository.save(any(Product.class))).thenReturn(product);
+        ProductCreatedResponse expectedResponse = ProductCreatedResponse.builder()
+                .id("1")
+                .name("Test")
+                .description("Test")
+                .salePrice(10.0)
+                .stock(10)
+                .criticalStock(5)
+                .imageUrl("https://test.com")
+                .category(Category.builder().id("1").build())
+                .build();
+
+        ProductCreateRequest request = ProductCreateRequest.builder()
+                .name("Test")
+                .description("Test")
+                .salePrice(10.0)
+                .stock(10)
+                .criticalStock(5)
+                .categoryId("1")
+                .imageUrl("https://test.com")
+                .build();
+
+        when(idService.generateCategoryId()).thenReturn("1");
+        when(modelMapperService.forRequest()).thenReturn(modelMapper);
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(modelMapper.map(request, Product.class)).thenReturn(product);
+        when(categoryRepository.findById("1")).thenReturn(Optional.of(Category.builder().id("1").build()));
+        when(productRepository.save(product)).thenReturn(product);
+        when(modelMapper.map(product, ProductCreatedResponse.class)).thenReturn(ProductCreatedResponse.builder().id("1").build());
 
         ProductCreatedResponse actualResponse = productManager.addProduct(request);
 
         verify(productBusinessRules, times(1)).checkIfProductNameExists(anyString());
         verify(categoryBusinessRules, times(1)).checkIfCategoryByIdNotFound(anyString());
-        verify(productRepository, times(1)).save(any(Product.class));
-        assertEquals(product.getId(), actualResponse.getId());
+        verify(productRepository, times(1)).save(product);
+        assertEquals(expectedResponse.getId(), actualResponse.getId());
     }
 
     @Test
-    void addProductThrowsExceptionWhenProductIsInvalid() {
-        ProductCreateRequest request = new ProductCreateRequest();
-        // Fill the request with invalid data
+    void addProductThrowsNoSuchElementExceptionWhenCategoryIsInvalid() {
+        ProductCreateRequest request = ProductCreateRequest.builder()
+                .name("Test")
+                .description("Test")
+                .salePrice(10.0)
+                .stock(10)
+                .criticalStock(5)
+                .categoryId("2")
+                .imageUrl("https://test.com")
+                .build();
 
-        doThrow(new IllegalArgumentException()).when(categoryBusinessRules).checkIfCategoryByIdNotFound(anyString());
+        Product product = Product.builder()
+                .id("1")
+                .name("Test")
+                .description("Test")
+                .salePrice(10.0)
+                .stock(10)
+                .criticalStock(5)
+                .imageUrl("https://test.com")
+                .category(Category.builder().id("1").build())
+                .build();
 
-        assertThrows(IllegalArgumentException.class, () -> productManager.addProduct(request));
+        when(idService.generateCategoryId()).thenReturn("1");
+        when(modelMapperService.forRequest()).thenReturn(modelMapper);
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(modelMapper.map(request, Product.class)).thenReturn(product);
+        when(categoryRepository.findById("1")).thenReturn(Optional.of(Category.builder().id("1").build()));
+        when(productRepository.save(product)).thenReturn(product);
+        when(modelMapper.map(product, ProductCreatedResponse.class)).thenReturn(ProductCreatedResponse.builder().id("1").build());
 
-        verify(productBusinessRules, times(1)).checkIfProductNameExists(anyString());
-        verify(categoryBusinessRules, times(1)).checkIfCategoryByIdNotFound(anyString());
+        assertThrows(NoSuchElementException.class, () -> productManager.addProduct(request));
     }
 }
