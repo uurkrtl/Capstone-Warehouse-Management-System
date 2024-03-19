@@ -1,11 +1,10 @@
-import 'bootstrap/dist/css/bootstrap.css';
-import Dashboard from "./layouts/Dashboard.tsx";
+import './App.css'
 
 function App() {
 
   return (
     <>
-      <Dashboard />
+
     </>
   )
 }
