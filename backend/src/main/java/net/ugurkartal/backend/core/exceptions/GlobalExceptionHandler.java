@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .apiPath(request.getDescription(false))
                 .status(HttpStatus.CONFLICT)
-                .title("Duplicate Record")
+                .title("Doppelter Datensatz gefunden")
                 .message(ex.getMessage())
                 .timestamp(LocalDateTime.now())
                 .build();
@@ -32,12 +32,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleRecordNotFoundException(RecordNotFoundException ex, WebRequest request) {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .apiPath(request.getDescription(false))
-                .status(HttpStatus.CONFLICT)
-                .title("Record Not Found")
+                .status(HttpStatus.NOT_FOUND)
+                .title("Aufnahme nicht gefunden")
                 .message(ex.getMessage())
                 .timestamp(LocalDateTime.now())
                 .build();
-        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(StockNotZeroException.class)
@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .apiPath(request.getDescription(false))
                 .status(HttpStatus.CONFLICT)
-                .title("Record Not Found")
+                .title("Lagerbestand ist nicht Null")
                 .message(ex.getMessage())
                 .timestamp(LocalDateTime.now())
                 .build();
@@ -63,7 +63,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .apiPath(request.getDescription(false))
                 .status(HttpStatus.BAD_REQUEST)
-                .title("Validation Failed")
+                .title("Validierung fehlgeschlagen")
                 .message(errorMessages.charAt(errorMessages.length()-2)=='-' ? errorMessages.substring(0,errorMessages.length()-3) : errorMessages.toString())
                 .timestamp(LocalDateTime.now())
                 .build();
@@ -75,7 +75,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .apiPath(request.getDescription(false))
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .title("Exception Occurred")
+                .title("Ausnahme aufgetreten")
                 .message(ex.getMessage())
                 .timestamp(LocalDateTime.now())
                 .build();
