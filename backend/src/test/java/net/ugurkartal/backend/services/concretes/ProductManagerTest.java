@@ -8,6 +8,7 @@ import net.ugurkartal.backend.models.Category;
 import net.ugurkartal.backend.models.Product;
 import net.ugurkartal.backend.repositories.CategoryRepository;
 import net.ugurkartal.backend.repositories.ProductRepository;
+import net.ugurkartal.backend.services.dtos.responses.ProductGetAllResponse;
 import net.ugurkartal.backend.services.rules.CategoryBusinessRules;
 import net.ugurkartal.backend.services.rules.ProductBusinessRules;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -52,6 +54,21 @@ class ProductManagerTest {
     public void setup() {
         MockitoAnnotations.openMocks(this);
         modelMapper = mock(ModelMapper.class);
+    }
+
+    @Test
+    void getAllProductsReturnsListOfProducts() {
+        List<Product> products = List.of(
+                Product.builder().id("1").build(),
+                Product.builder().id("2").build()
+        );
+
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(productRepository.findAll()).thenReturn(products);
+
+        List<ProductGetAllResponse> response = productManager.getAllProducts();
+
+        assertEquals(2, response.size());
     }
 
     @Test

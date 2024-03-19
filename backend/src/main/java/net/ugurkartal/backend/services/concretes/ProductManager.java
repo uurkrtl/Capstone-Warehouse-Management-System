@@ -10,11 +10,13 @@ import net.ugurkartal.backend.services.abstracts.IdService;
 import net.ugurkartal.backend.services.abstracts.ProductService;
 import net.ugurkartal.backend.services.dtos.requests.ProductCreateRequest;
 import net.ugurkartal.backend.services.dtos.responses.ProductCreatedResponse;
+import net.ugurkartal.backend.services.dtos.responses.ProductGetAllResponse;
 import net.ugurkartal.backend.services.rules.CategoryBusinessRules;
 import net.ugurkartal.backend.services.rules.ProductBusinessRules;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +27,14 @@ public class ProductManager implements ProductService {
     private final IdService idService;
     private final ProductBusinessRules productBusinessRules;
     private final CategoryBusinessRules categoryBusinessRules;
+
+    @Override
+    public List<ProductGetAllResponse> getAllProducts() {
+        List<Product> products = productRepository.findAll();
+        return products.stream()
+                .map(product -> modelMapperService.forResponse()
+                        .map(product, ProductGetAllResponse.class)).toList();
+    }
 
     @Override
     public ProductCreatedResponse addProduct(ProductCreateRequest productCreateRequest) {
