@@ -8,10 +8,12 @@ import net.ugurkartal.backend.services.abstracts.CategoryService;
 import net.ugurkartal.backend.services.abstracts.IdService;
 import net.ugurkartal.backend.services.dtos.requests.CategoryCreateRequest;
 import net.ugurkartal.backend.services.dtos.responses.CategoryCreatedResponse;
+import net.ugurkartal.backend.services.dtos.responses.CategoryGetAllResponse;
 import net.ugurkartal.backend.services.rules.CategoryBusinessRules;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +22,14 @@ public class CategoryManager implements CategoryService {
     private final ModelMapperService modelMapperService;
     private final IdService idService;
     private final CategoryBusinessRules categoryBusinessRules;
+
+    @Override
+    public List<CategoryGetAllResponse> getAllCategories() {
+        List<Category> categories = categoryRepository.findAll();
+        return categories.stream()
+                .map(category->this.modelMapperService.forResponse()
+                        .map(category, CategoryGetAllResponse.class)).toList();
+    }
 
     @Override
     public CategoryCreatedResponse addCategory(CategoryCreateRequest categoryCreateRequest) {
