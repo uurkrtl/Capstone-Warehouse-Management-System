@@ -4,9 +4,9 @@ import Dashboard from "./layouts/Dashboard.tsx";
 function App() {
 
   return (
-    <>
+    <div className="container">
       <Dashboard />
-    </>
+    </div>
   )
 }
 
