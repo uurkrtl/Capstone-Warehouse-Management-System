@@ -16,4 +16,10 @@ public class CategoryBusinessRules {
             throw new RecordNotFoundException(CategoryMessage.CATEGORY_NOT_FOUND);
         }
     }
+
+    public void checkIfCategoryNameExists(String name) {
+        if(this.categoryRepository.existsByName(name)) {
+            throw new RecordNotFoundException(CategoryMessage.CATEGORY_NAME_EXISTS);
+        }
+    }
 }
