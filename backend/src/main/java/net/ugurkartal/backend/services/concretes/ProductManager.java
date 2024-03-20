@@ -11,12 +11,15 @@ import net.ugurkartal.backend.services.abstracts.ProductService;
 import net.ugurkartal.backend.services.dtos.requests.ProductCreateRequest;
 import net.ugurkartal.backend.services.dtos.responses.ProductCreatedResponse;
 import net.ugurkartal.backend.services.dtos.responses.ProductGetAllResponse;
+import net.ugurkartal.backend.services.messages.ProductMessage;
 import net.ugurkartal.backend.services.rules.CategoryBusinessRules;
 import net.ugurkartal.backend.services.rules.ProductBusinessRules;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,11 +40,27 @@ public class ProductManager implements ProductService {
     }
 
     @Override
+    public ProductCreatedResponse getProductById(String id) {
+        productBusinessRules.checkIfProductByIdNotFound(id);
+        Optional<Product> productOptional = this.productRepository.findById(id);
+        if(productOptional.isPresent()) {
+            Product product = productOptional.get();
+            return modelMapperService.forResponse().map(product, ProductCreatedResponse.class);
+        } else {
+            throw new NoSuchElementException(ProductMessage.PRODUCT_NOT_FOUND);
+        }
+    }
+
+    @Override
     public ProductCreatedResponse addProduct(ProductCreateRequest productCreateRequest) {
         productBusinessRules.checkIfProductNameExists(productCreateRequest.getName());
         categoryBusinessRules.checkIfCategoryByIdNotFound(productCreateRequest.getCategoryId());
         Product product = modelMapperService.forRequest().map(productCreateRequest, Product.class);
         Category selectedCategory = categoryRepository.findById(productCreateRequest.getCategoryId()).orElseThrow();
+
+        if (product.getImageUrl().isEmpty()) {
+            product.setImageUrl("https://img.freepik.com/vektoren-premium/foto-kommt-bald-bilderrahmen_268834-398.jpg");
+        }
 
         product.setId(idService.generateProductId());
         product.setActive(true);
