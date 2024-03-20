@@ -4,6 +4,7 @@ import net.ugurkartal.backend.models.Category;
 import net.ugurkartal.backend.repositories.CategoryRepository;
 import net.ugurkartal.backend.services.abstracts.ProductService;
 import net.ugurkartal.backend.services.dtos.requests.ProductCreateRequest;
+import net.ugurkartal.backend.services.dtos.requests.ProductUpdateRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -131,5 +132,45 @@ class ProductControllerIntegrationTest {
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void updateProductReturnsUpdatedResponseWhenProductIsValid() throws Exception {
+        String categoryId = categoryRepository.save(Category.builder().build()).getId();
+        ProductCreateRequest productCreateRequest = ProductCreateRequest.builder()
+                .name("Test")
+                .description("Test")
+                .salePrice(10.0)
+                .stock(10)
+                .criticalStock(5)
+                .categoryId(categoryId)
+                .imageUrl("https://test.com")
+                .build();
+
+        String productId = productService.addProduct(productCreateRequest).getId();
+
+        ProductUpdateRequest request = ProductUpdateRequest.builder()
+                .id(productId)
+                .name("Updated Test")
+                .description("Updated Test")
+                .salePrice(15.0)
+                .stock(15)
+                .criticalStock(5)
+                .categoryId(categoryId)
+                .imageUrl("https://updatedtest.com")
+                .build();
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/api/products")
+                        .content(objectMapper.writeValueAsString(request))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(productId))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Updated Test"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.description").value("Updated Test"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.salePrice").value(15.0))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.stock").value(15))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.criticalStock").value(5))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.imageUrl").value("https://updatedtest.com"));
     }
 }

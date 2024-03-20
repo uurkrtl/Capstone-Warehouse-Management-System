@@ -44,6 +44,10 @@ function ProductList() {
                 <h2>Produktliste</h2>
             </div>
 
+            <div className="d-flex justify-content-end">
+                <Link to={"/products/add"} className="btn btn-outline-secondary">Produkt erstellen</Link>
+            </div>
+
             <div className="form-check form-check-inline mb-3">
                 <input className="form-check-input" type="radio" name="inlineRadioOptions" id="allProducts"
                        value="allProducts" onClick={handleStatusChange} defaultChecked/>
@@ -96,11 +100,10 @@ function ProductList() {
                                     <span className="badge text-bg-success rounded-pill">Aktiv</span>
                                     : <span className="badge text-bg-danger rounded-pill">Passiv</span>}
                             </td>
-                            <td><Link to={`/products/detail/${product.id}`} className="btn btn-outline-info">Detail</Link></td>
-                            <td><Link to={"/"} className="btn btn-outline-secondary">Kaufhistorie</Link>
-                            </td>
-                            <td><Link to={"/"} className="btn btn-outline-success">Verkaufsübersicht</Link>
-                            </td>
+                            <td><Link to={`/products/detail/${product.id}`}
+                                      className="btn btn-outline-info">Detail</Link></td>
+                            <td><Link to={"/"} className="btn btn-outline-secondary">Kaufhistorie</Link></td>
+                            <td><Link to={"/"} className="btn btn-outline-success">Verkaufsübersicht</Link></td>
                         </tr>
                     );
                 })}

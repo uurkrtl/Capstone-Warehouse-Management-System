@@ -3,6 +3,7 @@ package net.ugurkartal.backend.services.concretes;
 import net.ugurkartal.backend.core.mappers.ModelMapperService;
 import net.ugurkartal.backend.services.abstracts.IdService;
 import net.ugurkartal.backend.services.dtos.requests.ProductCreateRequest;
+import net.ugurkartal.backend.services.dtos.requests.ProductUpdateRequest;
 import net.ugurkartal.backend.services.dtos.responses.ProductCreatedResponse;
 import net.ugurkartal.backend.models.Category;
 import net.ugurkartal.backend.models.Product;
@@ -91,7 +92,7 @@ class ProductManagerTest {
                 .stock(10)
                 .criticalStock(5)
                 .imageUrl("https://test.com")
-                .category(Category.builder().id("1").build())
+                .categoryId("1")
                 .build();
 
         String id = "1";
@@ -133,7 +134,7 @@ class ProductManagerTest {
                 .stock(10)
                 .criticalStock(5)
                 .imageUrl("https://test.com")
-                .category(Category.builder().id("1").build())
+                .categoryId("1")
                 .build();
 
         ProductCreateRequest request = ProductCreateRequest.builder()
@@ -193,7 +194,7 @@ class ProductManagerTest {
                 .stock(10)
                 .criticalStock(5)
                 .imageUrl("https://img.freepik.com/vektoren-premium/foto-kommt-bald-bilderrahmen_268834-398.jpg")
-                .category(Category.builder().id("1").build())
+                .categoryId("1")
                 .build();
 
         when(idService.generateCategoryId()).thenReturn("1");
@@ -245,5 +246,63 @@ class ProductManagerTest {
         when(modelMapper.map(product, ProductCreatedResponse.class)).thenReturn(ProductCreatedResponse.builder().id("1").build());
 
         assertThrows(NoSuchElementException.class, () -> productManager.addProduct(request));
+    }
+
+    @Test
+    void updateProductReturnsUpdatedResponseWhenProductIsValid() {
+        ProductUpdateRequest request = ProductUpdateRequest.builder()
+                .id("1")
+                .name("Updated Test")
+                .description("Updated Test")
+                .salePrice(15.0)
+                .stock(15)
+                .criticalStock(5)
+                .categoryId("1")
+                .imageUrl("https://updatedtest.com")
+                .build();
+
+        Product updatedProduct = Product.builder()
+                .id("1")
+                .name("Updated Test")
+                .description("Updated Test")
+                .salePrice(15.0)
+                .stock(15)
+                .criticalStock(5)
+                .imageUrl("https://updatedtest.com")
+                .category(Category.builder().id("1").build())
+                .build();
+
+        ProductCreatedResponse expectedResponse = ProductCreatedResponse.builder()
+                .id("1")
+                .name("Updated Test")
+                .description("Updated Test")
+                .salePrice(15.0)
+                .stock(15)
+                .criticalStock(5)
+                .imageUrl("https://updatedtest.com")
+                .categoryId("1")
+                .build();
+
+        when(modelMapperService.forRequest()).thenReturn(modelMapper);
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(modelMapper.map(request, Product.class)).thenReturn(updatedProduct);
+        when(categoryRepository.findById("1")).thenReturn(Optional.of(Category.builder().id("1").build()));
+        when(productRepository.findById("1")).thenReturn(Optional.of(Product.builder().id("1").build()));
+        when(productRepository.save(updatedProduct)).thenReturn(updatedProduct);
+        when(modelMapper.map(updatedProduct, ProductCreatedResponse.class)).thenReturn(expectedResponse);
+
+        ProductCreatedResponse actualResponse = productManager.updateProduct(request);
+
+        verify(productBusinessRules, times(1)).checkIfProductByIdNotFound(anyString());
+        verify(productBusinessRules, times(1)).checkIfProductNameExists(anyString(), anyString());
+        verify(categoryBusinessRules, times(1)).checkIfCategoryByIdNotFound(anyString());
+        verify(productRepository, times(1)).save(updatedProduct);
+        assertEquals(expectedResponse.getId(), actualResponse.getId());
+        assertEquals(expectedResponse.getName(), actualResponse.getName());
+        assertEquals(expectedResponse.getDescription(), actualResponse.getDescription());
+        assertEquals(expectedResponse.getSalePrice(), actualResponse.getSalePrice());
+        assertEquals(expectedResponse.getStock(), actualResponse.getStock());
+        assertEquals(expectedResponse.getCriticalStock(), actualResponse.getCriticalStock());
+        assertEquals(expectedResponse.getImageUrl(), actualResponse.getImageUrl());
     }
 }

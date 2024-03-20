@@ -9,6 +9,7 @@ import net.ugurkartal.backend.repositories.ProductRepository;
 import net.ugurkartal.backend.services.abstracts.IdService;
 import net.ugurkartal.backend.services.abstracts.ProductService;
 import net.ugurkartal.backend.services.dtos.requests.ProductCreateRequest;
+import net.ugurkartal.backend.services.dtos.requests.ProductUpdateRequest;
 import net.ugurkartal.backend.services.dtos.responses.ProductCreatedResponse;
 import net.ugurkartal.backend.services.dtos.responses.ProductGetAllResponse;
 import net.ugurkartal.backend.services.messages.ProductMessage;
@@ -69,5 +70,26 @@ public class ProductManager implements ProductService {
         product = productRepository.save(product);
 
         return modelMapperService.forResponse().map(product, ProductCreatedResponse.class);
+    }
+
+    @Override
+    public ProductCreatedResponse updateProduct(ProductUpdateRequest productUpdateRequest) {
+        productBusinessRules.checkIfProductByIdNotFound(productUpdateRequest.getId());
+        productBusinessRules.checkIfProductNameExists(productUpdateRequest.getName(), productUpdateRequest.getId());
+        categoryBusinessRules.checkIfCategoryByIdNotFound(productUpdateRequest.getCategoryId());
+        Product updatedProduct = modelMapperService.forRequest().map(productUpdateRequest, Product.class);
+        Category selectedCategory = categoryRepository.findById(productUpdateRequest.getCategoryId()).orElseThrow();
+        Optional<Product> foundProductOptional = this.productRepository.findById(productUpdateRequest.getId());
+        if(foundProductOptional.isPresent()) {
+            Product foundProduct = foundProductOptional.get();
+            updatedProduct.setCreatedAt(foundProduct.getCreatedAt());
+            updatedProduct.setActive(foundProduct.isActive());
+        } else {
+            throw new NoSuchElementException(ProductMessage.PRODUCT_NOT_FOUND);
+        }
+        updatedProduct.setUpdatedAt(LocalDateTime.now());
+        updatedProduct.setCategory(selectedCategory);
+        updatedProduct = productRepository.save(updatedProduct);
+        return modelMapperService.forResponse().map(updatedProduct, ProductCreatedResponse.class);
     }
 }

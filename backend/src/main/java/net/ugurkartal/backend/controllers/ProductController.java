@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import net.ugurkartal.backend.services.abstracts.ProductService;
 import net.ugurkartal.backend.services.dtos.requests.ProductCreateRequest;
+import net.ugurkartal.backend.services.dtos.requests.ProductUpdateRequest;
 import net.ugurkartal.backend.services.dtos.responses.ProductCreatedResponse;
 import net.ugurkartal.backend.services.dtos.responses.ProductGetAllResponse;
 import org.springframework.http.HttpStatus;
@@ -31,5 +32,10 @@ public class ProductController {
     @ResponseStatus(HttpStatus.CREATED)
     public ProductCreatedResponse addProduct(@Valid @RequestBody ProductCreateRequest productCreateRequest) {
         return productService.addProduct(productCreateRequest);
+    }
+
+    @PutMapping
+    public ProductCreatedResponse updateProduct(@Valid @RequestBody ProductUpdateRequest productUpdateRequest) {
+        return productService.updateProduct(productUpdateRequest);
     }
 }
