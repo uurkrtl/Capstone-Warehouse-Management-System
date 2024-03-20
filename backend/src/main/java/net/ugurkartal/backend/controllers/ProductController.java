@@ -22,6 +22,11 @@ public class ProductController {
         return productService.getAllProducts();
     }
 
+    @GetMapping("/{id}")
+    public ProductCreatedResponse getProductById(@PathVariable String id) {
+        return productService.getProductById(id);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProductCreatedResponse addProduct(@Valid @RequestBody ProductCreateRequest productCreateRequest) {

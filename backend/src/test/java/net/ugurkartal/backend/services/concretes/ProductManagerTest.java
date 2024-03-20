@@ -22,8 +22,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class ProductManagerTest {
@@ -69,6 +68,48 @@ class ProductManagerTest {
         List<ProductGetAllResponse> response = productManager.getAllProducts();
 
         assertEquals(2, response.size());
+    }
+
+    @Test
+    void getProductByIdReturnsProductWhenProductExists() {
+        Product product = Product.builder()
+                .id("1")
+                .name("Test")
+                .description("Test")
+                .salePrice(10.0)
+                .stock(10)
+                .criticalStock(5)
+                .imageUrl("https://test.com")
+                .category(Category.builder().id("1").build())
+                .build();
+
+        ProductCreatedResponse expectedResponse = ProductCreatedResponse.builder()
+                .id("1")
+                .name("Test")
+                .description("Test")
+                .salePrice(10.0)
+                .stock(10)
+                .criticalStock(5)
+                .imageUrl("https://test.com")
+                .category(Category.builder().id("1").build())
+                .build();
+
+        String id = "1";
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(modelMapper.map(product, ProductCreatedResponse.class)).thenReturn(ProductCreatedResponse.builder().id("1").build());
+        when(productRepository.findById(id)).thenReturn(Optional.of(product));
+
+        ProductCreatedResponse actual = productManager.getProductById(id);
+
+        assertEquals(expectedResponse.getId(), actual.getId());
+    }
+
+    @Test
+    void getProductByIdThrowsNoSuchElementExceptionWhenProductDoesNotExist() {
+        String id = "1";
+        when(productRepository.findById(id)).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, () -> productManager.getProductById(id));
     }
 
     @Test
