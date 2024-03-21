@@ -1,7 +1,7 @@
 import {Product} from "../types/Product.tsx";
 import {Category} from "../types/Category.tsx";
 
-function ProductCommonFormFields({ product, setProduct, categories }: { product: Product, setProduct: (product: Product) => void, categories: Category[] }) {
+function ProductCommonFormFields({ product, setProduct, categories }: Readonly<{ product: Product, setProduct: (product: Product) => void, categories: Category[] }>) {
     return (
         <div className="row g-3">
 
