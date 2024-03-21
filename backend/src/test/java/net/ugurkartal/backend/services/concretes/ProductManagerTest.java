@@ -294,4 +294,30 @@ class ProductManagerTest {
         assertEquals(expectedResponse.getCriticalStock(), actualResponse.getCriticalStock());
         assertEquals(expectedResponse.getImageUrl(), actualResponse.getImageUrl());
     }
+
+    @Test
+    void changeProductStatusChangesStatusCorrectly() {
+        String id = "1";
+
+        Product updatedProduct = Product.builder()
+                .id("1")
+                .isActive(true)
+                .build();
+
+        ProductCreatedResponse expectedResponse = ProductCreatedResponse.builder()
+                .id("1")
+                .isActive(true)
+                .build();
+
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(productRepository.findById("1")).thenReturn(Optional.of(Product.builder().id("1").build()));
+        when(productRepository.save(any(Product.class))).thenReturn(updatedProduct);
+        when(modelMapper.map(updatedProduct, ProductCreatedResponse.class)).thenReturn(expectedResponse);
+
+        ProductCreatedResponse actualResponse = productManager.changeProductStatus(id, true);
+
+        verify(productBusinessRules, times(1)).checkIfProductByIdNotFound(anyString());
+        verify(productRepository, times(1)).save(any(Product.class));
+        assertEquals(expectedResponse.isActive(), actualResponse.isActive());
+    }
 }

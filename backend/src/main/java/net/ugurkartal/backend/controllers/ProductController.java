@@ -37,4 +37,9 @@ public class ProductController {
     public ProductCreatedResponse updateProduct(@PathVariable String id, @Valid @RequestBody ProductRequest productRequest) {
         return productService.updateProduct(id, productRequest);
     }
+
+    @PutMapping("/status/{id}")
+    public ProductCreatedResponse changeProductStatus(@PathVariable String id, @RequestParam boolean status) {
+        return productService.changeProductStatus(id, status);
+    }
 }

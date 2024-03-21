@@ -64,6 +64,7 @@ public class ProductManager implements ProductService {
 
         product.setId(idService.generateProductId());
         product.setActive(true);
+        product.setStock(0);
         product.setCreatedAt(LocalDateTime.now());
         product.setCategory(selectedCategory);
         product = productRepository.save(product);
@@ -91,5 +92,16 @@ public class ProductManager implements ProductService {
         updatedProduct.setCategory(selectedCategory);
         updatedProduct = productRepository.save(updatedProduct);
         return modelMapperService.forResponse().map(updatedProduct, ProductCreatedResponse.class);
+    }
+
+    @Override
+    public ProductCreatedResponse changeProductStatus(String id, boolean status) {
+        productBusinessRules.checkIfProductByIdNotFound(id);
+        productBusinessRules.checkIfProductStockNotZero(id, status);
+        Product product = productRepository.findById(id).orElseThrow();
+        product.setActive(status);
+        product.setUpdatedAt(LocalDateTime.now());
+        product = productRepository.save(product);
+        return modelMapperService.forResponse().map(product, ProductCreatedResponse.class);
     }
 }

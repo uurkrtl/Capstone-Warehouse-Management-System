@@ -2,6 +2,7 @@ package net.ugurkartal.backend.services.rules;
 
 import net.ugurkartal.backend.core.exceptions.types.DuplicateRecordException;
 import net.ugurkartal.backend.core.exceptions.types.RecordNotFoundException;
+import net.ugurkartal.backend.core.exceptions.types.StockNotZeroException;
 import net.ugurkartal.backend.models.Product;
 import net.ugurkartal.backend.repositories.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -76,5 +77,35 @@ class ProductBusinessRulesTest {
         when(productRepository.existsById(existingProductId)).thenReturn(true);
 
         assertDoesNotThrow(() -> productBusinessRules.checkIfProductByIdNotFound(existingProductId));
+    }
+
+    @Test
+    void checkIfProductStockNotZero_doesNotThrowExceptionWhenStockIsZeroAndStatusIsFalse() {
+        String productId = "1";
+        boolean status = false;
+
+        Product product = Product.builder()
+                .id(productId)
+                .stock(0)
+                .build();
+
+        when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+
+        assertDoesNotThrow(() -> productBusinessRules.checkIfProductStockNotZero(productId, status));
+    }
+
+    @Test
+    void checkIfProductStockNotZero_throwsStockNotZeroExceptionWhenStockIsGreaterThanZeroAndStatusIsFalse() {
+        String productId = "1";
+        boolean status = false;
+
+        Product product = Product.builder()
+                .id(productId)
+                .stock(1)
+                .build();
+
+        when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+
+        assertThrows(StockNotZeroException.class, () -> productBusinessRules.checkIfProductStockNotZero(productId, status));
     }
 }
