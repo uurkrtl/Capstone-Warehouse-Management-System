@@ -2,8 +2,7 @@ package net.ugurkartal.backend.services.concretes;
 
 import net.ugurkartal.backend.core.mappers.ModelMapperService;
 import net.ugurkartal.backend.services.abstracts.IdService;
-import net.ugurkartal.backend.services.dtos.requests.ProductCreateRequest;
-import net.ugurkartal.backend.services.dtos.requests.ProductUpdateRequest;
+import net.ugurkartal.backend.services.dtos.requests.ProductRequest;
 import net.ugurkartal.backend.services.dtos.responses.ProductCreatedResponse;
 import net.ugurkartal.backend.models.Category;
 import net.ugurkartal.backend.models.Product;
@@ -120,7 +119,6 @@ class ProductManagerTest {
                 .name("Test")
                 .description("Test")
                 .salePrice(10.0)
-                .stock(10)
                 .criticalStock(5)
                 .imageUrl("https://test.com")
                 .category(Category.builder().id("1").build())
@@ -131,17 +129,15 @@ class ProductManagerTest {
                 .name("Test")
                 .description("Test")
                 .salePrice(10.0)
-                .stock(10)
                 .criticalStock(5)
                 .imageUrl("https://test.com")
                 .categoryId("1")
                 .build();
 
-        ProductCreateRequest request = ProductCreateRequest.builder()
+        ProductRequest request = ProductRequest.builder()
                 .name("Test")
                 .description("Test")
                 .salePrice(10.0)
-                .stock(10)
                 .criticalStock(5)
                 .categoryId("1")
                 .imageUrl("https://test.com")
@@ -165,11 +161,10 @@ class ProductManagerTest {
 
     @Test
     void addProductReturnsCreatedResponseWithDefaultImageUrlWhenImageUrlIsEmpty() {
-        ProductCreateRequest request = ProductCreateRequest.builder()
+        ProductRequest request = ProductRequest.builder()
                 .name("Test")
                 .description("Test")
                 .salePrice(10.0)
-                .stock(10)
                 .criticalStock(5)
                 .categoryId("1")
                 .imageUrl("")
@@ -180,7 +175,6 @@ class ProductManagerTest {
                 .name("Test")
                 .description("Test")
                 .salePrice(10.0)
-                .stock(10)
                 .criticalStock(5)
                 .imageUrl("https://img.freepik.com/vektoren-premium/foto-kommt-bald-bilderrahmen_268834-398.jpg")
                 .category(Category.builder().id("1").build())
@@ -191,7 +185,6 @@ class ProductManagerTest {
                 .name("Test")
                 .description("Test")
                 .salePrice(10.0)
-                .stock(10)
                 .criticalStock(5)
                 .imageUrl("https://img.freepik.com/vektoren-premium/foto-kommt-bald-bilderrahmen_268834-398.jpg")
                 .categoryId("1")
@@ -216,11 +209,10 @@ class ProductManagerTest {
 
     @Test
     void addProductThrowsNoSuchElementExceptionWhenCategoryIsInvalid() {
-        ProductCreateRequest request = ProductCreateRequest.builder()
+        ProductRequest request = ProductRequest.builder()
                 .name("Test")
                 .description("Test")
                 .salePrice(10.0)
-                .stock(10)
                 .criticalStock(5)
                 .categoryId("2")
                 .imageUrl("https://test.com")
@@ -231,7 +223,6 @@ class ProductManagerTest {
                 .name("Test")
                 .description("Test")
                 .salePrice(10.0)
-                .stock(10)
                 .criticalStock(5)
                 .imageUrl("https://test.com")
                 .category(Category.builder().id("1").build())
@@ -250,12 +241,11 @@ class ProductManagerTest {
 
     @Test
     void updateProductReturnsUpdatedResponseWhenProductIsValid() {
-        ProductUpdateRequest request = ProductUpdateRequest.builder()
-                .id("1")
+        String id = "1";
+        ProductRequest request = ProductRequest.builder()
                 .name("Updated Test")
                 .description("Updated Test")
                 .salePrice(15.0)
-                .stock(15)
                 .criticalStock(5)
                 .categoryId("1")
                 .imageUrl("https://updatedtest.com")
@@ -291,7 +281,7 @@ class ProductManagerTest {
         when(productRepository.save(updatedProduct)).thenReturn(updatedProduct);
         when(modelMapper.map(updatedProduct, ProductCreatedResponse.class)).thenReturn(expectedResponse);
 
-        ProductCreatedResponse actualResponse = productManager.updateProduct(request);
+        ProductCreatedResponse actualResponse = productManager.updateProduct(id, request);
 
         verify(productBusinessRules, times(1)).checkIfProductByIdNotFound(anyString());
         verify(productBusinessRules, times(1)).checkIfProductNameExists(anyString(), anyString());
@@ -301,7 +291,6 @@ class ProductManagerTest {
         assertEquals(expectedResponse.getName(), actualResponse.getName());
         assertEquals(expectedResponse.getDescription(), actualResponse.getDescription());
         assertEquals(expectedResponse.getSalePrice(), actualResponse.getSalePrice());
-        assertEquals(expectedResponse.getStock(), actualResponse.getStock());
         assertEquals(expectedResponse.getCriticalStock(), actualResponse.getCriticalStock());
         assertEquals(expectedResponse.getImageUrl(), actualResponse.getImageUrl());
     }

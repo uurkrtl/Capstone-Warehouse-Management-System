@@ -3,8 +3,7 @@ package net.ugurkartal.backend.controllers;
 import net.ugurkartal.backend.models.Category;
 import net.ugurkartal.backend.repositories.CategoryRepository;
 import net.ugurkartal.backend.services.abstracts.ProductService;
-import net.ugurkartal.backend.services.dtos.requests.ProductCreateRequest;
-import net.ugurkartal.backend.services.dtos.requests.ProductUpdateRequest;
+import net.ugurkartal.backend.services.dtos.requests.ProductRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -48,17 +47,16 @@ class ProductControllerIntegrationTest {
     @Test
     void getProductByIdReturnsProductWhenProductExists() throws Exception {
         String categoryId = categoryRepository.save(Category.builder().build()).getId();
-        ProductCreateRequest productCreateRequest = ProductCreateRequest.builder()
+        ProductRequest productRequest = ProductRequest.builder()
                 .name("Test")
                 .description("Test")
                 .salePrice(10.0)
-                .stock(10)
                 .criticalStock(5)
                 .categoryId(categoryId)
                 .imageUrl("https://test.com")
                 .build();
 
-        String productId = productService.addProduct(productCreateRequest).getId();
+        String productId = productService.addProduct(productRequest).getId();
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/api/products/" + productId)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -78,11 +76,10 @@ class ProductControllerIntegrationTest {
     @Test
     void addProductReturnsCreatedResponseWhenProductIsValid() throws Exception {
         String categoryId = categoryRepository.save(Category.builder().build()).getId();
-        ProductCreateRequest request = ProductCreateRequest.builder()
+        ProductRequest request = ProductRequest.builder()
                 .name("Test")
                 .description("Test")
                 .salePrice(10.0)
-                .stock(10)
                 .criticalStock(5)
                 .categoryId(categoryId)
                 .imageUrl("https://test.com")
@@ -98,11 +95,10 @@ class ProductControllerIntegrationTest {
 
     @Test
     void addProductReturnsNotFoundExceptionWhenCategoryNotFound() throws Exception {
-        ProductCreateRequest request = ProductCreateRequest.builder()
+        ProductRequest request = ProductRequest.builder()
                 .name("Test")
                 .description("Test")
                 .salePrice(10)
-                .stock(10)
                 .criticalStock(5)
                 .categoryId("1")
                 .imageUrl("https://test.com")
@@ -117,11 +113,10 @@ class ProductControllerIntegrationTest {
 
     @Test
     void addProductReturnsBadRequestWhenProductIsInvalid() throws Exception {
-        ProductCreateRequest request = ProductCreateRequest.builder()
+        ProductRequest request = ProductRequest.builder()
                 .name("Test")
                 .description("Test")
                 .salePrice(0)
-                .stock(10)
                 .criticalStock(5)
                 .categoryId("1")
                 .imageUrl("https://test.com")
@@ -137,31 +132,28 @@ class ProductControllerIntegrationTest {
     @Test
     void updateProductReturnsUpdatedResponseWhenProductIsValid() throws Exception {
         String categoryId = categoryRepository.save(Category.builder().build()).getId();
-        ProductCreateRequest productCreateRequest = ProductCreateRequest.builder()
+        ProductRequest productRequest = ProductRequest.builder()
                 .name("Test")
                 .description("Test")
                 .salePrice(10.0)
-                .stock(10)
                 .criticalStock(5)
                 .categoryId(categoryId)
                 .imageUrl("https://test.com")
                 .build();
 
-        String productId = productService.addProduct(productCreateRequest).getId();
+        String productId = productService.addProduct(productRequest).getId();
 
-        ProductUpdateRequest request = ProductUpdateRequest.builder()
-                .id(productId)
+        ProductRequest request = ProductRequest.builder()
                 .name("Updated Test")
                 .description("Updated Test")
                 .salePrice(15.0)
-                .stock(15)
                 .criticalStock(5)
                 .categoryId(categoryId)
                 .imageUrl("https://updatedtest.com")
                 .build();
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .put("/api/products")
+                        .put("/api/products/" + productId)
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -169,7 +161,6 @@ class ProductControllerIntegrationTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Updated Test"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.description").value("Updated Test"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.salePrice").value(15.0))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.stock").value(15))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.criticalStock").value(5))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.imageUrl").value("https://updatedtest.com"));
     }

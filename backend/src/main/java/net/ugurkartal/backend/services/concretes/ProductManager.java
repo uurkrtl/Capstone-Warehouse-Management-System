@@ -8,8 +8,7 @@ import net.ugurkartal.backend.repositories.CategoryRepository;
 import net.ugurkartal.backend.repositories.ProductRepository;
 import net.ugurkartal.backend.services.abstracts.IdService;
 import net.ugurkartal.backend.services.abstracts.ProductService;
-import net.ugurkartal.backend.services.dtos.requests.ProductCreateRequest;
-import net.ugurkartal.backend.services.dtos.requests.ProductUpdateRequest;
+import net.ugurkartal.backend.services.dtos.requests.ProductRequest;
 import net.ugurkartal.backend.services.dtos.responses.ProductCreatedResponse;
 import net.ugurkartal.backend.services.dtos.responses.ProductGetAllResponse;
 import net.ugurkartal.backend.services.messages.ProductMessage;
@@ -53,11 +52,11 @@ public class ProductManager implements ProductService {
     }
 
     @Override
-    public ProductCreatedResponse addProduct(ProductCreateRequest productCreateRequest) {
-        productBusinessRules.checkIfProductNameExists(productCreateRequest.getName());
-        categoryBusinessRules.checkIfCategoryByIdNotFound(productCreateRequest.getCategoryId());
-        Product product = modelMapperService.forRequest().map(productCreateRequest, Product.class);
-        Category selectedCategory = categoryRepository.findById(productCreateRequest.getCategoryId()).orElseThrow();
+    public ProductCreatedResponse addProduct(ProductRequest productRequest) {
+        productBusinessRules.checkIfProductNameExists(productRequest.getName());
+        categoryBusinessRules.checkIfCategoryByIdNotFound(productRequest.getCategoryId());
+        Product product = modelMapperService.forRequest().map(productRequest, Product.class);
+        Category selectedCategory = categoryRepository.findById(productRequest.getCategoryId()).orElseThrow();
 
         if (product.getImageUrl().isEmpty()) {
             product.setImageUrl("https://img.freepik.com/vektoren-premium/foto-kommt-bald-bilderrahmen_268834-398.jpg");
@@ -73,13 +72,13 @@ public class ProductManager implements ProductService {
     }
 
     @Override
-    public ProductCreatedResponse updateProduct(ProductUpdateRequest productUpdateRequest) {
-        productBusinessRules.checkIfProductByIdNotFound(productUpdateRequest.getId());
-        productBusinessRules.checkIfProductNameExists(productUpdateRequest.getName(), productUpdateRequest.getId());
-        categoryBusinessRules.checkIfCategoryByIdNotFound(productUpdateRequest.getCategoryId());
-        Product updatedProduct = modelMapperService.forRequest().map(productUpdateRequest, Product.class);
-        Category selectedCategory = categoryRepository.findById(productUpdateRequest.getCategoryId()).orElseThrow();
-        Optional<Product> foundProductOptional = this.productRepository.findById(productUpdateRequest.getId());
+    public ProductCreatedResponse updateProduct(String id, ProductRequest productRequest) {
+        productBusinessRules.checkIfProductByIdNotFound(id);
+        productBusinessRules.checkIfProductNameExists(productRequest.getName(), id);
+        categoryBusinessRules.checkIfCategoryByIdNotFound(productRequest.getCategoryId());
+        Product updatedProduct = modelMapperService.forRequest().map(productRequest, Product.class);
+        Category selectedCategory = categoryRepository.findById(productRequest.getCategoryId()).orElseThrow();
+        Optional<Product> foundProductOptional = this.productRepository.findById(id);
         if(foundProductOptional.isPresent()) {
             Product foundProduct = foundProductOptional.get();
             updatedProduct.setCreatedAt(foundProduct.getCreatedAt());
@@ -87,6 +86,7 @@ public class ProductManager implements ProductService {
         } else {
             throw new NoSuchElementException(ProductMessage.PRODUCT_NOT_FOUND);
         }
+        updatedProduct.setId(id);
         updatedProduct.setUpdatedAt(LocalDateTime.now());
         updatedProduct.setCategory(selectedCategory);
         updatedProduct = productRepository.save(updatedProduct);

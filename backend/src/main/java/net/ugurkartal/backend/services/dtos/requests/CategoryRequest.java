@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CategoryCreateRequest {
+public class CategoryRequest {
     @Size(min = 2, max = 50, message = "Der Name muss zwischen 2 und 50 Zeichen lang sein")
     private String name;
     @Size(min = 2, max = 150, message = "Die Beschreibung muss zwischen 2 und 50 Zeichen lang sein")

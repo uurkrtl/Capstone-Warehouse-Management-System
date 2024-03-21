@@ -6,7 +6,7 @@ import net.ugurkartal.backend.models.Category;
 import net.ugurkartal.backend.repositories.CategoryRepository;
 import net.ugurkartal.backend.services.abstracts.CategoryService;
 import net.ugurkartal.backend.services.abstracts.IdService;
-import net.ugurkartal.backend.services.dtos.requests.CategoryCreateRequest;
+import net.ugurkartal.backend.services.dtos.requests.CategoryRequest;
 import net.ugurkartal.backend.services.dtos.responses.CategoryCreatedResponse;
 import net.ugurkartal.backend.services.dtos.responses.CategoryGetAllResponse;
 import net.ugurkartal.backend.services.rules.CategoryBusinessRules;
@@ -32,9 +32,9 @@ public class CategoryManager implements CategoryService {
     }
 
     @Override
-    public CategoryCreatedResponse addCategory(CategoryCreateRequest categoryCreateRequest) {
-        categoryBusinessRules.checkIfCategoryNameExists(categoryCreateRequest.getName());
-        Category category = modelMapperService.forRequest().map(categoryCreateRequest, Category.class);
+    public CategoryCreatedResponse addCategory(CategoryRequest categoryRequest) {
+        categoryBusinessRules.checkIfCategoryNameExists(categoryRequest.getName());
+        Category category = modelMapperService.forRequest().map(categoryRequest, Category.class);
 
         category.setId(idService.generateCategoryId());
         category.setCreatedAt(LocalDateTime.now());

@@ -1,6 +1,6 @@
 package net.ugurkartal.backend.controllers;
 
-import net.ugurkartal.backend.services.dtos.requests.CategoryCreateRequest;
+import net.ugurkartal.backend.services.dtos.requests.CategoryRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -33,7 +33,7 @@ class CategoryControllerIntegrationTest {
 
     @Test
     void addCategoryReturnsCreatedResponseWhenCategoryIsValid() throws Exception {
-        CategoryCreateRequest request = CategoryCreateRequest.builder()
+        CategoryRequest request = CategoryRequest.builder()
                 .name("Test")
                 .build();
 
