@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.ugurkartal.backend.models.Category;
 
 import java.time.LocalDateTime;
 
@@ -20,7 +19,8 @@ public class ProductCreatedResponse {
     private int stock;
     private int criticalStock;
     private String imageUrl;
-    private Category category;
+    private String categoryId;
+    private String categoryName;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private boolean isActive;

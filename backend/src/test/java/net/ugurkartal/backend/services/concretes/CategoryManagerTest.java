@@ -4,7 +4,7 @@ import net.ugurkartal.backend.core.mappers.ModelMapperService;
 import net.ugurkartal.backend.models.Category;
 import net.ugurkartal.backend.repositories.CategoryRepository;
 import net.ugurkartal.backend.services.abstracts.IdService;
-import net.ugurkartal.backend.services.dtos.requests.CategoryCreateRequest;
+import net.ugurkartal.backend.services.dtos.requests.CategoryRequest;
 import net.ugurkartal.backend.services.dtos.responses.CategoryCreatedResponse;
 import net.ugurkartal.backend.services.dtos.responses.CategoryGetAllResponse;
 import net.ugurkartal.backend.services.rules.CategoryBusinessRules;
@@ -65,7 +65,7 @@ class CategoryManagerTest {
     void addCategoryReturnsCreatedCategoryWhenCategoryIsValid() {
         Category category = Category.builder().id("1").build();
         CategoryCreatedResponse expectedResponse = CategoryCreatedResponse.builder().id("1").build();
-        CategoryCreateRequest request = CategoryCreateRequest.builder()
+        CategoryRequest request = CategoryRequest.builder()
                 .name("Test")
                 .description("Test")
                 .build();

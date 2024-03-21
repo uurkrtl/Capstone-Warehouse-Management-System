@@ -3,7 +3,7 @@ package net.ugurkartal.backend.controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import net.ugurkartal.backend.services.abstracts.ProductService;
-import net.ugurkartal.backend.services.dtos.requests.ProductCreateRequest;
+import net.ugurkartal.backend.services.dtos.requests.ProductRequest;
 import net.ugurkartal.backend.services.dtos.responses.ProductCreatedResponse;
 import net.ugurkartal.backend.services.dtos.responses.ProductGetAllResponse;
 import org.springframework.http.HttpStatus;
@@ -29,7 +29,12 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductCreatedResponse addProduct(@Valid @RequestBody ProductCreateRequest productCreateRequest) {
-        return productService.addProduct(productCreateRequest);
+    public ProductCreatedResponse addProduct(@Valid @RequestBody ProductRequest productRequest) {
+        return productService.addProduct(productRequest);
+    }
+
+    @PutMapping("/{id}")
+    public ProductCreatedResponse updateProduct(@PathVariable String id, @Valid @RequestBody ProductRequest productRequest) {
+        return productService.updateProduct(id, productRequest);
     }
 }

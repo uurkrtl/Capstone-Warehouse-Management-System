@@ -3,7 +3,6 @@ package net.ugurkartal.backend.services.dtos.responses;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.ugurkartal.backend.models.Category;
 
 @Data
 @AllArgsConstructor
@@ -11,6 +10,8 @@ import net.ugurkartal.backend.models.Category;
 public class ProductGetAllResponse {
     private String id;
     private String name;
-    private Category category;
+    private double salePrice;
+    private String categoryId;
+    private String categoryName;
     private boolean isActive;
 }

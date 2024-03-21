@@ -1,17 +1,21 @@
-import {Product} from "../../types/Product.ts";
+
 import {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import {Product} from "../../types/Product.ts";
+import {useNavigate, useParams} from "react-router-dom";
 import ProductService from "../../services/ProductService.ts";
-import {Category} from "../../types/Category.ts";
 import CategoryService from "../../services/CategoryService.ts";
+import {Category} from "../../types/Category.ts";
 import ProductCommonFormFields from "../../layouts/ProductCommonFormFields.tsx";
 import PageHeader from "../../layouts/PageHeader.tsx";
 
+const productService = new ProductService();
+const categoryService = new CategoryService();
 
-function ProductAdd() {
+function ProductUpdate() {
+    const { id = '' } = useParams<string>();
     const [product, setProduct] = useState<Product>({
         name: '',
-        id: '',
+        id: id,
         description: '',
         salePrice: 0,
         stock: 0,
@@ -21,11 +25,9 @@ function ProductAdd() {
         categoryName: '',
         createdAt: new Date(),
         updatedAt: new Date(),
-        active: false
+        active: true
     });
     const navigate = useNavigate();
-    const productService = new ProductService();
-    const categoryService = new CategoryService();
     const [categories, setCategories] = useState<Category[]>([]);
     const [errorMessage, setErrorMessage] = useState<string>('');
 
@@ -35,12 +37,25 @@ function ProductAdd() {
         });
     });
 
+    useEffect(() => {
+        if (id) {
+            productService.getProductById(id)
+                .then((response) => {
+                    setProduct(prevProduct => ({...prevProduct, ...response.data}));
+                })
+                .catch((error) => {
+                    console.error('Error fetching product:', error);
+                    navigate('*');
+                });
+        }
+    }, [id, navigate]);
+
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        productService.addProduct(product)
+        productService.updateProduct(id, product)
             .then(response => {
                 console.log(response)
-                navigate('/products')
+                navigate('/products/detail/' + id)
             })
             .catch(error => {
                 if (error.response) {
@@ -55,13 +70,13 @@ function ProductAdd() {
 
     return (
         <main>
-            <PageHeader title="Produkt hinzufügen" pageType="product" />
+            <PageHeader title="Produktaktualisierung" pageType="product" />
 
             <div className="row g-5">
                 <div className="col-md-12 col-lg-12">
                     <form onSubmit={handleSubmit}>
                         <ProductCommonFormFields product={product} setProduct={setProduct} categories={categories} />
-                        <button className="w-100 btn btn-primary btn-lg my-4" type="submit">Speichern</button>
+                        <button className="w-100 btn btn-primary btn-lg my-4" type="submit">Aktualisieren</button>
                     </form>
 
                     {errorMessage && (
@@ -76,4 +91,4 @@ function ProductAdd() {
     );
 }
 
-export default ProductAdd;
+export default ProductUpdate;
