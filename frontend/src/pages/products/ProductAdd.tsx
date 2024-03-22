@@ -54,7 +54,7 @@ function ProductAdd() {
     };
 
     return (
-        <main>
+        <main className={'container'}>
             <PageHeader title="Produkt hinzufügen" pageType="product" />
 
             <div className="row g-5">

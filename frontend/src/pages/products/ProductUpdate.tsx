@@ -69,7 +69,7 @@ function ProductUpdate() {
     };
 
     return (
-        <main>
+        <main className={'container'}>
             <PageHeader title="Produktaktualisierung" pageType="product" />
 
             <div className="row g-5">
