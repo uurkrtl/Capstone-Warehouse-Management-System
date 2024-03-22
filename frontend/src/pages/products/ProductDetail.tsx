@@ -22,7 +22,19 @@ function ProductDetail() {
         active: true
     });
     const navigate = useNavigate();
-
+    const handleStatusChange = (status: boolean) => {
+        productService.changeProductStatus(id, status)
+            .then(() => {
+                console.log('Product status changed successfully');
+                setProduct({
+                    ...product,
+                    active: status
+                });
+            })
+            .catch((error) => {
+                console.error('Error changing product status:', error);
+            });
+    }
 
     useEffect(() => {
         if (id) {
@@ -86,7 +98,8 @@ function ProductDetail() {
 
                 <div className="d-grid gap-2 d-md-flex justify-content-md-start">
                     <Link to={`/products/update/${product.id}`} type="button" className="btn btn-primary btn-lg px-4 me-md-2">Aktualisieren</Link>
-
+                    <button type="button" className={product.active ? 'btn btn-danger px-4 me-md-2' : 'btn btn-success px-4 me-md-2'} onClick={() => handleStatusChange(!product.active)}>
+                        {product.active ? 'Deaktivieren' : 'Aktivieren'}</button>
                     <Link to={`/products`} type="button" className="btn btn-outline-secondary btn-lg px-4">Produktliste</Link>
                 </div>
 

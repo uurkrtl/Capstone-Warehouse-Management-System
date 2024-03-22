@@ -164,4 +164,27 @@ class ProductControllerIntegrationTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.criticalStock").value(5))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.imageUrl").value("https://updatedtest.com"));
     }
+
+    @Test
+    void changeProductStatusChangesStatusCorrectly() throws Exception {
+        String categoryId = categoryRepository.save(Category.builder().build()).getId();
+        ProductRequest productRequest = ProductRequest.builder()
+                .name("Test")
+                .description("Test")
+                .salePrice(10.0)
+                .criticalStock(5)
+                .categoryId(categoryId)
+                .imageUrl("https://test.com")
+                .build();
+
+        String productId = productService.addProduct(productRequest).getId();
+        boolean newStatus = false;
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/api/products/status/" + productId)
+                        .param("status", String.valueOf(newStatus))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.active").value(newStatus));
+    }
 }

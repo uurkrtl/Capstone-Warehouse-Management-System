@@ -18,4 +18,7 @@ export default class ProductService {
         return axios.put(`/api/products/${id}`, product);
     }
 
+    changeProductStatus(id: string, status: boolean) {
+        return axios.put(`/api/products/status/${id}?status=${status}`);
+    }
 }
