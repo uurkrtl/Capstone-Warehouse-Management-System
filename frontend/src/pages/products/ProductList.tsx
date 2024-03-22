@@ -35,7 +35,7 @@ function ProductList() {
     }, []);
 
     return (
-        <div>
+        <div className={'container'}>
             <PageHeader title="Produktliste" pageType="product" />
 
             <div className="d-flex justify-content-end">
