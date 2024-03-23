@@ -154,4 +154,31 @@ class CategoryManagerTest {
         assertEquals(expectedResponse.getName(), actualResponse.getName());
         assertEquals(expectedResponse.getDescription(), actualResponse.getDescription());
     }
+
+    @Test
+    void changeCategoryStatusChangesStatusCorrectly() {
+        String id = "1";
+
+        Category updatedCategory = Category.builder()
+                .id("1")
+                .isActive(true)
+                .build();
+
+        CategoryCreatedResponse expectedResponse = CategoryCreatedResponse.builder()
+                .id("1")
+                .isActive(true)
+                .build();
+
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(categoryRepository.findById("1")).thenReturn(Optional.of(Category.builder().id("1").build()));
+        when(categoryRepository.save(any(Category.class))).thenReturn(updatedCategory);
+        when(modelMapper.map(updatedCategory, CategoryCreatedResponse.class)).thenReturn(expectedResponse);
+
+        CategoryCreatedResponse actualResponse = categoryManager.changeCategoryStatus(id, true);
+
+        verify(categoryBusinessRules, times(1)).checkIfCategoryByIdNotFound(anyString());
+        verify(categoryBusinessRules, times(1)).checkIfCategoryHasActiveProducts(anyString());
+        verify(categoryRepository, times(1)).save(any(Category.class));
+        assertEquals(expectedResponse.isActive(), actualResponse.isActive());
+    }
 }

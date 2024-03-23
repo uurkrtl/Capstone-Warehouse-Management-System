@@ -98,4 +98,22 @@ class CategoryControllerIntegrationTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Updated Test"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.description").value("Updated Test"));
     }
+
+    @Test
+    void changeCategoryStatusChangesStatusCorrectly() throws Exception {
+        CategoryRequest categoryRequest = CategoryRequest.builder()
+                .name("Test")
+                .description("Test")
+                .build();
+
+        String categoryId = categoryService.addCategory(categoryRequest).getId();
+        boolean newStatus = false;
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/api/categories/status/" + categoryId)
+                        .param("status", String.valueOf(newStatus))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.active").value(newStatus));
+    }
 }

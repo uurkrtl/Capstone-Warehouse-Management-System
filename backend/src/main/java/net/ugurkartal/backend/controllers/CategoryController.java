@@ -36,4 +36,9 @@ public class CategoryController {
     public CategoryCreatedResponse updateCategory(@PathVariable String id, @RequestBody CategoryRequest categoryRequest) {
         return categoryService.updateCategory(id, categoryRequest);
     }
+
+    @PutMapping("/status/{id}")
+    public CategoryCreatedResponse changeCategoryStatus(@PathVariable String id, @RequestParam boolean status) {
+        return categoryService.changeCategoryStatus(id, status);
+    }
 }

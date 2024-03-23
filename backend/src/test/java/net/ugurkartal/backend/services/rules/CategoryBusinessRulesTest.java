@@ -1,9 +1,11 @@
 package net.ugurkartal.backend.services.rules;
 
 import net.ugurkartal.backend.core.exceptions.types.DuplicateRecordException;
+import net.ugurkartal.backend.core.exceptions.types.HaveActiveProductException;
 import net.ugurkartal.backend.core.exceptions.types.RecordNotFoundException;
 import net.ugurkartal.backend.models.Category;
 import net.ugurkartal.backend.repositories.CategoryRepository;
+import net.ugurkartal.backend.repositories.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -20,6 +22,9 @@ class CategoryBusinessRulesTest {
 
     @Mock
     private CategoryRepository categoryRepository;
+
+    @Mock
+    private ProductRepository productRepository;
 
     @InjectMocks
     private CategoryBusinessRules categoryBusinessRules;
@@ -76,5 +81,14 @@ class CategoryBusinessRulesTest {
         when(categoryRepository.existsById(existingCategoryId)).thenReturn(true);
 
         assertDoesNotThrow(() -> categoryBusinessRules.checkIfCategoryByIdNotFound(existingCategoryId));
+    }
+
+    @Test
+    void checkIfCategoryHasActiveProducts_throwsHaveActiveProductException() {
+        String existingCategoryId = "Existing Category Id";
+
+        when(productRepository.existsByCategoryIdAndIsActiveTrue(existingCategoryId)).thenReturn(true);
+
+        assertThrows(HaveActiveProductException.class, () -> categoryBusinessRules.checkIfCategoryHasActiveProducts(existingCategoryId));
     }
 }
