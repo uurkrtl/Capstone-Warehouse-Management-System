@@ -7,6 +7,7 @@ import PageNotFound404 from "../pages/notFound404/PageNotFound404.tsx";
 import Homepage from "../pages/home/Homepage.tsx";
 import Navbar from "./Navbar.tsx";
 import Footer from "./Footer.tsx";
+import CategoryAdd from "../pages/categories/CategoryAdd.tsx";
 
 function Dashboard() {
     return (
@@ -19,6 +20,7 @@ function Dashboard() {
                     <Route path={'/products/update/:id'} element={<ProductUpdate/>}/>
                     <Route path={'/products/detail/:id'} element={<ProductDetail/>}/>
                     <Route path={'/products/add'} element={<ProductAdd/>}/>
+                    <Route path={'/categories/add'} element={<CategoryAdd/>}/>
                     <Route path={'*'} element={<PageNotFound404/>}/>
                 </Routes>
                 <Footer />

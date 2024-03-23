@@ -14,11 +14,25 @@ function Navbar() {
                                       aria-current="page">Home</Link>
                             </li>
                             <li className="nav-item dropdown">
-                                <Link to={`#`} className="nav-link dropdown-toggle text-decoration-none" type="button" data-bs-toggle="dropdown"
+                                <Link to={`#`} className="nav-link dropdown-toggle text-decoration-none" type="button"
+                                      data-bs-toggle="dropdown"
                                       aria-expanded="false">Produkt</Link>
                                 <ul className="dropdown-menu">
-                                    <Link to={`/products`} className="dropdown-item text-decoration-none">Produktliste</Link>
-                                    <Link to={`/products/add`} className="dropdown-item text-decoration-none">Produkt erstellen</Link>
+                                    <Link to={`/products`}
+                                          className="dropdown-item text-decoration-none">Produktliste</Link>
+                                    <Link to={`/products/add`} className="dropdown-item text-decoration-none">Produkt
+                                        erstellen</Link>
+                                </ul>
+                            </li>
+                            <li className="nav-item dropdown">
+                                <Link to={`#`} className="nav-link dropdown-toggle text-decoration-none" type="button"
+                                      data-bs-toggle="dropdown"
+                                      aria-expanded="false">Kategorie</Link>
+                                <ul className="dropdown-menu">
+                                    <Link to={`/categories`}
+                                          className="dropdown-item text-decoration-none">Kategorieliste</Link>
+                                    <Link to={`/categories/add`} className="dropdown-item text-decoration-none">Produkt
+                                        erstellen</Link>
                                 </ul>
                             </li>
                         </ul>

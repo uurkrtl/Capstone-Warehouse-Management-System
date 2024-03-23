@@ -6,7 +6,7 @@ function PageNotFound404() {
             <div className="container">
                 <h1>404 - Seite nicht gefunden</h1>
                 <p>Leider konnten wir die gewünschte Seite nicht finden.</p>
-                <p>Klicken Sie <a href="/public"> hier um zur Startseite zurückzukehren</a>.</p>
+                <p>Klicken Sie <a href="/"> hier um zur Startseite zurückzukehren</a>.</p>
             </div>
         </div>
     );
