@@ -1,6 +1,7 @@
 package net.ugurkartal.backend.core.exceptions;
 
 import net.ugurkartal.backend.core.exceptions.types.DuplicateRecordException;
+import net.ugurkartal.backend.core.exceptions.types.HaveActiveProductException;
 import net.ugurkartal.backend.core.exceptions.types.RecordNotFoundException;
 import net.ugurkartal.backend.core.exceptions.types.StockNotZeroException;
 import org.springframework.http.HttpStatus;
@@ -46,6 +47,18 @@ public class GlobalExceptionHandler {
                 .apiPath(request.getDescription(false))
                 .status(HttpStatus.BAD_REQUEST)
                 .title("Lagerbestand ist nicht Null")
+                .message(ex.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(HaveActiveProductException.class)
+    public ResponseEntity<ErrorResponse> handleHaveActiveProductException(HaveActiveProductException ex, WebRequest request) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .apiPath(request.getDescription(false))
+                .status(HttpStatus.BAD_REQUEST)
+                .title("Kategorie hat aktive Produkte")
                 .message(ex.getMessage())
                 .timestamp(LocalDateTime.now())
                 .build();

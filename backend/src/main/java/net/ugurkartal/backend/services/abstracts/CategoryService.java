@@ -8,5 +8,8 @@ import java.util.List;
 
 public interface CategoryService {
     List<CategoryGetAllResponse> getAllCategories();
+    CategoryCreatedResponse getCategoryById(String id);
     CategoryCreatedResponse addCategory(CategoryRequest categoryRequest);
+    CategoryCreatedResponse updateCategory(String id, CategoryRequest categoryRequest);
+    CategoryCreatedResponse changeCategoryStatus(String id, boolean status);
 }

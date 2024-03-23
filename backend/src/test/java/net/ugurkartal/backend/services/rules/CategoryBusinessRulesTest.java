@@ -1,12 +1,18 @@
 package net.ugurkartal.backend.services.rules;
 
+import net.ugurkartal.backend.core.exceptions.types.DuplicateRecordException;
+import net.ugurkartal.backend.core.exceptions.types.HaveActiveProductException;
 import net.ugurkartal.backend.core.exceptions.types.RecordNotFoundException;
+import net.ugurkartal.backend.models.Category;
 import net.ugurkartal.backend.repositories.CategoryRepository;
+import net.ugurkartal.backend.repositories.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -16,6 +22,9 @@ class CategoryBusinessRulesTest {
 
     @Mock
     private CategoryRepository categoryRepository;
+
+    @Mock
+    private ProductRepository productRepository;
 
     @InjectMocks
     private CategoryBusinessRules categoryBusinessRules;
@@ -42,6 +51,23 @@ class CategoryBusinessRulesTest {
     }
 
     @Test
+    void checkIfCategoryNameExists_throwsDuplicateRecordExceptionForDifferentCategory() {
+        String existingCategoryName = "Existing Category";
+        String newCategoryName = "New Category";
+        String existingCategoryId = "1";
+
+        Category existingCategory = new Category();
+        existingCategory.setId(existingCategoryId);
+        existingCategory.setName(existingCategoryName);
+
+        when(categoryRepository.findById(existingCategoryId)).thenReturn(Optional.of(existingCategory));
+
+        when(categoryRepository.existsByName(newCategoryName)).thenReturn(true);
+
+        assertThrows(DuplicateRecordException.class, () -> categoryBusinessRules.checkIfCategoryNameExists(newCategoryName, existingCategoryId));
+    }
+
+    @Test
     void categoryByIdNotFound_throwsRecordNotFoundException() {
         String nonExistingCategoryId = "Non Existing Category Id";
         when(categoryRepository.existsById(nonExistingCategoryId)).thenReturn(false);
@@ -55,5 +81,14 @@ class CategoryBusinessRulesTest {
         when(categoryRepository.existsById(existingCategoryId)).thenReturn(true);
 
         assertDoesNotThrow(() -> categoryBusinessRules.checkIfCategoryByIdNotFound(existingCategoryId));
+    }
+
+    @Test
+    void checkIfCategoryHasActiveProducts_throwsHaveActiveProductException() {
+        String existingCategoryId = "Existing Category Id";
+
+        when(productRepository.existsByCategoryIdAndIsActiveTrue(existingCategoryId)).thenReturn(true);
+
+        assertThrows(HaveActiveProductException.class, () -> categoryBusinessRules.checkIfCategoryHasActiveProducts(existingCategoryId));
     }
 }

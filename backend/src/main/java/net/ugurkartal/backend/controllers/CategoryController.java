@@ -21,9 +21,24 @@ public class CategoryController {
         return categoryService.getAllCategories();
     }
 
+    @GetMapping("/{id}")
+    public CategoryCreatedResponse getCategoryById(@PathVariable String id) {
+        return categoryService.getCategoryById(id);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryCreatedResponse addCategory(@RequestBody CategoryRequest categoryRequest) {
         return categoryService.addCategory(categoryRequest);
+    }
+
+    @PutMapping("/{id}")
+    public CategoryCreatedResponse updateCategory(@PathVariable String id, @RequestBody CategoryRequest categoryRequest) {
+        return categoryService.updateCategory(id, categoryRequest);
+    }
+
+    @PutMapping("/status/{id}")
+    public CategoryCreatedResponse changeCategoryStatus(@PathVariable String id, @RequestParam boolean status) {
+        return categoryService.changeCategoryStatus(id, status);
     }
 }

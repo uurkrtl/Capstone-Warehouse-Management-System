@@ -32,6 +32,13 @@ public class CategoryManager implements CategoryService {
     }
 
     @Override
+    public CategoryCreatedResponse getCategoryById(String id) {
+        categoryBusinessRules.checkIfCategoryByIdNotFound(id);
+        Category category = categoryRepository.findById(id).orElseThrow();
+        return modelMapperService.forResponse().map(category, CategoryCreatedResponse.class);
+    }
+
+    @Override
     public CategoryCreatedResponse addCategory(CategoryRequest categoryRequest) {
         categoryBusinessRules.checkIfCategoryNameExists(categoryRequest.getName());
         Category category = modelMapperService.forRequest().map(categoryRequest, Category.class);
@@ -40,6 +47,31 @@ public class CategoryManager implements CategoryService {
         category.setCreatedAt(LocalDateTime.now());
         category.setActive(true);
 
+        category = categoryRepository.save(category);
+        return modelMapperService.forResponse().map(category, CategoryCreatedResponse.class);
+    }
+
+    @Override
+    public CategoryCreatedResponse updateCategory(String id, CategoryRequest categoryRequest) {
+        categoryBusinessRules.checkIfCategoryByIdNotFound(id);
+        categoryBusinessRules.checkIfCategoryNameExists(categoryRequest.getName(), id);
+        Category updatedCategory = modelMapperService.forRequest().map(categoryRequest, Category.class);
+        Category foundCategory = categoryRepository.findById(id).orElseThrow();
+        updatedCategory.setId(foundCategory.getId());
+        updatedCategory.setActive(foundCategory.isActive());
+        updatedCategory.setCreatedAt(foundCategory.getCreatedAt());
+        updatedCategory.setUpdatedAt(LocalDateTime.now());
+        updatedCategory = categoryRepository.save(updatedCategory);
+        return modelMapperService.forResponse().map(updatedCategory, CategoryCreatedResponse.class);
+    }
+
+    @Override
+    public CategoryCreatedResponse changeCategoryStatus(String id, boolean status) {
+        categoryBusinessRules.checkIfCategoryByIdNotFound(id);
+        categoryBusinessRules.checkIfCategoryHasActiveProducts(id);
+        Category category = categoryRepository.findById(id).orElseThrow();
+        category.setActive(status);
+        category.setUpdatedAt(LocalDateTime.now());
         category = categoryRepository.save(category);
         return modelMapperService.forResponse().map(category, CategoryCreatedResponse.class);
     }

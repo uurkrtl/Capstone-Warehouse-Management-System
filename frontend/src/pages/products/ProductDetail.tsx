@@ -53,7 +53,7 @@ function ProductDetail() {
         <div className="container">
         <div className="row flex-lg-row-reverse align-items-center g-5 py-2">
             <div className="col-10 col-sm-8 col-lg-6">
-                <img src={product.imageUrl} className="d-block mx-lg-auto img-fluid" alt="Product image"
+                <img src={product.imageUrl} className="d-block mx-lg-auto img-fluid" alt="Product"
                      width="400" height="300" loading="lazy"/>
             </div>
             <div className="col-lg-6">
