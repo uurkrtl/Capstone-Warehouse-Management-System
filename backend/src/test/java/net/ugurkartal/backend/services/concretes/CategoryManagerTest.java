@@ -16,6 +16,8 @@ import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -59,6 +61,38 @@ class CategoryManagerTest {
         List<CategoryGetAllResponse> response = categoryManager.getAllCategories();
 
         assertEquals(2, response.size());
+    }
+
+    @Test
+    void getCategoryByIdReturnsCategoryWhenCategoryExists() {
+        Category category = Category.builder()
+                .id("1")
+                .name("Test")
+                .description("Test")
+                .build();
+
+        CategoryCreatedResponse expectedResponse = CategoryCreatedResponse.builder()
+                .id("1")
+                .name("Test")
+                .description("Test")
+                .build();
+
+        String id = "1";
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(modelMapper.map(category, CategoryCreatedResponse.class)).thenReturn(expectedResponse);
+        when(categoryRepository.findById(id)).thenReturn(Optional.of(category));
+
+        CategoryCreatedResponse actual = categoryManager.getCategoryById(id);
+
+        assertEquals(expectedResponse.getId(), actual.getId());
+    }
+
+    @Test
+    void getCategoryByIdThrowsNoSuchElementExceptionWhenCategoryDoesNotExist() {
+        String id = "1";
+        when(categoryRepository.findById(id)).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, () -> categoryManager.getCategoryById(id));
     }
 
     @Test

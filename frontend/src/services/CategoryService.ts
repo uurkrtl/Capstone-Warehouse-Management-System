@@ -6,6 +6,10 @@ export default class CategoryService {
         return axios.get('/api/categories');
     }
 
+    getCategoryById(id: string) {
+        return axios.get(`/api/categories/${id}`);
+    }
+
     addCategory(category: Category) {
         return axios.post('/api/categories', category);
     }

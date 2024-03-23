@@ -32,6 +32,13 @@ public class CategoryManager implements CategoryService {
     }
 
     @Override
+    public CategoryCreatedResponse getCategoryById(String id) {
+        categoryBusinessRules.checkIfCategoryByIdNotFound(id);
+        Category category = categoryRepository.findById(id).orElseThrow();
+        return modelMapperService.forResponse().map(category, CategoryCreatedResponse.class);
+    }
+
+    @Override
     public CategoryCreatedResponse addCategory(CategoryRequest categoryRequest) {
         categoryBusinessRules.checkIfCategoryNameExists(categoryRequest.getName());
         Category category = modelMapperService.forRequest().map(categoryRequest, Category.class);
