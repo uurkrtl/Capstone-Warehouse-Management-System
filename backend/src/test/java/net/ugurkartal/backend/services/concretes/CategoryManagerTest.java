@@ -117,4 +117,41 @@ class CategoryManagerTest {
         verify(categoryRepository, times(1)).save(category);
         assertEquals(expectedResponse.getId(), actualResponse.getId());
     }
+
+    @Test
+    void updateCategoryReturnsUpdatedResponseWhenCategoryIsValid() {
+        String id = "1";
+        CategoryRequest request = CategoryRequest.builder()
+                .name("Updated Test")
+                .description("Updated Test")
+                .build();
+
+        Category updatedCategory = Category.builder()
+                .id("1")
+                .name("Updated Test")
+                .description("Updated Test")
+                .build();
+
+        CategoryCreatedResponse expectedResponse = CategoryCreatedResponse.builder()
+                .id("1")
+                .name("Updated Test")
+                .description("Updated Test")
+                .build();
+
+        when(modelMapperService.forRequest()).thenReturn(modelMapper);
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(modelMapper.map(request, Category.class)).thenReturn(updatedCategory);
+        when(categoryRepository.findById("1")).thenReturn(Optional.of(Category.builder().id("1").build()));
+        when(categoryRepository.save(updatedCategory)).thenReturn(updatedCategory);
+        when(modelMapper.map(updatedCategory, CategoryCreatedResponse.class)).thenReturn(expectedResponse);
+
+        CategoryCreatedResponse actualResponse = categoryManager.updateCategory(id, request);
+
+        verify(categoryBusinessRules, times(1)).checkIfCategoryByIdNotFound(anyString());
+        verify(categoryBusinessRules, times(1)).checkIfCategoryNameExists(anyString(), anyString());
+        verify(categoryRepository, times(1)).save(updatedCategory);
+        assertEquals(expectedResponse.getId(), actualResponse.getId());
+        assertEquals(expectedResponse.getName(), actualResponse.getName());
+        assertEquals(expectedResponse.getDescription(), actualResponse.getDescription());
+    }
 }

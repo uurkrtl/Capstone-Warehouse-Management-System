@@ -74,4 +74,28 @@ class CategoryControllerIntegrationTest {
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
     }
+
+    @Test
+    void updateCategoryReturnsUpdatedResponseWhenCategoryIsValid() throws Exception {
+        CategoryRequest categoryRequest = CategoryRequest.builder()
+                .name("Test")
+                .description("Test")
+                .build();
+
+        String categoryId = categoryService.addCategory(categoryRequest).getId();
+
+        CategoryRequest request = CategoryRequest.builder()
+                .name("Updated Test")
+                .description("Updated Test")
+                .build();
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/api/categories/" + categoryId)
+                        .content(objectMapper.writeValueAsString(request))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(categoryId))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Updated Test"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.description").value("Updated Test"));
+    }
 }

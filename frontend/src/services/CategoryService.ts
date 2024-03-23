@@ -13,4 +13,8 @@ export default class CategoryService {
     addCategory(category: Category) {
         return axios.post('/api/categories', category);
     }
+
+    updateCategory(id:string, category: Category) {
+        return axios.put(`/api/categories/${id}`, category);
+    }
 }
