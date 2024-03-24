@@ -22,6 +22,11 @@ public class SupplierController {
         return supplierService.getAllSuppliers();
     }
 
+    @GetMapping("/{id}")
+    public SupplierCreatedResponse getSupplierById(@PathVariable String id) {
+        return supplierService.getSupplierById(id);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public SupplierCreatedResponse addSupplier(@Valid @RequestBody SupplierRequest supplierRequest) {

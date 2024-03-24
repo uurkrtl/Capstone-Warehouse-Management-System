@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface SupplierService {
     List<SupplierGetAllResponse> getAllSuppliers();
+    SupplierCreatedResponse getSupplierById(String id);
     SupplierCreatedResponse addSupplier(SupplierRequest supplierRequest);
 }

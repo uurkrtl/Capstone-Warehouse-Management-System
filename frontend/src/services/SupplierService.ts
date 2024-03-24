@@ -6,6 +6,10 @@ export default class SupplierService {
         return axios.get('/api/suppliers');
     }
 
+    getSupplierById(id: string) {
+        return axios.get(`/api/suppliers/${id}`);
+    }
+
     addSupplier(supplier: Supplier) {
         return axios.post('/api/suppliers', supplier);
     }

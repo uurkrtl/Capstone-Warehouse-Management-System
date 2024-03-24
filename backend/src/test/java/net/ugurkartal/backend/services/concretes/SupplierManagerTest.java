@@ -16,8 +16,11 @@ import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
@@ -61,6 +64,32 @@ class SupplierManagerTest {
 
         // Then
         assertEquals(2, response.size());
+    }
+
+    @Test
+    void getSupplierById_whenSupplierExists_shouldReturnSupplier() {
+        // Given
+        Supplier supplier = Supplier.builder().id("1").build();
+        SupplierCreatedResponse expectedResponse = SupplierCreatedResponse.builder().id("1").build();
+
+        // When
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(modelMapper.map(supplier, SupplierCreatedResponse.class)).thenReturn(expectedResponse);
+        when(supplierRepository.findById("1")).thenReturn(Optional.of(supplier));
+
+        SupplierCreatedResponse actual = supplierManager.getSupplierById("1");
+
+        // Then
+        assertEquals(expectedResponse.getId(), actual.getId());
+    }
+
+    @Test
+    void getSupplierById_WhenSupplierDoesNotExist_shouldThrowsNoSuchElementException() {
+        // Given & When
+        when(supplierRepository.findById("1")).thenReturn(Optional.empty());
+
+        // Then
+        assertThrows(NoSuchElementException.class, () -> supplierManager.getSupplierById("1"));
     }
 
     @Test

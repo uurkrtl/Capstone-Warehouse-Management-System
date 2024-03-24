@@ -32,6 +32,13 @@ public class SupplierManager implements SupplierService {
     }
 
     @Override
+    public SupplierCreatedResponse getSupplierById(String id) {
+        supplierBusinessRules.checkIfSupplierByIdNotFound(id);
+        Supplier supplier = supplierRepository.findById(id).orElseThrow();
+        return modelMapperService.forResponse().map(supplier, SupplierCreatedResponse.class);
+    }
+
+    @Override
     public SupplierCreatedResponse addSupplier(SupplierRequest supplierRequest) {
         supplierBusinessRules.checkIfSupplierNameExists(supplierRequest.getName());
         Supplier supplier = modelMapperService.forRequest().map(supplierRequest, Supplier.class);

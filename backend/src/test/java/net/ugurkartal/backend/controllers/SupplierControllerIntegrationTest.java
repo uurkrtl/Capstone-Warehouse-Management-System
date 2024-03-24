@@ -1,6 +1,7 @@
 package net.ugurkartal.backend.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.ugurkartal.backend.services.abstracts.SupplierService;
 import net.ugurkartal.backend.services.dtos.requests.SupplierRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ class SupplierControllerIntegrationTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private SupplierService supplierService;
 
     @Test
     void getAllSuppliers_shouldReturnsListOfSuppliers() throws Exception {
@@ -51,6 +55,39 @@ class SupplierControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
+    }
+
+    @Test
+    void getSupplierById_whenSupplierExists_shouldReturnSupplier() throws Exception {
+        //Given
+        SupplierRequest supplierRequest = SupplierRequest.builder()
+                .name("Supplier")
+                .contactName("Contact Name")
+                .email("test@test.com")
+                .phone("1234567890")
+                .build();
+
+        String supplierId = supplierService.addSupplier(supplierRequest).getId();
+
+        //When & Then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/suppliers/" + supplierId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(supplierId));
+
+    }
+
+    @Test
+    void getSupplierById_WhenSupplierDoesNotExist_shouldThrowsNoSuchElementException() throws Exception {
+        //Given
+        String id = "non-existing-id";
+
+        //When & Then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/suppliers/" + id)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
     @Test

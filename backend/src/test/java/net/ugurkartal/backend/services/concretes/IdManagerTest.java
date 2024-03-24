@@ -35,6 +35,14 @@ class IdManagerTest {
     }
 
     @Test
+    void generateSupplierIdReturnsUniqueId() {
+        String id1 = idManager.generateSupplierId();
+        String id2 = idManager.generateSupplierId();
+
+        assertNotEquals(id1, id2);
+    }
+
+    @Test
     void generateProductIdReturnsIdWithCorrectPrefix() {
         String id = idManager.generateProductId();
 
@@ -46,5 +54,12 @@ class IdManagerTest {
         String id = idManager.generateCategoryId();
 
         assertTrue(id.startsWith("CAT-"));
+    }
+
+    @Test
+    void generateSupplierIdReturnsIdWithCorrectPrefix() {
+        String id = idManager.generateSupplierId();
+
+        assertTrue(id.startsWith("SUP-"));
     }
 }

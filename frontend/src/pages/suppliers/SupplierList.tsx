@@ -90,7 +90,7 @@ function SupplierList() {
                                     <span className="badge text-bg-success rounded-pill">Aktiv</span>
                                     : <span className="badge text-bg-danger rounded-pill">Passiv</span>}
                             </td>
-                            <td><Link to={`/categories/detail/${supplier.id}`}
+                            <td><Link to={`/suppliers/detail/${supplier.id}`}
                                       className="btn btn-outline-info">Detail</Link></td>
                             <td><Link to={"/"} className="btn btn-outline-secondary">Kaufhistorie</Link></td>
                         </tr>
