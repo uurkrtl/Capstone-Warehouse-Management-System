@@ -5,14 +5,22 @@ import lombok.RequiredArgsConstructor;
 import net.ugurkartal.backend.services.abstracts.SupplierService;
 import net.ugurkartal.backend.services.dtos.requests.SupplierRequest;
 import net.ugurkartal.backend.services.dtos.responses.SupplierCreatedResponse;
+import net.ugurkartal.backend.services.dtos.responses.SupplierGetAllResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/suppliers")
 @RequiredArgsConstructor
 public class SupplierController {
     private final SupplierService supplierService;
+
+    @GetMapping
+    public List<SupplierGetAllResponse> getAllSuppliers() {
+        return supplierService.getAllSuppliers();
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

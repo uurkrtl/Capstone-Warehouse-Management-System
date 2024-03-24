@@ -6,6 +6,7 @@ import net.ugurkartal.backend.repositories.SupplierRepository;
 import net.ugurkartal.backend.services.abstracts.IdService;
 import net.ugurkartal.backend.services.dtos.requests.SupplierRequest;
 import net.ugurkartal.backend.services.dtos.responses.SupplierCreatedResponse;
+import net.ugurkartal.backend.services.dtos.responses.SupplierGetAllResponse;
 import net.ugurkartal.backend.services.rules.SupplierBusinessRules;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -40,6 +43,24 @@ class SupplierManagerTest {
     public void setup() {
         MockitoAnnotations.openMocks(this);
         modelMapper = mock(ModelMapper.class);
+    }
+
+    @Test
+    void getAllSuppliers_shouldReturnsListOfSuppliers() {
+        // Given
+        List<Supplier> suppliers = List.of(
+                Supplier.builder().id("1").build(),
+                Supplier.builder().id("2").build()
+        );
+
+        // When
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(supplierRepository.findAll()).thenReturn(suppliers);
+
+        List<SupplierGetAllResponse> response = supplierManager.getAllSuppliers();
+
+        // Then
+        assertEquals(2, response.size());
     }
 
     @Test

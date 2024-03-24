@@ -25,6 +25,16 @@ class SupplierControllerIntegrationTest {
     private ObjectMapper objectMapper;
 
     @Test
+    void getAllSuppliers_shouldReturnsListOfSuppliers() throws Exception {
+        //When & Then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/suppliers")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+    }
+
+    @Test
     void addSupplier_whenValidInput_thenReturns200() throws Exception {
         //Given
         SupplierRequest supplierRequest = SupplierRequest.builder()

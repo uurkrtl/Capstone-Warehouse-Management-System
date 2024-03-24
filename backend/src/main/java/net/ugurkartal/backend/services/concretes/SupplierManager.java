@@ -8,10 +8,12 @@ import net.ugurkartal.backend.services.abstracts.IdService;
 import net.ugurkartal.backend.services.abstracts.SupplierService;
 import net.ugurkartal.backend.services.dtos.requests.SupplierRequest;
 import net.ugurkartal.backend.services.dtos.responses.SupplierCreatedResponse;
+import net.ugurkartal.backend.services.dtos.responses.SupplierGetAllResponse;
 import net.ugurkartal.backend.services.rules.SupplierBusinessRules;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +22,14 @@ public class SupplierManager implements SupplierService {
     private final ModelMapperService modelMapperService;
     private final IdService idService;
     private final SupplierBusinessRules supplierBusinessRules;
+
+    @Override
+    public List<SupplierGetAllResponse> getAllSuppliers() {
+        List<Supplier> suppliers = supplierRepository.findAll();
+        return suppliers.stream()
+                .map(supplier->this.modelMapperService.forResponse()
+                        .map(supplier, SupplierGetAllResponse.class)).toList();
+    }
 
     @Override
     public SupplierCreatedResponse addSupplier(SupplierRequest supplierRequest) {
