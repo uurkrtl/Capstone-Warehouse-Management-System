@@ -11,6 +11,7 @@ import CategoryAdd from "../pages/categories/CategoryAdd.tsx";
 import CategoryList from "../pages/categories/CategoryList.tsx";
 import CategoryDetail from "../pages/categories/CategoryDetail.tsx";
 import CategoryUpdate from "../pages/categories/CategoryUpdate.tsx";
+import SupplierAdd from "../pages/suppliers/SupplierAdd.tsx";
 
 function Dashboard() {
     return (
@@ -27,6 +28,7 @@ function Dashboard() {
                     <Route path={'/categories/update/:id'} element={<CategoryUpdate/>}/>
                     <Route path={'/categories/detail/:id'} element={<CategoryDetail/>}/>
                     <Route path={'/categories/add'} element={<CategoryAdd/>}/>
+                    <Route path={'/suppliers/add'} element={<SupplierAdd/>}/>
                     <Route path={'*'} element={<PageNotFound404/>}/>
                 </Routes>
                 <Footer />
