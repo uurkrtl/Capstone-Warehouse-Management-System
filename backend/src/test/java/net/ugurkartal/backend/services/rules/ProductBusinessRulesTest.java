@@ -1,8 +1,10 @@
 package net.ugurkartal.backend.services.rules;
 
+import net.ugurkartal.backend.core.exceptions.types.CategoryOfProductPassiveException;
 import net.ugurkartal.backend.core.exceptions.types.DuplicateRecordException;
 import net.ugurkartal.backend.core.exceptions.types.RecordNotFoundException;
 import net.ugurkartal.backend.core.exceptions.types.StockNotZeroException;
+import net.ugurkartal.backend.models.Category;
 import net.ugurkartal.backend.models.Product;
 import net.ugurkartal.backend.repositories.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -107,5 +109,39 @@ class ProductBusinessRulesTest {
         when(productRepository.findById(productId)).thenReturn(Optional.of(product));
 
         assertThrows(StockNotZeroException.class, () -> productBusinessRules.checkIfProductStockNotZero(productId, status));
+    }
+
+    @Test
+    void checkIfCategoryOfProductPassive_whenCategoryIsPassiveAndProductStatusIsTrue_throwsCategoryOfProductPassiveException() {
+        String productId = "1";
+        boolean productStatus = true;
+
+        Category category = new Category();
+        category.setActive(false);
+
+        Product product = new Product();
+        product.setId(productId);
+        product.setCategory(category);
+
+        when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+
+        assertThrows(CategoryOfProductPassiveException.class, () -> productBusinessRules.checkIfCategoryOfProductPassive(productId, productStatus));
+    }
+
+    @Test
+    void checkIfCategoryOfProductPassive_whenCategoryIsActiveAndProductStatusIsTrue_doesNotThrowException() {
+        String productId = "1";
+        boolean productStatus = true;
+
+        Category category = new Category();
+        category.setActive(true);
+
+        Product product = new Product();
+        product.setId(productId);
+        product.setCategory(category);
+
+        when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+
+        assertDoesNotThrow(() -> productBusinessRules.checkIfCategoryOfProductPassive(productId, productStatus));
     }
 }

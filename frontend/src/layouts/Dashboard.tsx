@@ -11,6 +11,10 @@ import CategoryAdd from "../pages/categories/CategoryAdd.tsx";
 import CategoryList from "../pages/categories/CategoryList.tsx";
 import CategoryDetail from "../pages/categories/CategoryDetail.tsx";
 import CategoryUpdate from "../pages/categories/CategoryUpdate.tsx";
+import SupplierAdd from "../pages/suppliers/SupplierAdd.tsx";
+import SupplierList from "../pages/suppliers/SupplierList.tsx";
+import SupplierDetail from "../pages/suppliers/SupplierDetail.tsx";
+import SupplierUpdate from "../pages/suppliers/SupplierUpdate.tsx";
 
 function Dashboard() {
     return (
@@ -27,6 +31,10 @@ function Dashboard() {
                     <Route path={'/categories/update/:id'} element={<CategoryUpdate/>}/>
                     <Route path={'/categories/detail/:id'} element={<CategoryDetail/>}/>
                     <Route path={'/categories/add'} element={<CategoryAdd/>}/>
+                    <Route path={'/suppliers'} element={<SupplierList/>}/>
+                    <Route path={'/suppliers/update/:id'} element={<SupplierUpdate/>}/>
+                    <Route path={'/suppliers/detail/:id'} element={<SupplierDetail/>}/>
+                    <Route path={'/suppliers/add'} element={<SupplierAdd/>}/>
                     <Route path={'*'} element={<PageNotFound404/>}/>
                 </Routes>
                 <Footer />

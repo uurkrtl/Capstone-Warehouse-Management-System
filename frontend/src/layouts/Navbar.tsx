@@ -35,6 +35,17 @@ function Navbar() {
                                         erstellen</Link>
                                 </ul>
                             </li>
+                            <li className="nav-item dropdown">
+                                <Link to={`#`} className="nav-link dropdown-toggle text-decoration-none" type="button"
+                                      data-bs-toggle="dropdown"
+                                      aria-expanded="false">Lieferant</Link>
+                                <ul className="dropdown-menu">
+                                    <Link to={`/suppliers`}
+                                          className="dropdown-item text-decoration-none">Lieferantenliste</Link>
+                                    <Link to={`/suppliers/add`} className="dropdown-item text-decoration-none">Lieferant
+                                        erstellen</Link>
+                                </ul>
+                            </li>
                         </ul>
                         <form className="d-flex" role="search">
                             <input className="form-control me-2" type="search" placeholder="Search"

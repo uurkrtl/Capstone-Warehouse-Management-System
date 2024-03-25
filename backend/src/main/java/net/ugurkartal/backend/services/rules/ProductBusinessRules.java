@@ -1,6 +1,7 @@
 package net.ugurkartal.backend.services.rules;
 
 import lombok.RequiredArgsConstructor;
+import net.ugurkartal.backend.core.exceptions.types.CategoryOfProductPassiveException;
 import net.ugurkartal.backend.core.exceptions.types.DuplicateRecordException;
 import net.ugurkartal.backend.core.exceptions.types.RecordNotFoundException;
 import net.ugurkartal.backend.core.exceptions.types.StockNotZeroException;
@@ -45,6 +46,13 @@ public class ProductBusinessRules {
             if(product.getStock() > 0 && !status) {
                 throw new StockNotZeroException(ProductMessage.PRODUCT_STOCK_NOT_ZERO);
             }
+        }
+    }
+
+    public void checkIfCategoryOfProductPassive(String productId, boolean productStatus) {
+        boolean categoryStatus = productRepository.findById(productId).orElseThrow().getCategory().isActive();
+        if(!categoryStatus && productStatus) {
+            throw new CategoryOfProductPassiveException(ProductMessage.CATEGORY_OF_PRODUCT_PASSIVE);
         }
     }
 }

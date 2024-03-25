@@ -1,5 +1,6 @@
 package net.ugurkartal.backend.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import net.ugurkartal.backend.services.abstracts.CategoryService;
 import net.ugurkartal.backend.services.dtos.requests.CategoryRequest;
@@ -28,12 +29,12 @@ public class CategoryController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CategoryCreatedResponse addCategory(@RequestBody CategoryRequest categoryRequest) {
+    public CategoryCreatedResponse addCategory(@Valid @RequestBody CategoryRequest categoryRequest) {
         return categoryService.addCategory(categoryRequest);
     }
 
     @PutMapping("/{id}")
-    public CategoryCreatedResponse updateCategory(@PathVariable String id, @RequestBody CategoryRequest categoryRequest) {
+    public CategoryCreatedResponse updateCategory(@Valid @PathVariable String id, @RequestBody CategoryRequest categoryRequest) {
         return categoryService.updateCategory(id, categoryRequest);
     }
 

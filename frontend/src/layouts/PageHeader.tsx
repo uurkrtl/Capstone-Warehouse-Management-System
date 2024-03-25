@@ -22,6 +22,14 @@ function PageHeader({ title, pageType }: Readonly<{ title: string, pageType: str
             fillRule2 = undefined;
             imageUrl2 = 'M1.293 7.793A1 1 0 0 1 1 7.086V2a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l.043-.043z';
             break;
+        case 'supplier':
+            fill = 'currentColor';
+            className = 'bi bi-person-vcard-fill';
+            fillRule1 = undefined;
+            imageUrl1 = 'M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm9 1.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4a.5.5 0 0 0-.5.5M9 8a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4A.5.5 0 0 0 9 8m1 2.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 0-1h-3a.5.5 0 0 0-.5.5m-1 2C9 10.567 7.21 9 5 9c-2.086 0-3.8 1.398-3.984 3.181A1 1 0 0 0 2 13h6.96q.04-.245.04-.5M7 6a2 2 0 1 0-4 0 2 2 0 0 0 4 0';
+            fillRule2 = undefined;
+            imageUrl2 = '';
+            break;
         default:
             fill = 'currentColor';
             className = 'bi bi-shop';
