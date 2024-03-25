@@ -11,4 +11,5 @@ public interface SupplierService {
     SupplierCreatedResponse getSupplierById(String id);
     SupplierCreatedResponse addSupplier(SupplierRequest supplierRequest);
     SupplierCreatedResponse updateSupplier(String id, SupplierRequest supplierRequest);
+    SupplierCreatedResponse changeSupplierStatus(String id, boolean status);
 }

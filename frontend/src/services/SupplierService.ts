@@ -17,4 +17,8 @@ export default class SupplierService {
     updateSupplier(id:string, supplier: Supplier) {
         return axios.put(`/api/suppliers/${id}`, supplier);
     }
+
+    changeSupplierStatus(id: string, status: boolean) {
+        return axios.put(`/api/suppliers/status/${id}?status=${status}`);
+    }
 }

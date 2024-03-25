@@ -37,4 +37,9 @@ public class SupplierController {
     public SupplierCreatedResponse updateSupplier(@PathVariable String id, @Valid @RequestBody SupplierRequest supplierRequest) {
         return supplierService.updateSupplier(id, supplierRequest);
     }
+
+    @PutMapping("/status/{id}")
+    public SupplierCreatedResponse changeSupplierStatus(@PathVariable String id, @RequestParam boolean status) {
+        return supplierService.changeSupplierStatus(id, status);
+    }
 }

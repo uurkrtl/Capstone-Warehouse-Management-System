@@ -139,4 +139,26 @@ class SupplierControllerIntegrationTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("updated_mail@mail.com"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.phone").value("Updated 1234567890"));
     }
+
+    @Test
+    void changeSupplierStatus_whenSupplierExists_shouldChangeStatusCorrectly() throws Exception {
+        //Given
+        SupplierRequest supplierRequest = SupplierRequest.builder()
+                .name("Test")
+                .contactName("Test")
+                .email("mail@mail.com")
+                .phone("1234567890")
+                .build();
+
+        String supplierId = supplierService.addSupplier(supplierRequest).getId();
+        boolean newStatus = false;
+
+        //When & Then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/api/suppliers/status/" + supplierId)
+                        .param("status", String.valueOf(newStatus))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.active").value(newStatus));
+    }
 }

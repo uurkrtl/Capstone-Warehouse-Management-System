@@ -22,17 +22,25 @@ function ProductDetail() {
         active: true
     });
     const navigate = useNavigate();
+    const [errorMessage, setErrorMessage] = useState<string>('');
     const handleStatusChange = (status: boolean) => {
         productService.changeProductStatus(id, status)
             .then(() => {
                 console.log('Product status changed successfully');
+                setErrorMessage('')
                 setProduct({
                     ...product,
                     active: status
                 });
             })
             .catch((error) => {
-                console.error('Error changing product status:', error);
+                if (error.response) {
+                    console.log(error.response.data);
+                    setErrorMessage(error.response.data.message);
+                } else {
+                    console.log('Etwas ist schief gelaufen:', error.message);
+                    setErrorMessage('Etwas ist schief gelaufen: ' + error.message);
+                }
             });
     }
 
@@ -101,7 +109,11 @@ function ProductDetail() {
                         {product.active ? 'Deaktivieren' : 'Aktivieren'}</button>
                     <Link to={`/products`} type="button" className="btn btn-outline-secondary btn-lg px-4">Produktliste</Link>
                 </div>
-
+                {errorMessage && (
+                    <div className="alert alert-danger mt-3" role="alert">
+                        {errorMessage}
+                    </div>
+                )}
             </div>
         </div>
         </div>

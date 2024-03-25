@@ -178,4 +178,33 @@ class SupplierManagerTest {
         assertEquals(expectedResponse.getEmail(), actualResponse.getEmail());
         assertEquals(expectedResponse.getPhone(), actualResponse.getPhone());
     }
+
+    @Test
+    void changeSupplierStatus_whenSupplierExists_shouldChangeStatusCorrectly() {
+        // Given
+        String id = "1";
+
+        Supplier updatedSupplier = Supplier.builder()
+                .id("1")
+                .isActive(true)
+                .build();
+
+        SupplierCreatedResponse expectedResponse = SupplierCreatedResponse.builder()
+                .id("1")
+                .isActive(true)
+                .build();
+
+        // When
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(supplierRepository.findById("1")).thenReturn(Optional.of(Supplier.builder().id("1").build()));
+        when(supplierRepository.save(any(Supplier.class))).thenReturn(updatedSupplier);
+        when(modelMapper.map(updatedSupplier, SupplierCreatedResponse.class)).thenReturn(expectedResponse);
+
+        SupplierCreatedResponse actualResponse = supplierManager.changeSupplierStatus(id, true);
+
+        // Then
+        verify(supplierBusinessRules, times(1)).checkIfSupplierByIdNotFound(anyString());
+        verify(supplierRepository, times(1)).save(any(Supplier.class));
+        assertEquals(expectedResponse.isActive(), actualResponse.isActive());
+    }
 }

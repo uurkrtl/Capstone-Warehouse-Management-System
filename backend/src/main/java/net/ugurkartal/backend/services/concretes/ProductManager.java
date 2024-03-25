@@ -98,6 +98,7 @@ public class ProductManager implements ProductService {
     public ProductCreatedResponse changeProductStatus(String id, boolean status) {
         productBusinessRules.checkIfProductByIdNotFound(id);
         productBusinessRules.checkIfProductStockNotZero(id, status);
+        productBusinessRules.checkIfCategoryOfProductPassive(id, status);
         Product product = productRepository.findById(id).orElseThrow();
         product.setActive(status);
         product.setUpdatedAt(LocalDateTime.now());
