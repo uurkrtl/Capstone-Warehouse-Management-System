@@ -10,4 +10,5 @@ public interface SupplierService {
     List<SupplierGetAllResponse> getAllSuppliers();
     SupplierCreatedResponse getSupplierById(String id);
     SupplierCreatedResponse addSupplier(SupplierRequest supplierRequest);
+    SupplierCreatedResponse updateSupplier(String id, SupplierRequest supplierRequest);
 }

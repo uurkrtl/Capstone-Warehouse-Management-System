@@ -13,4 +13,8 @@ export default class SupplierService {
     addSupplier(supplier: Supplier) {
         return axios.post('/api/suppliers', supplier);
     }
+
+    updateSupplier(id:string, supplier: Supplier) {
+        return axios.put(`/api/suppliers/${id}`, supplier);
+    }
 }

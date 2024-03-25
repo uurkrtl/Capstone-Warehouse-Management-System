@@ -39,7 +39,7 @@ class SupplierControllerIntegrationTest {
     }
 
     @Test
-    void addSupplier_whenValidInput_thenReturns200() throws Exception {
+    void addSupplier_whenValidInput_shouldReturns201() throws Exception {
         //Given
         SupplierRequest supplierRequest = SupplierRequest.builder()
                 .name("Supplier")
@@ -91,7 +91,7 @@ class SupplierControllerIntegrationTest {
     }
 
     @Test
-    void addSupplier_whenInvalidInputName_thenReturns400() throws Exception {
+    void addSupplier_whenInvalidInputName_shouldReturns400() throws Exception {
         //Given
         SupplierRequest supplierRequest = SupplierRequest.builder()
                 .name("S")
@@ -106,5 +106,37 @@ class SupplierControllerIntegrationTest {
                         .content(objectMapper.writeValueAsString(supplierRequest))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void updateSupplier_whenSupplierRequestIsValid_shouldReturnSupplierCreatedResponse() throws Exception {
+        //Given
+        SupplierRequest supplierRequest = SupplierRequest.builder()
+                .name("Test")
+                .contactName("Test")
+                .email("mail@mail.com")
+                .phone("1234567890")
+                .build();
+
+        String supplierId = supplierService.addSupplier(supplierRequest).getId();
+
+        SupplierRequest request = SupplierRequest.builder()
+                .name("Updated Test")
+                .contactName("Updated Test")
+                .email("updated_mail@mail.com")
+                .phone("Updated 1234567890")
+                .build();
+
+        //When & Then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/api/suppliers/" + supplierId)
+                        .content(objectMapper.writeValueAsString(request))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(supplierId))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Updated Test"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.contactName").value("Updated Test"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("updated_mail@mail.com"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.phone").value("Updated 1234567890"));
     }
 }

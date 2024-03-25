@@ -48,4 +48,18 @@ public class SupplierManager implements SupplierService {
         supplier = supplierRepository.save(supplier);
         return modelMapperService.forResponse().map(supplier, SupplierCreatedResponse.class);
     }
+
+    @Override
+    public SupplierCreatedResponse updateSupplier(String id, SupplierRequest supplierRequest) {
+        supplierBusinessRules.checkIfSupplierByIdNotFound(id);
+        supplierBusinessRules.checkIfSupplierNameExists(supplierRequest.getName(), id);
+        Supplier updatedSupplier = modelMapperService.forRequest().map(supplierRequest, Supplier.class);
+        Supplier foundSupplier = supplierRepository.findById(id).orElseThrow();
+        updatedSupplier.setId(foundSupplier.getId());
+        updatedSupplier.setCreatedAt(foundSupplier.getCreatedAt());
+        updatedSupplier.setUpdatedAt(LocalDateTime.now());
+        updatedSupplier.setActive(foundSupplier.isActive());
+        updatedSupplier = supplierRepository.save(updatedSupplier);
+        return modelMapperService.forResponse().map(updatedSupplier, SupplierCreatedResponse.class);
+    }
 }

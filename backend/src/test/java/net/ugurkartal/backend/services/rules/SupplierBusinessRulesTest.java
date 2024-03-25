@@ -2,6 +2,7 @@ package net.ugurkartal.backend.services.rules;
 
 import net.ugurkartal.backend.core.exceptions.types.DuplicateRecordException;
 import net.ugurkartal.backend.core.exceptions.types.RecordNotFoundException;
+import net.ugurkartal.backend.models.Supplier;
 import net.ugurkartal.backend.repositories.SupplierRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,6 +48,21 @@ class SupplierBusinessRulesTest {
 
         // Then
         assertDoesNotThrow(() -> supplierBusinessRules.checkIfSupplierNameExists(nonExistingSupplierName));
+    }
+
+    @Test
+    void checkIfSupplierNameExists_whenSupplierNameExistsForSameSupplier_doesNotThrowException() {
+        // Given
+        String existingSupplierName = "Existing Supplier";
+        String existingSupplierId = "1";
+        Supplier existingSupplier = Supplier.builder().id(existingSupplierId).name(existingSupplierName).build();
+
+        // When
+        when(supplierRepository.findById(existingSupplierId)).thenReturn(java.util.Optional.of(existingSupplier));
+        when(supplierRepository.existsByName(existingSupplierName)).thenReturn(true);
+
+        // Then
+        assertDoesNotThrow(() -> supplierBusinessRules.checkIfSupplierNameExists(existingSupplierName, existingSupplierId));
     }
 
     @Test

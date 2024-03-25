@@ -130,4 +130,52 @@ class SupplierManagerTest {
         verify(supplierRepository, times(1)).save(supplier);
         assertEquals(expectedResponse.getId(), actualResponse.getId());
     }
+
+    @Test
+    void updateSupplier_whenSupplierRequestIsValid_shouldReturnSupplierCreatedResponse() {
+        // Given
+        String id = "1";
+        SupplierRequest request = SupplierRequest.builder()
+                .name("Updated Test")
+                .contactName("Updated Test")
+                .email("test@test.com")
+                .phone("1234567890")
+                .build();
+
+        Supplier updatedSupplier = Supplier.builder()
+                .id(id)
+                .name("Updated Test")
+                .contactName("Updated Test")
+                .email("test@test.com")
+                .phone("1234567890")
+                .build();
+
+        SupplierCreatedResponse expectedResponse = SupplierCreatedResponse.builder()
+                .id("1")
+                .name("Updated Test")
+                .contactName("Updated Test")
+                .email("test@test.com")
+                .phone("1234567890")
+                .build();
+
+        // When
+        when(modelMapperService.forRequest()).thenReturn(modelMapper);
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(modelMapper.map(request, Supplier.class)).thenReturn(updatedSupplier);
+        when(supplierRepository.findById(id)).thenReturn(Optional.of(Supplier.builder().id(id).build()));
+        when(supplierRepository.save(updatedSupplier)).thenReturn(updatedSupplier);
+        when(modelMapper.map(updatedSupplier, SupplierCreatedResponse.class)).thenReturn(expectedResponse);
+
+        SupplierCreatedResponse actualResponse = supplierManager.updateSupplier(id, request);
+
+        // Then
+        verify(supplierBusinessRules, times(1)).checkIfSupplierByIdNotFound(anyString());
+        verify(supplierBusinessRules, times(1)).checkIfSupplierNameExists(anyString(), anyString());
+        verify(supplierRepository, times(1)).save(updatedSupplier);
+        assertEquals(expectedResponse.getId(), actualResponse.getId());
+        assertEquals(expectedResponse.getName(), actualResponse.getName());
+        assertEquals(expectedResponse.getContactName(), actualResponse.getContactName());
+        assertEquals(expectedResponse.getEmail(), actualResponse.getEmail());
+        assertEquals(expectedResponse.getPhone(), actualResponse.getPhone());
+    }
 }

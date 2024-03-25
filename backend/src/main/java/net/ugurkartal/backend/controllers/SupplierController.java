@@ -32,4 +32,9 @@ public class SupplierController {
     public SupplierCreatedResponse addSupplier(@Valid @RequestBody SupplierRequest supplierRequest) {
         return supplierService.addSupplier(supplierRequest);
     }
+
+    @PutMapping("/{id}")
+    public SupplierCreatedResponse updateSupplier(@PathVariable String id, @Valid @RequestBody SupplierRequest supplierRequest) {
+        return supplierService.updateSupplier(id, supplierRequest);
+    }
 }
