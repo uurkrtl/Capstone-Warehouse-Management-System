@@ -15,6 +15,7 @@ import SupplierAdd from "../pages/suppliers/SupplierAdd.tsx";
 import SupplierList from "../pages/suppliers/SupplierList.tsx";
 import SupplierDetail from "../pages/suppliers/SupplierDetail.tsx";
 import SupplierUpdate from "../pages/suppliers/SupplierUpdate.tsx";
+import PurchaseAdd from "../pages/purchases/PurchaseAdd.tsx";
 
 function Dashboard() {
     return (
@@ -35,6 +36,7 @@ function Dashboard() {
                     <Route path={'/suppliers/update/:id'} element={<SupplierUpdate/>}/>
                     <Route path={'/suppliers/detail/:id'} element={<SupplierDetail/>}/>
                     <Route path={'/suppliers/add'} element={<SupplierAdd/>}/>
+                    <Route path={'/purchases/add'} element={<PurchaseAdd/>}/>
                     <Route path={'*'} element={<PageNotFound404/>}/>
                 </Routes>
                 <Footer />
