@@ -3,13 +3,8 @@ package net.ugurkartal.backend.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.ugurkartal.backend.models.Product;
 import net.ugurkartal.backend.models.Supplier;
-import net.ugurkartal.backend.repositories.CategoryRepository;
 import net.ugurkartal.backend.repositories.ProductRepository;
-import net.ugurkartal.backend.repositories.PurchaseRepository;
 import net.ugurkartal.backend.repositories.SupplierRepository;
-import net.ugurkartal.backend.services.abstracts.ProductService;
-import net.ugurkartal.backend.services.abstracts.PurchaseService;
-import net.ugurkartal.backend.services.abstracts.SupplierService;
 import net.ugurkartal.backend.services.dtos.requests.PurchaseRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -37,16 +31,20 @@ class PurchaseControllerIntegrationTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private PurchaseRepository purchaseRepository;
-
-    @Autowired
     private ProductRepository productRepository;
 
     @Autowired
     private SupplierRepository supplierRepository;
 
-    @Autowired
-    private PurchaseService purchaseService;
+    @Test
+    void getAllPurchases_shouldReturnsListOfPurchases() throws Exception {
+        //When & Then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/purchases")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+    }
 
     @Test
     void addPurchase_whenValidInput_shouldReturns201() throws Exception {

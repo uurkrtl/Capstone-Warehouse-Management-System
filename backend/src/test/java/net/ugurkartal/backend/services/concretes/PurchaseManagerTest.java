@@ -10,6 +10,7 @@ import net.ugurkartal.backend.repositories.SupplierRepository;
 import net.ugurkartal.backend.services.abstracts.IdService;
 import net.ugurkartal.backend.services.dtos.requests.PurchaseRequest;
 import net.ugurkartal.backend.services.dtos.responses.PurchaseCreatedResponse;
+import net.ugurkartal.backend.services.dtos.responses.PurchaseGetAllResponse;
 import net.ugurkartal.backend.services.rules.PurchaseBusinessRules;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,7 @@ import org.modelmapper.ModelMapper;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -54,6 +56,24 @@ class PurchaseManagerTest {
     public void setup() {
         MockitoAnnotations.openMocks(this);
         modelMapper = mock(ModelMapper.class);
+    }
+
+    @Test
+    void getAllPurchases_shouldReturnsListOfPurchases() {
+        // Given
+        List<Purchase> purchases = List.of(
+                Purchase.builder().id("1").build(),
+                Purchase.builder().id("2").build()
+        );
+
+        // When
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(purchaseRepository.findAll()).thenReturn(purchases);
+
+        List<PurchaseGetAllResponse> response = purchaseManager.getAllPurchases();
+
+        // Then
+        assertEquals(2, response.size());
     }
 
     @Test

@@ -1,5 +1,5 @@
 import SupplierService from "../../services/SupplierService.ts";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Supplier} from "../../types/Supplier.ts";
 import PageHeader from "../../layouts/PageHeader.tsx";
 import {Link} from "react-router-dom";
@@ -11,8 +11,8 @@ function SupplierList() {
     const [suppliersByStatus, setSuppliersByStatus] = useState<Supplier[]>(suppliers);
 
     const filteredSuppliers = suppliersByStatus.filter(
-        (category) =>
-            category.name.toLowerCase().includes(filter.toLowerCase())
+        (supplier) =>
+            supplier.name.toLowerCase().includes(filter.toLowerCase())
     );
 
     const handleStatusChange = (e: React.MouseEvent<HTMLInputElement>) => {

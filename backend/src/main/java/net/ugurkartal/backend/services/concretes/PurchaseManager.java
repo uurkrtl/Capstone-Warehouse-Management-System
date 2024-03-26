@@ -12,10 +12,12 @@ import net.ugurkartal.backend.services.abstracts.IdService;
 import net.ugurkartal.backend.services.abstracts.PurchaseService;
 import net.ugurkartal.backend.services.dtos.requests.PurchaseRequest;
 import net.ugurkartal.backend.services.dtos.responses.PurchaseCreatedResponse;
+import net.ugurkartal.backend.services.dtos.responses.PurchaseGetAllResponse;
 import net.ugurkartal.backend.services.rules.PurchaseBusinessRules;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +28,14 @@ public class PurchaseManager implements PurchaseService {
     private final ModelMapperService modelMapperService;
     private final IdService idService;
     private final PurchaseBusinessRules purchaseBusinessRules;
+
+    @Override
+    public List<PurchaseGetAllResponse> getAllPurchases() {
+        List<Purchase> purchases = purchaseRepository.findAll();
+        return purchases.stream()
+                .map(purchase -> this.modelMapperService.forResponse()
+                        .map(purchase, PurchaseGetAllResponse.class)).toList();
+    }
 
     @Override
     public PurchaseCreatedResponse addPurchase(PurchaseRequest purchaseRequest) {
