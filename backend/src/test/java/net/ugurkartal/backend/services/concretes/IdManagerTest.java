@@ -43,6 +43,14 @@ class IdManagerTest {
     }
 
     @Test
+    void generatePurchaseIdReturnsUniqueId() {
+        String id1 = idManager.generatePurchaseId();
+        String id2 = idManager.generatePurchaseId();
+
+        assertNotEquals(id1, id2);
+    }
+
+    @Test
     void generateProductIdReturnsIdWithCorrectPrefix() {
         String id = idManager.generateProductId();
 
@@ -61,5 +69,12 @@ class IdManagerTest {
         String id = idManager.generateSupplierId();
 
         assertTrue(id.startsWith("SUP-"));
+    }
+
+    @Test
+    void generatePurchaseIdReturnsIdWithCorrectPrefix() {
+        String id = idManager.generatePurchaseId();
+
+        assertTrue(id.startsWith("PRC-"));
     }
 }

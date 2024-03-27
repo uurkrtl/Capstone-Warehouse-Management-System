@@ -21,4 +21,9 @@ public class IdManager implements IdService {
     public String generateSupplierId() {
         return "SUP-" + UUID.randomUUID();
     }
+
+    @Override
+    public String generatePurchaseId() {
+        return "PRC-" + UUID.randomUUID();
+    }
 }

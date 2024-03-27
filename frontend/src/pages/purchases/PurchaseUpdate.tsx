@@ -1,32 +1,57 @@
-import React, {useEffect, useState} from 'react';
-import SupplierService from "../../services/SupplierService.ts";
+import PurchaseService from "../../services/PurchaseService.ts";
 import {useNavigate, useParams} from "react-router-dom";
-import {Supplier} from "../../types/Supplier.ts";
+import React, {useEffect, useState} from "react";
+import {Purchase} from "../../types/Purchase.ts";
 import PageHeader from "../../layouts/PageHeader.tsx";
-import SupplierCommonFormFields from "../../layouts/SupplierCommonFormFields.tsx";
+import PurchaseCommonFormFields from "../../layouts/PurchaseCommonFormFields.tsx";
+import {Product} from "../../types/Product.ts";
+import {Supplier} from "../../types/Supplier.ts";
+import ProductService from "../../services/ProductService.ts";
+import SupplierService from "../../services/SupplierService.ts";
 
+
+const purchaseService = new PurchaseService();
+const productService = new ProductService();
 const supplierService = new SupplierService();
-function SupplierUpdate() {
+function PurchaseUpdate() {
     const { id = '' } = useParams<string>();
-    const [supplier, setSupplier] = useState<Supplier>({
-        name: '',
+    const [purchase, setPurchase] = useState<Purchase>({
         id: '',
-        contactName: '',
-        email: '',
-        phone: '',
+        productId: '',
+        productName: '',
+        supplierId: '',
+        supplierName: '',
+        purchasePrice: 0,
+        quantity: 0,
+        totalPrice: 0,
+        purchaseDate: new Date,
         createdAt: new Date(),
         updatedAt: new Date(),
         active: true
     });
-
     const navigate = useNavigate();
+
+    const [suppliers, setSuppliers] = useState<Supplier[]>([]);
     const [errorMessage, setErrorMessage] = useState<string>('');
+    const [products, setProducts] = useState<Product[]>([]);
+
+    useEffect(() => {
+        productService.getAllProducts().then((response) => {
+            setProducts(response.data);
+        });
+    });
+
+    useEffect(() => {
+        supplierService.getAllSuppliers().then((response) => {
+            setSuppliers(response.data);
+        });
+    });
 
     useEffect(() => {
         if (id) {
-            supplierService.getSupplierById(id)
+            purchaseService.getPurchaseById(id)
                 .then((response) => {
-                    setSupplier(prevSupplier => ({...prevSupplier, ...response.data}));
+                    setPurchase(prevPurchase => ({...prevPurchase, ...response.data}));
                 })
                 .catch((error) => {
                     console.error('Etwas ist schief gelaufen:', error);
@@ -37,10 +62,10 @@ function SupplierUpdate() {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        supplierService.updateSupplier(id, supplier)
+        purchaseService.updatePurchase(id, purchase)
             .then(response => {
                 console.log(response)
-                navigate('/suppliers/detail/' + id)
+                navigate('/purchases/detail/' + id)
             })
             .catch(error => {
                 if (error.response) {
@@ -55,12 +80,12 @@ function SupplierUpdate() {
 
     return (
         <main className={'container'}>
-            <PageHeader title="Lieferantenaktualisierung" pageType="supplier"/>
+            <PageHeader title="Kaufsaktualisierung" pageType="purchase"/>
 
             <div className="row g-5">
                 <div className="col-md-12 col-lg-12">
                     <form onSubmit={handleSubmit}>
-                        <SupplierCommonFormFields supplier={supplier} setSupplier={setSupplier}/>
+                        <PurchaseCommonFormFields purchase={purchase} setPurchase={setPurchase} products={products} suppliers={suppliers}/>
                         <button className="w-100 btn btn-primary btn-lg my-4" type="submit">Aktualisieren</button>
                     </form>
 
@@ -76,4 +101,4 @@ function SupplierUpdate() {
     );
 }
 
-export default SupplierUpdate;
+export default PurchaseUpdate;

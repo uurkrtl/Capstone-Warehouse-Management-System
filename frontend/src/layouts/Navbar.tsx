@@ -31,7 +31,7 @@ function Navbar() {
                                 <ul className="dropdown-menu">
                                     <Link to={`/categories`}
                                           className="dropdown-item text-decoration-none">Kategorieliste</Link>
-                                    <Link to={`/categories/add`} className="dropdown-item text-decoration-none">Produkt
+                                    <Link to={`/categories/add`} className="dropdown-item text-decoration-none">Kategorie
                                         erstellen</Link>
                                 </ul>
                             </li>
@@ -43,6 +43,17 @@ function Navbar() {
                                     <Link to={`/suppliers`}
                                           className="dropdown-item text-decoration-none">Lieferantenliste</Link>
                                     <Link to={`/suppliers/add`} className="dropdown-item text-decoration-none">Lieferant
+                                        erstellen</Link>
+                                </ul>
+                            </li>
+                            <li className="nav-item dropdown">
+                                <Link to={`#`} className="nav-link dropdown-toggle text-decoration-none" type="button"
+                                      data-bs-toggle="dropdown"
+                                      aria-expanded="false">Kauf</Link>
+                                <ul className="dropdown-menu">
+                                    <Link to={`/purchases`}
+                                          className="dropdown-item text-decoration-none">Einkaufsliste</Link>
+                                    <Link to={`/purchases/add`} className="dropdown-item text-decoration-none">Kauf
                                         erstellen</Link>
                                 </ul>
                             </li>
