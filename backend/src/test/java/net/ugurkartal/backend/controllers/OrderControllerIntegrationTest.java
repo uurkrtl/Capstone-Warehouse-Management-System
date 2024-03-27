@@ -25,6 +25,16 @@ class OrderControllerIntegrationTest {
     private ObjectMapper objectMapper;
 
     @Test
+    void getAllOrders_shouldReturnsListOfOrders() throws Exception {
+        //When & Then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/orders")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+    }
+
+    @Test
     void addOrder_whenValidInput_shouldReturns201() throws Exception {
         //Given
         OrderRequest orderRequest = OrderRequest.builder().customerName("Customer").build();

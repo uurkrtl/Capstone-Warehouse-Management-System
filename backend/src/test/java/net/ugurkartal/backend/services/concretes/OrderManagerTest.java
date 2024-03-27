@@ -6,6 +6,7 @@ import net.ugurkartal.backend.repositories.OrderRepository;
 import net.ugurkartal.backend.services.abstracts.IdService;
 import net.ugurkartal.backend.services.dtos.requests.OrderRequest;
 import net.ugurkartal.backend.services.dtos.responses.OrderCreatedResponse;
+import net.ugurkartal.backend.services.dtos.responses.OrderGetAllResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -13,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -37,6 +39,24 @@ class OrderManagerTest {
     public void setup() {
         MockitoAnnotations.openMocks(this);
         modelMapper = mock(ModelMapper.class);
+    }
+
+    @Test
+    void getAllOrders_shouldReturnsListOfOrders() {
+        // Given
+        List<Order> orders = List.of(
+                Order.builder().id("1").build(),
+                Order.builder().id("2").build()
+        );
+
+        // When
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(orderRepository.findAll()).thenReturn(orders);
+
+        List<OrderGetAllResponse> response = orderManager.getAllOrders();
+
+        // Then
+        assertEquals(2, response.size());
     }
 
     @Test

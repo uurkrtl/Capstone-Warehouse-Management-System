@@ -5,14 +5,22 @@ import lombok.RequiredArgsConstructor;
 import net.ugurkartal.backend.services.abstracts.OrderService;
 import net.ugurkartal.backend.services.dtos.requests.OrderRequest;
 import net.ugurkartal.backend.services.dtos.responses.OrderCreatedResponse;
+import net.ugurkartal.backend.services.dtos.responses.OrderGetAllResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/orders")
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
+
+    @GetMapping
+    public List<OrderGetAllResponse> getAllOrders() {
+        return orderService.getAllOrders();
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
