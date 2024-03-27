@@ -22,8 +22,22 @@ function PurchaseDetail() {
         active: true
     });
     const navigate = useNavigate();
+    const [errorMessage, setErrorMessage] = useState<string>('');
 
-
+    const handleStatusChange = (status: boolean) => {
+        purchaseService.changePurchaseStatus(id, status)
+            .then(() => {
+                console.log('Der Kaufstatus wurde erfolgreich geändert');
+                setPurchase({
+                    ...purchase,
+                    active: status
+                });
+            })
+            .catch((error) => {
+                console.error('Fehler beim Ändern des Lieferantenstatus:', error);
+                setErrorMessage(error.response.data.message);
+            });
+    }
 
     useEffect(() => {
         if (id) {
@@ -37,7 +51,6 @@ function PurchaseDetail() {
                 });
         }
     }, [id, navigate]);
-
 
     return (
         <div className="container">
@@ -90,11 +103,18 @@ function PurchaseDetail() {
                     <div className="d-grid gap-2 d-md-flex justify-content-md-start">
                         <Link to={`/purchases/update/${purchase.id}`} type="button"
                               className="btn btn-primary btn-lg px-4 me-md-2">Aktualisieren</Link>
-
+                        <button type="button"
+                                className={purchase.active ? 'btn btn-danger px-4 me-md-2' : 'btn btn-success px-4 me-md-2'}
+                                onClick={() => handleStatusChange(!purchase.active)}>
+                            {purchase.active ? 'Deaktivieren' : 'Aktivieren'}</button>
                         <Link to={`/purchases`} type="button"
                               className="btn btn-outline-secondary btn-lg px-4">Einkaufsliste</Link>
                     </div>
-
+                    {errorMessage && (
+                        <div className="alert alert-danger mt-3" role="alert">
+                            {errorMessage}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

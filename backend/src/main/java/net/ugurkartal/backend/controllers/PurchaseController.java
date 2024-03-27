@@ -37,4 +37,9 @@ public class PurchaseController {
     public PurchaseCreatedResponse updatePurchase(@PathVariable String id, @Valid @RequestBody PurchaseRequest purchaseRequest) {
         return purchaseService.updatePurchase(id, purchaseRequest);
     }
+
+    @PutMapping("/status/{id}")
+    public PurchaseCreatedResponse changePurchaseStatus(@PathVariable String id, @RequestParam boolean status) {
+        return purchaseService.changePurchaseStatus(id, status);
+    }
 }

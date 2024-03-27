@@ -164,4 +164,29 @@ class PurchaseControllerIntegrationTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.purchasePrice").value(200.0))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.quantity").value(20));
     }
+
+    @Test
+    void changePurchaseStatus_whenPurchaseExists_shouldChangeStatusCorrectly() throws Exception {
+        // Given
+        String productId = productRepository.save(Product.builder().build()).getId();
+        String supplierId = supplierRepository.save(Supplier.builder().build()).getId();
+        PurchaseRequest purchaseRequest = PurchaseRequest.builder()
+                .productId(productId)
+                .supplierId(supplierId)
+                .purchasePrice(100.0)
+                .quantity(10)
+                .purchaseDate(LocalDateTime.now())
+                .build();
+
+        String purchaseId = purchaseService.addPurchase(purchaseRequest).getId();
+        boolean newStatus = false;
+
+        // When & Then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/api/purchases/status/" + purchaseId)
+                        .param("status", String.valueOf(newStatus))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.active").value(newStatus));
+    }
 }

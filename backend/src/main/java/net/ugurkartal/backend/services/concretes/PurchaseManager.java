@@ -82,4 +82,14 @@ public class PurchaseManager implements PurchaseService {
         updatedPurchase = purchaseRepository.save(updatedPurchase);
         return modelMapperService.forResponse().map(updatedPurchase, PurchaseCreatedResponse.class);
     }
+
+    @Override
+    public PurchaseCreatedResponse changePurchaseStatus(String id, boolean status) {
+        purchaseBusinessRules.checkIfPurchaseByIdNotFound(id);
+        Purchase purchase = purchaseRepository.findById(id).orElseThrow();
+        purchase.setActive(status);
+        purchase.setUpdatedAt(LocalDateTime.now());
+        purchase = purchaseRepository.save(purchase);
+        return modelMapperService.forResponse().map(purchase, PurchaseCreatedResponse.class);
+    }
 }

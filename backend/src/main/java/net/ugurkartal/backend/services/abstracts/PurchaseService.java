@@ -11,4 +11,5 @@ public interface PurchaseService {
     PurchaseCreatedResponse getPurchaseById(String id);
     PurchaseCreatedResponse addPurchase(PurchaseRequest purchaseRequest);
     PurchaseCreatedResponse updatePurchase(String id, PurchaseRequest purchaseRequest);
+    PurchaseCreatedResponse changePurchaseStatus(String id, boolean status);
 }

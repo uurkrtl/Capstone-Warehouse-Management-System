@@ -17,4 +17,8 @@ export default class PurchaseService {
     updatePurchase(id: string, purchase: Purchase) {
         return axios.put(`/api/purchases/${id}`, purchase);
     }
+
+    changePurchaseStatus(id: string, status: boolean) {
+        return axios.put(`/api/purchases/status/${id}?status=${status}`);
+    }
 }

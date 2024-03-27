@@ -183,4 +183,33 @@ class PurchaseManagerTest {
         assertEquals(expectedResponse.getQuantity(), actualResponse.getQuantity());
         assertEquals(expectedResponse.getPurchaseDate(), actualResponse.getPurchaseDate());
     }
+
+    @Test
+    void changePurchaseStatus_whenPurchaseExists_shouldChangeStatusCorrectly() {
+        // Given
+        String id = "1";
+
+        Purchase updatedPurchase = Purchase.builder()
+                .id("1")
+                .isActive(true)
+                .build();
+
+        PurchaseCreatedResponse expectedResponse = PurchaseCreatedResponse.builder()
+                .id("1")
+                .isActive(true)
+                .build();
+
+        // When
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(purchaseRepository.findById("1")).thenReturn(Optional.of(Purchase.builder().id("1").build()));
+        when(purchaseRepository.save(any(Purchase.class))).thenReturn(updatedPurchase);
+        when(modelMapper.map(updatedPurchase, PurchaseCreatedResponse.class)).thenReturn(expectedResponse);
+
+        PurchaseCreatedResponse actualResponse = purchaseManager.changePurchaseStatus(id, true);
+
+        // Then
+        verify(purchaseBusinessRules, times(1)).checkIfPurchaseByIdNotFound(anyString());
+        verify(purchaseRepository, times(1)).save(any(Purchase.class));
+        assertEquals(expectedResponse.isActive(), actualResponse.isActive());
+    }
 }
