@@ -32,4 +32,9 @@ public class PurchaseController {
     public PurchaseCreatedResponse addPurchase(@Valid @RequestBody PurchaseRequest purchaseRequest) {
         return purchaseService.addPurchase(purchaseRequest);
     }
+
+    @PutMapping("/{id}")
+    public PurchaseCreatedResponse updatePurchase(@PathVariable String id, @Valid @RequestBody PurchaseRequest purchaseRequest) {
+        return purchaseService.updatePurchase(id, purchaseRequest);
+    }
 }

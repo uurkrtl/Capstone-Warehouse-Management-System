@@ -76,7 +76,7 @@ function PurchaseDetail() {
                         </tr>
                         <tr>
                             <th scope="row">Datum der Aktualisierung</th>
-                            <td>{purchase.updatedAt ? purchase.updatedAt.toString() : "-"}</td>
+                            <td>{purchase.updatedAt ? new Date(purchase.updatedAt).toLocaleString('tr-TR') : "-"}</td>
                         </tr>
                         <tr>
                             <th scope="row">Status</th>

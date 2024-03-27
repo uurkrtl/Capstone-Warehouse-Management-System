@@ -127,4 +127,60 @@ class PurchaseManagerTest {
         verify(purchaseRepository, times(1)).save(purchase);
         assertEquals(expectedResponse.getId(), actualResponse.getId());
     }
+
+    @Test
+    void updatePurchase_whenPurchaseRequestIsValid_shouldReturnPurchaseCreatedResponse() {
+        // Given
+        Purchase purchase = Purchase.builder()
+                .id("1")
+                .product(Product.builder().id("1").build())
+                .supplier(Supplier.builder().id("1").build())
+                .purchasePrice(100.0)
+                .quantity(10)
+                .totalPrice(1000.0)
+                .purchaseDate(LocalDateTime.now())
+                .build();
+
+        PurchaseCreatedResponse expectedResponse = PurchaseCreatedResponse.builder()
+                .id("1")
+                .productId("1")
+                .supplierId("1")
+                .purchasePrice(100.0)
+                .quantity(10)
+                .totalPrice(1000.0)
+                .purchaseDate(LocalDateTime.now())
+                .build();
+
+        PurchaseRequest purchaseRequest = PurchaseRequest.builder()
+                .productId("1")
+                .supplierId("1")
+                .purchasePrice(100.0)
+                .quantity(10)
+                .purchaseDate(LocalDateTime.now())
+                .build();
+
+        // When
+        when(modelMapperService.forRequest()).thenReturn(modelMapper);
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(modelMapper.map(purchaseRequest, Purchase.class)).thenReturn(purchase);
+        when(purchaseRepository.findById("1")).thenReturn(Optional.of(purchase));
+        when(productRepository.findById("1")).thenReturn(Optional.of(Product.builder().id("1").build()));
+        when(supplierRepository.findById("1")).thenReturn(Optional.of(Supplier.builder().id("1").build()));
+        when(purchaseRepository.save(purchase)).thenReturn(purchase);
+        when(modelMapper.map(purchase, PurchaseCreatedResponse.class)).thenReturn(expectedResponse);
+
+        PurchaseCreatedResponse actualResponse = purchaseManager.updatePurchase("1", purchaseRequest);
+
+        // Then
+        verify(purchaseBusinessRules, times(1)).checkIfProductByIdNotFound(anyString());
+        verify(purchaseBusinessRules, times(1)).checkIfPurchaseByIdNotFound(anyString());
+        verify(purchaseBusinessRules, times(1)).checkIfSupplierByIdNotFound(anyString());
+        verify(purchaseRepository, times(1)).save(purchase);
+        assertEquals(expectedResponse.getId(), actualResponse.getId());
+        assertEquals(expectedResponse.getProductId(), actualResponse.getProductId());
+        assertEquals(expectedResponse.getSupplierId(), actualResponse.getSupplierId());
+        assertEquals(expectedResponse.getPurchasePrice(), actualResponse.getPurchasePrice());
+        assertEquals(expectedResponse.getQuantity(), actualResponse.getQuantity());
+        assertEquals(expectedResponse.getPurchaseDate(), actualResponse.getPurchaseDate());
+    }
 }

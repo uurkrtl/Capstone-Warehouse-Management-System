@@ -13,4 +13,8 @@ export default class PurchaseService {
     addPurchase(purchase: Purchase) {
         return axios.post('/api/purchases', purchase);
     }
+
+    updatePurchase(id: string, purchase: Purchase) {
+        return axios.put(`/api/purchases/${id}`, purchase);
+    }
 }

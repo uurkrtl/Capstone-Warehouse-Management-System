@@ -61,4 +61,25 @@ public class PurchaseManager implements PurchaseService {
         purchase = purchaseRepository.save(purchase);
         return modelMapperService.forResponse().map(purchase, PurchaseCreatedResponse.class);
     }
+
+    @Override
+    public PurchaseCreatedResponse updatePurchase(String id, PurchaseRequest purchaseRequest) {
+        purchaseBusinessRules.checkIfPurchaseByIdNotFound(id);
+        purchaseBusinessRules.checkIfProductByIdNotFound(purchaseRequest.getProductId());
+        purchaseBusinessRules.checkIfSupplierByIdNotFound(purchaseRequest.getSupplierId());
+        Purchase updatedPurchase = modelMapperService.forRequest().map(purchaseRequest, Purchase.class);
+        Purchase foundPurchase = purchaseRepository.findById(id).orElseThrow();
+        Product selectedProduct = productRepository.findById(purchaseRequest.getProductId()).orElseThrow();
+        Supplier selectedSupplier = supplierRepository.findById(purchaseRequest.getSupplierId()).orElseThrow();
+        updatedPurchase.setId(id);
+        updatedPurchase.setProduct(selectedProduct);
+        updatedPurchase.setSupplier(selectedSupplier);
+        updatedPurchase.setTotalPrice(purchaseRequest.getPurchasePrice() * purchaseRequest.getQuantity());
+        updatedPurchase.setPurchaseDate(purchaseRequest.getPurchaseDate().plusHours(1));
+        updatedPurchase.setActive(foundPurchase.isActive());
+        updatedPurchase.setCreatedAt(foundPurchase.getCreatedAt());
+        updatedPurchase.setUpdatedAt(LocalDateTime.now());
+        updatedPurchase = purchaseRepository.save(updatedPurchase);
+        return modelMapperService.forResponse().map(updatedPurchase, PurchaseCreatedResponse.class);
+    }
 }

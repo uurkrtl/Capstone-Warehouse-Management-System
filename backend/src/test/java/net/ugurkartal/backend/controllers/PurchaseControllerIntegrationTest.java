@@ -128,4 +128,40 @@ class PurchaseControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    void updatePurchase_whenPurchaseRequestIsValid_shouldReturnPurchaseCreatedResponse() throws Exception {
+        // Given
+        String productId = productRepository.save(Product.builder().build()).getId();
+        String supplierId = supplierRepository.save(Supplier.builder().build()).getId();
+        PurchaseRequest purchaseRequest = PurchaseRequest.builder()
+                .productId(productId)
+                .supplierId(supplierId)
+                .purchasePrice(100.0)
+                .quantity(10)
+                .purchaseDate(LocalDateTime.now())
+                .build();
+
+        String purchaseId = purchaseService.addPurchase(purchaseRequest).getId();
+
+        PurchaseRequest updatedPurchaseRequest = PurchaseRequest.builder()
+                .productId(productId)
+                .supplierId(supplierId)
+                .purchasePrice(200.0)
+                .quantity(20)
+                .purchaseDate(LocalDateTime.now())
+                .build();
+
+        // When & Then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/api/purchases/" + purchaseId)
+                        .content(objectMapper.writeValueAsString(updatedPurchaseRequest))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(purchaseId))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.productId").value(productId))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.supplierId").value(supplierId))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.purchasePrice").value(200.0))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.quantity").value(20));
+    }
 }
