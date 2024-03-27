@@ -1,8 +1,8 @@
 package net.ugurkartal.backend.services.rules;
 
 import net.ugurkartal.backend.core.exceptions.types.RecordNotFoundException;
-import net.ugurkartal.backend.repositories.CategoryRepository;
 import net.ugurkartal.backend.repositories.ProductRepository;
+import net.ugurkartal.backend.repositories.PurchaseRepository;
 import net.ugurkartal.backend.repositories.SupplierRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +14,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 class PurchaseBusinessRulesTest {
+
+    @Mock
+    private PurchaseRepository purchaseRepository;
     @Mock
     private SupplierRepository supplierRepository;
 
@@ -60,4 +63,19 @@ class PurchaseBusinessRulesTest {
         assertDoesNotThrow(() -> purchaseBusinessRules.checkIfSupplierByIdNotFound(existingSupplierId));
     }
 
+    @Test
+    void checkIfPurchaseByIdNotFound_throwsRecordNotFoundException_whenPurchaseDoesNotExist() {
+        String nonExistingPurchaseId = "Non Existing Purchase Id";
+        when(purchaseRepository.existsById(nonExistingPurchaseId)).thenReturn(false);
+
+        assertThrows(RecordNotFoundException.class, () -> purchaseBusinessRules.checkIfPurchaseByIdNotFound(nonExistingPurchaseId));
+    }
+
+    @Test
+    void checkIfPurchaseByIdNotFound_doesNotThrowException_whenPurchaseExists() {
+        String existingPurchaseId = "Existing Purchase Id";
+        when(purchaseRepository.existsById(existingPurchaseId)).thenReturn(true);
+
+        assertDoesNotThrow(() -> purchaseBusinessRules.checkIfPurchaseByIdNotFound(existingPurchaseId));
+    }
 }

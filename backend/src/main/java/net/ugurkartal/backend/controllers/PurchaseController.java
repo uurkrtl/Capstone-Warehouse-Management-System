@@ -22,6 +22,11 @@ public class PurchaseController {
         return purchaseService.getAllPurchases();
     }
 
+    @GetMapping("/{id}")
+    public PurchaseCreatedResponse getPurchaseById(@PathVariable String id) {
+        return purchaseService.getPurchaseById(id);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PurchaseCreatedResponse addPurchase(@Valid @RequestBody PurchaseRequest purchaseRequest) {

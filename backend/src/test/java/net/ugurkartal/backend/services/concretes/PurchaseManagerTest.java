@@ -19,9 +19,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -77,10 +77,36 @@ class PurchaseManagerTest {
     }
 
     @Test
+    void getPurchaseById_whenPurchaseExists_shouldReturnPurchase() {
+        // Given
+        Purchase purchase = Purchase.builder().id("1").build();
+        PurchaseCreatedResponse expectedResponse = PurchaseCreatedResponse.builder().id("1").build();
+
+        // When
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(modelMapper.map(purchase, PurchaseCreatedResponse.class)).thenReturn(expectedResponse);
+        when(purchaseRepository.findById("1")).thenReturn(Optional.of(purchase));
+
+        PurchaseCreatedResponse actual = purchaseManager.getPurchaseById("1");
+
+        // Then
+        assertEquals(expectedResponse.getId(), actual.getId());
+    }
+
+    @Test
+    void getPurchaseById_WhenPurchaseDoesNotExist_shouldThrowsNoSuchElementException() {
+        // Given & When
+        when(purchaseRepository.findById("1")).thenReturn(Optional.empty());
+
+        // Then
+        assertThrows(NoSuchElementException.class, () -> purchaseManager.getPurchaseById("1"));
+    }
+
+    @Test
     void addPurchase_whenPurchaseRequestIsValid_shouldReturnPurchaseCreatedResponse() {
         // Given
         Purchase purchase = Purchase.builder().id("1").build();
-        PurchaseCreatedResponse expectedResponse = PurchaseCreatedResponse.builder().id("1").purchaseDate(LocalDate.now()).build();
+        PurchaseCreatedResponse expectedResponse = PurchaseCreatedResponse.builder().id("1").purchaseDate(LocalDateTime.now()).build();
         PurchaseRequest purchaseRequest = PurchaseRequest.builder().productId("1").supplierId("1").purchaseDate(LocalDateTime.now()).build();
 
         // When

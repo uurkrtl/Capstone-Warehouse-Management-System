@@ -5,4 +5,5 @@ public class SupplierMessage {
 
     public static final String SUPPLIER_NAME_ALREADY_EXISTS = "Name des Anbieters existiert bereits";
     public static final String SUPPLIER_NOT_FOUND = "Lieferant nicht gefunden";
+    public static final String PURCHASE_NOT_FOUND = "Einkauf nicht gefunden";
 }

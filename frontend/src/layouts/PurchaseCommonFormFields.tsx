@@ -42,7 +42,7 @@ function PurchaseCommonFormFields({ purchase, setPurchase, products, suppliers }
             </div>
 
             <div className="col-sm-4">
-                <label htmlFor="purchasePrice" className="form-label">Kaufpreis</label>
+                <label htmlFor="purchasePrice" className="form-label">Einzelpreis</label>
                 <input type="number" step="0.01" className="form-control" id="purchasePrice"
                        placeholder="Schreiben Sie den Kaufpreis" value={purchase.purchasePrice}
                        onChange={(e) => setPurchase({

@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface PurchaseService {
     List<PurchaseGetAllResponse> getAllPurchases();
+    PurchaseCreatedResponse getPurchaseById(String id);
     PurchaseCreatedResponse addPurchase(PurchaseRequest purchaseRequest);
 }

@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -21,7 +20,7 @@ public class PurchaseCreatedResponse {
     private double purchasePrice;
     private int quantity;
     private double totalPrice;
-    private LocalDate purchaseDate;
+    private LocalDateTime purchaseDate;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private boolean isActive;

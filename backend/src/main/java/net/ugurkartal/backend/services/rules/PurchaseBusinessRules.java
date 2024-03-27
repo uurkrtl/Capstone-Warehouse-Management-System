@@ -6,6 +6,7 @@ import net.ugurkartal.backend.repositories.ProductRepository;
 import net.ugurkartal.backend.repositories.PurchaseRepository;
 import net.ugurkartal.backend.repositories.SupplierRepository;
 import net.ugurkartal.backend.services.messages.PurchaseMessage;
+import net.ugurkartal.backend.services.messages.SupplierMessage;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,6 +25,12 @@ public class PurchaseBusinessRules {
     public void checkIfSupplierByIdNotFound(String supplierId) {
         if(!this.supplierRepository.existsById(supplierId)) {
             throw new RecordNotFoundException(PurchaseMessage.SUPPLIER_NOT_FOUND);
+        }
+    }
+
+    public void checkIfPurchaseByIdNotFound(String id) {
+        if(!this.purchaseRepository.existsById(id)) {
+            throw new RecordNotFoundException(SupplierMessage.PURCHASE_NOT_FOUND);
         }
     }
 }

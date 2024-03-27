@@ -38,6 +38,13 @@ public class PurchaseManager implements PurchaseService {
     }
 
     @Override
+    public PurchaseCreatedResponse getPurchaseById(String id) {
+        purchaseBusinessRules.checkIfPurchaseByIdNotFound(id);
+        Purchase purchase = purchaseRepository.findById(id).orElseThrow();
+        return modelMapperService.forResponse().map(purchase, PurchaseCreatedResponse.class);
+    }
+
+    @Override
     public PurchaseCreatedResponse addPurchase(PurchaseRequest purchaseRequest) {
         purchaseBusinessRules.checkIfProductByIdNotFound(purchaseRequest.getProductId());
         purchaseBusinessRules.checkIfSupplierByIdNotFound(purchaseRequest.getSupplierId());
