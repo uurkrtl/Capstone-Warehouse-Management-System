@@ -1,6 +1,8 @@
 package net.ugurkartal.backend.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.ugurkartal.backend.models.enums.OrderStatus;
+import net.ugurkartal.backend.services.abstracts.OrderService;
 import net.ugurkartal.backend.services.dtos.requests.OrderRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ class OrderControllerIntegrationTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private OrderService orderService;
 
     @Test
     void getAllOrders_shouldReturnsListOfOrders() throws Exception {
@@ -59,5 +64,22 @@ class OrderControllerIntegrationTest {
                         .content(objectMapper.writeValueAsString(orderRequest))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void changeOrderStatus_whenOrderExists_shouldChangeStatusCorrectly() throws Exception {
+        //Given
+        OrderRequest orderRequest = OrderRequest.builder().customerName("Test").build();
+
+        String orderId = orderService.addOrder(orderRequest).getId();
+        String newStatus = OrderStatus.CONFIRMED.name();
+
+        //When & Then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/api/orders/status/" + orderId)
+                        .param("status", newStatus)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.orderStatus").value(newStatus));
     }
 }

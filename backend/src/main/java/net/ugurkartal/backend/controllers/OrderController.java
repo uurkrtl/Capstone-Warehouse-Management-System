@@ -27,4 +27,9 @@ public class OrderController {
     public OrderCreatedResponse addOrder(@Valid @RequestBody OrderRequest orderRequest) {
         return orderService.addOrder(orderRequest);
     }
+
+    @PutMapping("/status/{id}")
+    public OrderCreatedResponse changeOrderStatus(@PathVariable String id, @RequestParam String status) {
+        return orderService.changeOrderStatus(id, status);
+    }
 }

@@ -9,4 +9,5 @@ import java.util.List;
 public interface OrderService {
     List<OrderGetAllResponse> getAllOrders();
     OrderCreatedResponse addOrder(OrderRequest orderRequest);
+    OrderCreatedResponse changeOrderStatus(String orderId, String status);
 }
