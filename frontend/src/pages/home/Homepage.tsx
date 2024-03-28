@@ -62,7 +62,7 @@ function Homepage() {
                     </div>
 
                     <div className="col-lg-4">
-                        <Link to={`/`} className="nav-link active text-decoration-none" aria-current="page">
+                        <Link to={`/orders`} className="nav-link active text-decoration-none" aria-current="page">
                             <img
                                 src="https://cdn3.iconfinder.com/data/icons/tools-and-materials-ecommerce-hazel-vol-2/256/Work_Order_Management-512.png"
                                 className="bd-placeholder-img rounded-circle" width="140" height="140" alt="Bestellungsverwaltung"/>
