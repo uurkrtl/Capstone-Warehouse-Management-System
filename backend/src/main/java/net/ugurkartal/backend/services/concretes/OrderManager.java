@@ -36,6 +36,13 @@ public class OrderManager implements OrderService {
     }
 
     @Override
+    public OrderCreatedResponse getOrderById(String orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RecordNotFoundException(OrderMessage.ORDER_NOT_FOUND));
+        return modelMapperService.forResponse().map(order, OrderCreatedResponse.class);
+    }
+
+    @Override
     public OrderCreatedResponse addOrder(OrderRequest orderRequest) {
         Order order = modelMapperService.forRequest().map(orderRequest, Order.class);
         order.setId(idService.generateOrderId());

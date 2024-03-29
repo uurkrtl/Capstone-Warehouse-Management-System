@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class OrderDetailIntegrationTest {
+class OrderDetailControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
@@ -33,6 +33,14 @@ class OrderDetailIntegrationTest {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Test
+    void getOrdersByOrderId_returns404() throws Exception {
+        String orderId = "testOrderId";
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/order-details/" + orderId))
+                .andExpect(status().isNotFound());
+    }
 
     @Test
     void addOrderDetail_whenValidInput_shouldReturns201() throws Exception {

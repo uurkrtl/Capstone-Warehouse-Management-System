@@ -65,6 +65,23 @@ class OrderManagerTest {
     }
 
     @Test
+    void getOrderById_whenOrderExists_shouldReturnOrder() {
+        // Given
+        Order order = Order.builder().id("1").build();
+        OrderCreatedResponse expectedResponse = OrderCreatedResponse.builder().id("1").build();
+
+        // When
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(modelMapper.map(order, OrderCreatedResponse.class)).thenReturn(expectedResponse);
+        when(orderRepository.findById("1")).thenReturn(Optional.of(order));
+
+        OrderCreatedResponse actual = orderManager.getOrderById("1");
+
+        // Then
+        assertEquals(expectedResponse.getId(), actual.getId());
+    }
+
+    @Test
     void addOrder_whenOrderRequestIsValid_shouldReturnOrderCreatedResponse() {
         // Given
         Order order = Order.builder().id("1").build();

@@ -22,6 +22,11 @@ public class OrderController {
         return orderService.getAllOrders();
     }
 
+    @GetMapping("/{id}")
+    public OrderCreatedResponse getOrderById(@PathVariable String id) {
+        return orderService.getOrderById(id);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public OrderCreatedResponse addOrder(@Valid @RequestBody OrderRequest orderRequest) {

@@ -12,8 +12,11 @@ import net.ugurkartal.backend.services.abstracts.IdService;
 import net.ugurkartal.backend.services.abstracts.OrderDetailService;
 import net.ugurkartal.backend.services.dtos.requests.OrderDetailRequest;
 import net.ugurkartal.backend.services.dtos.responses.OrderDetailCreatedResponse;
+import net.ugurkartal.backend.services.dtos.responses.OrderDetailGetAllResponse;
 import net.ugurkartal.backend.services.rules.OrderDetailBusinessRules;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +27,15 @@ public class OrderDetailManager implements OrderDetailService {
     private final ModelMapperService modelMapperService;
     private final IdService idService;
     private final OrderDetailBusinessRules orderDetailBusinessRules;
+
+    @Override
+    public List<OrderDetailGetAllResponse> getOrdersByOrderId(String orderId) {
+        orderDetailBusinessRules.checkIfOrderByIdNotFound(orderId);
+        List<OrderDetail> orderDetails = orderDetailRepository.findAll();
+        return orderDetails.stream().filter(orderDetail -> orderDetail.getOrder().getId().equals(orderId))
+                .map(orderDetail -> modelMapperService.forResponse()
+                        .map(orderDetail, OrderDetailGetAllResponse.class)).toList();
+    }
 
     @Override
     public OrderDetailCreatedResponse addOrderDetail(OrderDetailRequest orderDetailRequest) {

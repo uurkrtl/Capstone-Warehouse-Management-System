@@ -40,6 +40,22 @@ class OrderControllerIntegrationTest {
     }
 
     @Test
+    void getOrderById_whenOrderExists_shouldReturnOrder() throws Exception {
+        //Given
+        OrderRequest orderRequest = OrderRequest.builder().customerName("Test").build();
+
+        String orderId = orderService.addOrder(orderRequest).getId();
+
+        //When & Then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/orders/" + orderId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(orderId));
+
+    }
+
+    @Test
     void addOrder_whenValidInput_shouldReturns201() throws Exception {
         //Given
         OrderRequest orderRequest = OrderRequest.builder().customerName("Customer").build();
