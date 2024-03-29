@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class OrderRequest {
-    @Size(min = 2, max = 50, message = "The customer name must be between 2 and 50 characters")
+    @Size(min = 2, max = 50, message = "Der Name des Kunden muss zwischen 2 und 50 Zeichen lang sein")
     private String customerName;
 }

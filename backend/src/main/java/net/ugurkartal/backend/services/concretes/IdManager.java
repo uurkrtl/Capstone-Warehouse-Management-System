@@ -31,4 +31,9 @@ public class IdManager implements IdService {
     public String generateOrderId() {
         return "ORD-" + UUID.randomUUID();
     }
+
+    @Override
+    public String generateOrderDetailId() {
+        return "ODT-" + UUID.randomUUID();
+    }
 }

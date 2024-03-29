@@ -6,4 +6,5 @@ public interface IdService {
     String generateSupplierId();
     String generatePurchaseId();
     String generateOrderId();
+    String generateOrderDetailId();
 }

@@ -41,7 +41,7 @@ public class OrderManager implements OrderService {
         order.setId(idService.generateOrderId());
         order.setOrderDate(LocalDateTime.now());
         order.setOrderStatus(OrderStatus.PENDING);
-        orderRepository.save(order);
+        order = orderRepository.save(order);
         return modelMapperService.forResponse().map(order, OrderCreatedResponse.class);
     }
 
