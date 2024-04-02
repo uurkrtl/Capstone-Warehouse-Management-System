@@ -1,26 +1,21 @@
-package net.ugurkartal.backend.models;
+package net.ugurkartal.backend.services.dtos.responses;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.ugurkartal.backend.models.enums.StockMovementReason;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
-@Document(collection = "stock_movements")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class StockMovement {
-    @Id
+public class StockMovementGetAllResponse {
     private String id;
-    @DBRef
-    private Product product;
+    private String productId;
+    private String productName;
     private int quantity;
     private boolean type;
     private StockMovementReason reason;

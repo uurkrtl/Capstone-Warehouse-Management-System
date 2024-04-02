@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.ugurkartal.backend.models.Product;
 import net.ugurkartal.backend.models.enums.StockMovementReason;
 
 import java.time.LocalDateTime;
@@ -15,7 +14,8 @@ import java.time.LocalDateTime;
 @Builder
 public class StockMovementCreatedResponse {
     private String id;
-    private Product product;
+    private String productId;
+    private String productName;
     private int quantity;
     private boolean type;
     private StockMovementReason reason;

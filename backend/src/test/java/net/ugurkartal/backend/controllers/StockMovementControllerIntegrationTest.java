@@ -29,6 +29,16 @@ class StockMovementControllerIntegrationTest {
     private ProductRepository productRepository;
 
     @Test
+    void getAllStockMovements_shouldReturnsListOfStockMovements() throws Exception {
+        //When & Then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/stock-movements")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+    }
+
+    @Test
     void addStockMovement_whenValidInput_shouldReturns201() throws Exception {
         //Given
         String productId = productRepository.save(Product.builder().build()).getId();

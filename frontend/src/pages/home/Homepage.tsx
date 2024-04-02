@@ -71,7 +71,7 @@ function Homepage() {
                     </div>
 
                     <div className="col-lg-4">
-                        <Link to={`/`} className="nav-link active text-decoration-none" aria-current="page">
+                        <Link to={`/stock-movements`} className="nav-link active text-decoration-none" aria-current="page">
                             <img src="https://cdn-icons-png.flaticon.com/512/7656/7656399.png"
                                  className="bd-placeholder-img rounded-circle" width="140" height="140" alt="Lagerbewegung"/>
                             <h2 className="fw-normal">Lagerbewegung</h2>

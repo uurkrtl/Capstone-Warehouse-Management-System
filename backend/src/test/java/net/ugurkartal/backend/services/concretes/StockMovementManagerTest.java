@@ -8,6 +8,7 @@ import net.ugurkartal.backend.repositories.StockMovementRepository;
 import net.ugurkartal.backend.services.abstracts.IdService;
 import net.ugurkartal.backend.services.dtos.requests.StockMovementRequest;
 import net.ugurkartal.backend.services.dtos.responses.StockMovementCreatedResponse;
+import net.ugurkartal.backend.services.dtos.responses.StockMovementGetAllResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -15,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,6 +44,24 @@ class StockMovementManagerTest {
     public void setup() {
         MockitoAnnotations.openMocks(this);
         modelMapper = mock(ModelMapper.class);
+    }
+
+    @Test
+    void getAllStockMovements_shouldReturnsListOfStockMovements() {
+        // Given
+        List<StockMovement> stockMovements = List.of(
+                StockMovement.builder().id("1").build(),
+                StockMovement.builder().id("2").build()
+        );
+
+        // When
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(stockMovementRepository.findAll()).thenReturn(stockMovements);
+
+        List<StockMovementGetAllResponse> response = stockMovementManager.getAllStockMovements();
+
+        // Then
+        assertEquals(2, response.size());
     }
 
     @Test
