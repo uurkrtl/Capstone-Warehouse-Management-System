@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import {Order} from "../../types/Order.ts";
 import {OrderDetail} from "../../types/OrderDetail.ts";
 import OrderDetailService from "../../services/OrderDetailService.ts";
+import {OrderStatus} from "../../types/enums/OrderStatus.ts";
 
 
 const orderService = new OrderService();
@@ -45,7 +46,7 @@ function OrderDetails() {
             <div className="row flex-lg-row align-items-center g-5 py-2">
                 <div className="col-lg-6">
                     <h1 className="display-5 fw-bold text-body-emphasis lh-1 mb-3">{order.customerName}</h1>
-                    <p className="lead">{order.orderDate ? new Date(order.orderDate).toLocaleDateString() : '-'} - {order.orderStatus}</p>
+                    <p className="lead">{order.orderDate ? new Date(order.orderDate).toLocaleDateString() : '-'} - {OrderStatus[order.orderStatus as keyof typeof OrderStatus]}</p>
 
                     <table className="table table-striped">
                         <thead>

@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import {Order} from "../../types/Order.ts";
 import PageHeader from "../../layouts/PageHeader.tsx";
 import {Link} from "react-router-dom";
+import {OrderStatus} from "../../types/enums/OrderStatus.ts";
 
 const orderService = new OrderService();
 function OrderList() {
@@ -110,7 +111,7 @@ function OrderList() {
                             </td>
 
                             <td>{order.orderDate ? new Date(order.orderDate).toLocaleDateString() : '-'}</td>
-                            <td>{order.orderStatus}</td>
+                            <td>{OrderStatus[order.orderStatus as keyof typeof OrderStatus]}</td>
                             <td><Link to={`/orders/detail/${order.id}`}
                                       className="btn btn-outline-info">Detail</Link></td>
                         </tr>

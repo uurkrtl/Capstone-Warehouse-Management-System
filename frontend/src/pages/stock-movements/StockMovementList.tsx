@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {StockMovement} from "../../types/StockMovement.ts";
 import StockMovementService from "../../services/StockMovementService.ts";
 import PageHeader from "../../layouts/PageHeader.tsx";
+import {StockMovementReason} from "../../types/enums/StockMovementReason.ts";
 
 const stockMovementService = new StockMovementService();
 function StockMovementList() {
@@ -96,7 +97,7 @@ function StockMovementList() {
                                     <span className="badge text-bg-success rounded-pill">Lagereintrag</span>
                                     : <span className="badge text-bg-danger rounded-pill">Lagerausgabe</span>}
                             </td>
-                            <td>{stockMovement.reason}</td>
+                            <td>{StockMovementReason[stockMovement.reason as keyof typeof StockMovementReason]}</td>
                             <td>{stockMovement.createdAt ? new Date(stockMovement.createdAt).toLocaleString('tr-TR') : "-"}</td>
                         </tr>
                     );
