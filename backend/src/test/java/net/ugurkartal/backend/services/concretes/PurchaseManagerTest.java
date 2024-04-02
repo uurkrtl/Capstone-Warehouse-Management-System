@@ -8,6 +8,7 @@ import net.ugurkartal.backend.repositories.ProductRepository;
 import net.ugurkartal.backend.repositories.PurchaseRepository;
 import net.ugurkartal.backend.repositories.SupplierRepository;
 import net.ugurkartal.backend.services.abstracts.IdService;
+import net.ugurkartal.backend.services.abstracts.StockMovementService;
 import net.ugurkartal.backend.services.dtos.requests.PurchaseRequest;
 import net.ugurkartal.backend.services.dtos.responses.PurchaseCreatedResponse;
 import net.ugurkartal.backend.services.dtos.responses.PurchaseGetAllResponse;
@@ -48,6 +49,10 @@ class PurchaseManagerTest {
 
     @Mock
     private ModelMapperService modelMapperService;
+
+    @SuppressWarnings("unused")
+    @Mock
+    private StockMovementService stockMovementService;
 
     @Mock
     private IdService idService;
@@ -188,9 +193,11 @@ class PurchaseManagerTest {
     void changePurchaseStatus_whenPurchaseExists_shouldChangeStatusCorrectly() {
         // Given
         String id = "1";
+        Product product = Product.builder().id("1").stock(10).build();
 
         Purchase updatedPurchase = Purchase.builder()
                 .id("1")
+                .product(product)
                 .isActive(true)
                 .build();
 
@@ -201,7 +208,7 @@ class PurchaseManagerTest {
 
         // When
         when(modelMapperService.forResponse()).thenReturn(modelMapper);
-        when(purchaseRepository.findById("1")).thenReturn(Optional.of(Purchase.builder().id("1").build()));
+        when(purchaseRepository.findById("1")).thenReturn(Optional.of(Purchase.builder().id("1").product(product).build()));
         when(purchaseRepository.save(any(Purchase.class))).thenReturn(updatedPurchase);
         when(modelMapper.map(updatedPurchase, PurchaseCreatedResponse.class)).thenReturn(expectedResponse);
 

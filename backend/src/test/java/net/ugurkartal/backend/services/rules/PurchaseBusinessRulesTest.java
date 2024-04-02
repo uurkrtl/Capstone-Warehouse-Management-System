@@ -1,6 +1,9 @@
 package net.ugurkartal.backend.services.rules;
 
+import net.ugurkartal.backend.core.exceptions.types.NegativeStockException;
 import net.ugurkartal.backend.core.exceptions.types.RecordNotFoundException;
+import net.ugurkartal.backend.models.Product;
+import net.ugurkartal.backend.models.Purchase;
 import net.ugurkartal.backend.repositories.ProductRepository;
 import net.ugurkartal.backend.repositories.PurchaseRepository;
 import net.ugurkartal.backend.repositories.SupplierRepository;
@@ -9,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -77,5 +82,22 @@ class PurchaseBusinessRulesTest {
         when(purchaseRepository.existsById(existingPurchaseId)).thenReturn(true);
 
         assertDoesNotThrow(() -> purchaseBusinessRules.checkIfPurchaseByIdNotFound(existingPurchaseId));
+    }
+
+    @Test
+    void checkIfStockIsNotEnough_throwsNegativeStockException() {
+        String productId = "Existing Product Id";
+        String purchaseId = "Existing Purchase Id";
+        int quantity = 1;
+
+        when(purchaseRepository.findById(purchaseId)).thenReturn(Optional.of(new Purchase(){{
+            setQuantity(5);
+        }}));
+
+        when(productRepository.findById(productId)).thenReturn(Optional.of(new Product(){{
+            setStock(3);
+        }}));
+
+        assertThrows(NegativeStockException.class, () -> purchaseBusinessRules.checkIfStockIsNotEnough(productId, purchaseId, quantity));
     }
 }

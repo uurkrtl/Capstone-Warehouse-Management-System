@@ -105,4 +105,12 @@ public class ProductManager implements ProductService {
         product = productRepository.save(product);
         return modelMapperService.forResponse().map(product, ProductCreatedResponse.class);
     }
+
+    @Override
+    public void updateStock(String id, int quantity) {
+        productBusinessRules.checkIfProductByIdNotFound(id);
+        Product foundProduct = productRepository.findById(id).orElseThrow();
+        foundProduct.setStock(foundProduct.getStock() + quantity);
+        productRepository.save(foundProduct);
+    }
 }

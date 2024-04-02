@@ -26,4 +26,19 @@ public class IdManager implements IdService {
     public String generatePurchaseId() {
         return "PRC-" + UUID.randomUUID();
     }
+
+    @Override
+    public String generateOrderId() {
+        return "ORD-" + UUID.randomUUID();
+    }
+
+    @Override
+    public String generateOrderDetailId() {
+        return "ODT-" + UUID.randomUUID();
+    }
+
+    @Override
+    public String generateStockMovementId() {
+        return "SMV-" + UUID.randomUUID();
+    }
 }

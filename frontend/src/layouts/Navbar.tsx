@@ -57,6 +57,14 @@ function Navbar() {
                                         erstellen</Link>
                                 </ul>
                             </li>
+                            <li className="nav-item">
+                                <Link to={`/orders`} className="nav-link text-decoration-none"
+                                      aria-current="page">Bestellung</Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link to={`/stock-movements`} className="nav-link text-decoration-none"
+                                      aria-current="page">Lagerbewegung</Link>
+                            </li>
                         </ul>
                         <form className="d-flex" role="search">
                             <input className="form-control me-2" type="search" placeholder="Search"

@@ -19,6 +19,11 @@ import PurchaseAdd from "../pages/purchases/PurchaseAdd.tsx";
 import PurchaseList from "../pages/purchases/PurchaseList.tsx";
 import PurchaseDetail from "../pages/purchases/PurchaseDetail.tsx";
 import PurchaseUpdate from "../pages/purchases/PurchaseUpdate.tsx";
+import OrderAdd from "../pages/orders/OrderAdd.tsx";
+import OrderList from "../pages/orders/OrderList.tsx";
+import OrderDetailAdd from "../pages/order-details/OrderDetailAdd.tsx";
+import OrderDetails from "../pages/orders/OrderDetails.tsx";
+import StockMovementList from "../pages/stock-movements/StockMovementList.tsx";
 
 function Dashboard() {
     return (
@@ -43,6 +48,11 @@ function Dashboard() {
                     <Route path={'/purchases/update/:id'} element={<PurchaseUpdate/>}/>
                     <Route path={'/purchases/detail/:id'} element={<PurchaseDetail/>}/>
                     <Route path={'/purchases/add'} element={<PurchaseAdd/>}/>
+                    <Route path={'/orders'} element={<OrderList/>}/>
+                    <Route path={'/orders/detail/:id'} element={<OrderDetails/>}/>
+                    <Route path={'/orders/add'} element={<OrderAdd/>}/>
+                    <Route path={'/order-details/add/:orderId'} element={<OrderDetailAdd/>}/>
+                    <Route path={'/stock-movements'} element={<StockMovementList/>}/>
                     <Route path={'*'} element={<PageNotFound404/>}/>
                 </Routes>
                 <Footer />

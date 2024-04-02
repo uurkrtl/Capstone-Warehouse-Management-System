@@ -5,4 +5,7 @@ public interface IdService {
     String generateCategoryId();
     String generateSupplierId();
     String generatePurchaseId();
+    String generateOrderId();
+    String generateOrderDetailId();
+    String generateStockMovementId();
 }
