@@ -8,6 +8,7 @@ import net.ugurkartal.backend.repositories.OrderDetailRepository;
 import net.ugurkartal.backend.repositories.OrderRepository;
 import net.ugurkartal.backend.repositories.ProductRepository;
 import net.ugurkartal.backend.services.abstracts.IdService;
+import net.ugurkartal.backend.services.abstracts.StockMovementService;
 import net.ugurkartal.backend.services.dtos.requests.OrderDetailRequest;
 import net.ugurkartal.backend.services.dtos.responses.OrderDetailCreatedResponse;
 import net.ugurkartal.backend.services.rules.OrderDetailBusinessRules;
@@ -46,6 +47,10 @@ class OrderDetailManagerTest {
 
     @Mock
     private IdService idService;
+
+    @SuppressWarnings("unused")
+    @Mock
+    private StockMovementService stockMovementService;
 
     @BeforeEach
     public void setup() {

@@ -1,6 +1,7 @@
 package net.ugurkartal.backend.services.rules;
 
 import lombok.RequiredArgsConstructor;
+import net.ugurkartal.backend.core.exceptions.types.NegativeStockException;
 import net.ugurkartal.backend.core.exceptions.types.RecordNotFoundException;
 import net.ugurkartal.backend.repositories.OrderRepository;
 import net.ugurkartal.backend.repositories.ProductRepository;
@@ -22,6 +23,12 @@ public class OrderDetailBusinessRules {
     public void checkIfProductByIdNotFound(String id) {
         if(!this.productRepository.existsById(id)) {
             throw new RecordNotFoundException(OrderDetailMessage.PRODUCT_NOT_FOUND);
+        }
+    }
+
+    public void checkIfStockIsNotEnough(int stock, int quantity) {
+        if(stock < quantity) {
+            throw new NegativeStockException(OrderDetailMessage.STOCK_NOT_ENOUGH);
         }
     }
 }

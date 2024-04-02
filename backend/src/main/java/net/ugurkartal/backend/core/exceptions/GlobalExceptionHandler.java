@@ -74,6 +74,18 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(NegativeStockException.class)
+    public ResponseEntity<ErrorResponse> handleNegativeStockException(NegativeStockException ex, WebRequest request) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .apiPath(request.getDescription(false))
+                .status(HttpStatus.BAD_REQUEST)
+                .title("Negativer Lagerbestand")
+                .message(ex.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler
     public ResponseEntity<ErrorResponse>handleMethodArgumentNotValid(MethodArgumentNotValidException ex, WebRequest request){
         StringBuilder errorMessages = new StringBuilder();

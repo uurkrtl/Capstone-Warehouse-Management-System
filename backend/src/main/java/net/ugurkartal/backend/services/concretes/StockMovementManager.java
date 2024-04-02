@@ -7,6 +7,7 @@ import net.ugurkartal.backend.models.StockMovement;
 import net.ugurkartal.backend.repositories.ProductRepository;
 import net.ugurkartal.backend.repositories.StockMovementRepository;
 import net.ugurkartal.backend.services.abstracts.IdService;
+import net.ugurkartal.backend.services.abstracts.ProductService;
 import net.ugurkartal.backend.services.abstracts.StockMovementService;
 import net.ugurkartal.backend.services.dtos.requests.StockMovementRequest;
 import net.ugurkartal.backend.services.dtos.responses.StockMovementCreatedResponse;
@@ -21,6 +22,7 @@ import java.util.List;
 public class StockMovementManager implements StockMovementService {
     private final StockMovementRepository stockMovementRepository;
     private final ProductRepository productRepository;
+    private final ProductService productService;
     private final ModelMapperService modelMapperService;
     private final IdService idService;
 
@@ -34,6 +36,12 @@ public class StockMovementManager implements StockMovementService {
 
     @Override
     public StockMovementCreatedResponse addStockMovement(StockMovementRequest stockMovementRequest) {
+        if (!stockMovementRequest.isType()) {
+            stockMovementRequest.setQuantity(stockMovementRequest.getQuantity() * -1);
+        }
+
+        productService.updateStock(stockMovementRequest.getProductId(), stockMovementRequest.getQuantity()); // Update stock in product class
+
         StockMovement stockMovement = modelMapperService.forRequest().map(stockMovementRequest, StockMovement.class);
         Product selectedProduct = productRepository.findById(stockMovementRequest.getProductId())
                 .orElseThrow(() -> new RuntimeException("Product not found"));

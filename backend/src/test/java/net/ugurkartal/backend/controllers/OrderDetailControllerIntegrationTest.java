@@ -46,7 +46,7 @@ class OrderDetailControllerIntegrationTest {
     void addOrderDetail_whenValidInput_shouldReturns201() throws Exception {
         //Given
         String orderId = orderRepository.save(Order.builder().build()).getId();
-        String productId = productRepository.save(Product.builder().build()).getId();
+        String productId = productRepository.save(Product.builder().stock(5).build()).getId();
         OrderDetailRequest orderDetailRequest = OrderDetailRequest.builder()
                 .orderId(orderId)
                 .productId(productId)

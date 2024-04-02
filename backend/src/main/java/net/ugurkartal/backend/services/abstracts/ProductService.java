@@ -12,4 +12,5 @@ public interface ProductService {
     ProductCreatedResponse addProduct(ProductRequest productRequest);
     ProductCreatedResponse updateProduct(String id, ProductRequest productRequest);
     ProductCreatedResponse changeProductStatus(String id, boolean status);
+    void updateStock(String id, int quantity);
 }

@@ -1,5 +1,6 @@
 package net.ugurkartal.backend.services.rules;
 
+import net.ugurkartal.backend.core.exceptions.types.NegativeStockException;
 import net.ugurkartal.backend.core.exceptions.types.RecordNotFoundException;
 import net.ugurkartal.backend.repositories.OrderRepository;
 import net.ugurkartal.backend.repositories.ProductRepository;
@@ -59,5 +60,13 @@ class OrderDetailBusinessRulesTest {
         when(productRepository.existsById(existingProductId)).thenReturn(true);
 
         assertDoesNotThrow(() -> orderDetailBusinessRules.checkIfProductByIdNotFound(existingProductId));
+    }
+
+    @Test
+    void checkIfStockIsNotEnough_throwsNegativeStockException() {
+        int stock = 5;
+        int quantity = 10;
+
+        assertThrows(NegativeStockException.class, () -> orderDetailBusinessRules.checkIfStockIsNotEnough(stock, quantity));
     }
 }

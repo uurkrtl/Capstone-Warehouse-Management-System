@@ -6,6 +6,7 @@ import net.ugurkartal.backend.models.StockMovement;
 import net.ugurkartal.backend.repositories.ProductRepository;
 import net.ugurkartal.backend.repositories.StockMovementRepository;
 import net.ugurkartal.backend.services.abstracts.IdService;
+import net.ugurkartal.backend.services.abstracts.ProductService;
 import net.ugurkartal.backend.services.dtos.requests.StockMovementRequest;
 import net.ugurkartal.backend.services.dtos.responses.StockMovementCreatedResponse;
 import net.ugurkartal.backend.services.dtos.responses.StockMovementGetAllResponse;
@@ -36,6 +37,10 @@ class StockMovementManagerTest {
 
     @Mock
     private ModelMapperService modelMapperService;
+
+    @SuppressWarnings("unused")
+    @Mock
+    private ProductService productService;
 
     @Mock
     private IdService idService;
