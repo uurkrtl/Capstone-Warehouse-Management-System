@@ -7,16 +7,17 @@ import {Link} from "react-router-dom";
 const orderService = new OrderService();
 function OrderList() {
     const [orders, setOrders] = useState<Order[]>([]);
-    const [filter, setFilter] = useState("");
+    const [selectedCustomerName, setSelectedCustomerName] = useState("");
     const [ordersByStatus, setOrdersByStatus] = useState<Order[]>(orders);
 
     const filteredOrders = ordersByStatus.filter(
         (order) =>
-            order.customerName.toLowerCase().includes(filter.toLowerCase())
+            order.customerName.toLowerCase().includes(selectedCustomerName.toLowerCase())
     );
 
     const handleStatusChange = (e: React.MouseEvent<HTMLInputElement>) => {
         const target = e.target as HTMLElement;
+        setSelectedCustomerName("");
         if (target.id === "allOrders") {
             setOrdersByStatus(orders)
         }else {
@@ -24,10 +25,16 @@ function OrderList() {
         }
     };
 
+    const handleSelectedCustomerName = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSelectedCustomerName(e.target.value);
+    };
+
     useEffect(() => {
         orderService.getAllOrders().then((response) => {
             setOrders(response.data);
             setOrdersByStatus(response.data);
+        }).catch((error) => {
+            console.error('Fehler beim Abrufen der Bestellungen:', error);
         });
     }, []);
 
@@ -78,7 +85,7 @@ function OrderList() {
                     className="form-control"
                     id="basic-url"
                     aria-describedby="basic-addon3 basic-addon4"
-                    onChange={(e) => setFilter(e.target.value)}
+                    onChange={handleSelectedCustomerName}
                 />
             </div>
 
