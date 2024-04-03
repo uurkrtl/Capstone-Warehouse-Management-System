@@ -1,7 +1,8 @@
 function PageHeader({ title, pageType }: Readonly<{ title: string, pageType: string }>) {
     let fill;
     let className;
-    let fillRule1: "evenodd" | "inherit" | "nonzero" | undefined;
+    type FillRuleType = "evenodd" | "inherit" | "nonzero" | undefined;
+    let fillRule1: FillRuleType;
     let imagePath1;
     let fillRule2: "evenodd" | "inherit" | "nonzero" | undefined;
     let imagePath2;
