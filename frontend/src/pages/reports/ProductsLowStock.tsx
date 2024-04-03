@@ -4,13 +4,14 @@ import {Product} from "../../types/Product.ts";
 import PageHeader from "../../layouts/PageHeader.tsx";
 import {Link} from "react-router-dom";
 
+
 const reportService = new ReportService();
-function ProductsOutOfStock() {
+function ProductsLowStock() {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        reportService.getProductsOutOfStock().then((response) => {
+        reportService.getProductsLowInStock().then((response) => {
             setProducts(response.data);
             setLoading(false);
         });
@@ -34,6 +35,8 @@ function ProductsOutOfStock() {
                     <th scope="col">Name</th>
                     <th scope="col">Verkaufspreis</th>
                     <th scope="col">Kategoriename</th>
+                    <th scope="col">Kritischer Lagerbestand</th>
+                    <th scope="col">Lagerbestand</th>
                     <th scope="col">Detail</th>
                 </tr>
                 </thead>
@@ -44,6 +47,8 @@ function ProductsOutOfStock() {
                             <td>{product.name}</td>
                             <td>{product.salePrice}</td>
                             <td>{product.categoryName}</td>
+                            <td>{product.criticalStock}</td>
+                            <td>{product.stock}</td>
                             <td><Link to={`/products/detail/${product.id}`}
                                       className="btn btn-outline-info" target='_blank'>Detail</Link></td>
                         </tr>
@@ -55,4 +60,4 @@ function ProductsOutOfStock() {
     );
 }
 
-export default ProductsOutOfStock;
+export default ProductsLowStock;

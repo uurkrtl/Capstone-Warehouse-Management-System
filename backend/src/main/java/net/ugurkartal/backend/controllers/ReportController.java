@@ -19,4 +19,9 @@ public class ReportController {
     public List<ProductGetAllResponse> getProductsOutOfStock() {
         return reportService.getProductsOutOfStock();
     }
+
+    @GetMapping("/products-low-stock")
+    List<ProductGetAllResponse> getProductsLowInStock() {
+        return reportService.getProductsLowInStock();
+    }
 }

@@ -72,7 +72,7 @@ function Navbar() {
                                 <ul className="dropdown-menu">
                                     <Link to={`/reports/products-out-of-stock`}
                                           className="dropdown-item text-decoration-none">Nicht vorrätige Produkte</Link>
-                                    <Link to={`/`}
+                                    <Link to={`/reports/products-low-stock`}
                                           className="dropdown-item text-decoration-none">Produkte mit niedrigem Lagerbestand</Link>
                                     <li>
                                         <hr className="dropdown-divider"/>

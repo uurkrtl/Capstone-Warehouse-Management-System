@@ -100,4 +100,30 @@ class ReportManagerTest {
         // Then
         assertEquals(expectedResponse, response);
     }
+
+    @Test
+    void getProductsLowInStock_whenSomeProductsLowInStock_shouldReturnThoseProducts() {
+        // Given
+        List<Product> products = List.of(
+                Product.builder().id("1").stock(5).criticalStock(10).build(),
+                Product.builder().id("2").stock(10).criticalStock(20).build(),
+                Product.builder().id("3").stock(20).criticalStock(10).build()
+        );
+
+        List<ProductGetAllResponse> expectedResponse = List.of(
+                new ProductGetAllResponse(),
+                new ProductGetAllResponse()
+        );
+
+        // When
+        when(productRepository.findAll()).thenReturn(products);
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(modelMapper.map(products.get(0), ProductGetAllResponse.class)).thenReturn(expectedResponse.get(0));
+        when(modelMapper.map(products.get(1), ProductGetAllResponse.class)).thenReturn(expectedResponse.get(1));
+
+        List<ProductGetAllResponse> response = reportManager.getProductsLowInStock();
+
+        // Then
+        assertEquals(expectedResponse, response);
+    }
 }

@@ -44,8 +44,8 @@ function ReportsHome() {
 
                     </div>
                     <h3 className="fs-2 text-body-emphasis">Produkte mit niedrigem Lagerbestand</h3>
-                    <p>Sie können die Liste der Produkte sehen, deren Lagerbestand unter dem kritischen Lagerbestand liegt.</p>
-                    <Link to={`/`} className="icon-link">
+                    <p>Sie können die Liste der Produkte sehen, deren Lagerbestand unter dem kritischen Lagerbestand liegt. Produkte, die nicht vorrätig sind, werden hier nicht aufgeführt</p>
+                    <Link to={`/reports/products-low-stock`} className="icon-link">
                         Gehen zum Bericht
                         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
                              className="bi bi-chevron-double-right" viewBox="0 0 16 16">
@@ -56,21 +56,7 @@ function ReportsHome() {
                         </svg>
                     </Link>
                 </div>
-                <div className="feature col">
-                    <div
-                        className="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
-                        <svg className="bi" width="1em" height="1em">
-                        </svg>
-                    </div>
-                    <h3 className="fs-2 text-body-emphasis">Featured title</h3>
-                    <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another
-                        sentence and probably just keep going until we run out of words.</p>
-                    <a href="#" className="icon-link">
-                        Call to action
-                        <svg className="bi">
-                        </svg>
-                    </a>
-                </div>
+
             </div>
         </div>
     );

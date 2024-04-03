@@ -74,7 +74,7 @@ function ProductList() {
                 <thead>
                 <tr>
                     <th scope="col">Name</th>
-                    <th scope="col">Sale Price</th>
+                    <th scope="col">Verkaufspreis</th>
                     <th scope="col">Kategoriename</th>
                     <th scope="col">Status</th>
                     <th scope="col">Detail</th>
