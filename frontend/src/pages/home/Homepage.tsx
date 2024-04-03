@@ -92,7 +92,7 @@ function Homepage() {
                                 src="https://cdn-icons-png.flaticon.com/512/5738/5738277.png"
                                 className="bd-placeholder-img rounded-circle" width="140" height="140"
                                 alt="Einkaufsmanagement"/>
-                            <h2 className="fw-normal">Brichte</h2>
+                            <h2 className="fw-normal">Berichte</h2>
                         </Link>
                     </div>
                 </div>

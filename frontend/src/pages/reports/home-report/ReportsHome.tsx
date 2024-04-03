@@ -1,4 +1,5 @@
 import './ReportHome.css'
+import {Link} from "react-router-dom";
 
 function ReportsHome() {
     return (
@@ -19,9 +20,9 @@ function ReportsHome() {
                         </svg>
 
                     </div>
-                    <h3 className="fs-2 text-body-emphasis">Produkt nicht vorrätig</h3>
-                    <p>Sie können die Liste der Produkte sehen, die nicht vorrätig sind.</p>
-                    <a href="#" className="icon-link">
+                    <h3 className="fs-2 text-body-emphasis">Nicht vorrätige Produkte</h3>
+                    <p>Sie können die Liste der aktiven Produkte sehen, die nicht vorrätig sind.</p>
+                    <Link to={`/reports/products-out-of-stock`} className="icon-link">
                         Gehen zum Bericht
                         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
                              className="bi bi-chevron-double-right" viewBox="0 0 16 16">
@@ -30,7 +31,7 @@ function ReportsHome() {
                             <path fillRule="evenodd"
                                   d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708"></path>
                         </svg>
-                    </a>
+                    </Link>
                 </div>
                 <div className="feature col">
                     <div
@@ -42,9 +43,9 @@ function ReportsHome() {
                         </svg>
 
                     </div>
-                    <h3 className="fs-2 text-body-emphasis">Geringer Bestand</h3>
+                    <h3 className="fs-2 text-body-emphasis">Produkte mit niedrigem Lagerbestand</h3>
                     <p>Sie können die Liste der Produkte sehen, deren Lagerbestand unter dem kritischen Lagerbestand liegt.</p>
-                    <a href="#" className="icon-link">
+                    <Link to={`/`} className="icon-link">
                         Gehen zum Bericht
                         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
                              className="bi bi-chevron-double-right" viewBox="0 0 16 16">
@@ -53,7 +54,7 @@ function ReportsHome() {
                             <path fillRule="evenodd"
                                   d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708"></path>
                         </svg>
-                    </a>
+                    </Link>
                 </div>
                 <div className="feature col">
                     <div

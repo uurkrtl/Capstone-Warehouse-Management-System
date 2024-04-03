@@ -70,10 +70,10 @@ function Navbar() {
                                       data-bs-toggle="dropdown"
                                       aria-expanded="false">Berichte</Link>
                                 <ul className="dropdown-menu">
+                                    <Link to={`/reports/products-out-of-stock`}
+                                          className="dropdown-item text-decoration-none">Nicht vorrätige Produkte</Link>
                                     <Link to={`/`}
-                                          className="dropdown-item text-decoration-none">Produkt nicht vorrätig</Link>
-                                    <Link to={`/`}
-                                          className="dropdown-item text-decoration-none">Geringer Bestand</Link>
+                                          className="dropdown-item text-decoration-none">Produkte mit niedrigem Lagerbestand</Link>
                                     <li>
                                         <hr className="dropdown-divider"/>
                                     </li>
