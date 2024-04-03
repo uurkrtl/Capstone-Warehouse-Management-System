@@ -65,6 +65,21 @@ function Navbar() {
                                 <Link to={`/stock-movements`} className="nav-link text-decoration-none"
                                       aria-current="page">Lagerbewegung</Link>
                             </li>
+                            <li className="nav-item dropdown">
+                                <Link to={`#`} className="nav-link dropdown-toggle text-decoration-none" type="button"
+                                      data-bs-toggle="dropdown"
+                                      aria-expanded="false">Berichte</Link>
+                                <ul className="dropdown-menu">
+                                    <Link to={`/`}
+                                          className="dropdown-item text-decoration-none">Produkt nicht vorrätig</Link>
+                                    <Link to={`/`}
+                                          className="dropdown-item text-decoration-none">Geringer Bestand</Link>
+                                    <li>
+                                        <hr className="dropdown-divider"/>
+                                    </li>
+                                    <li><Link to={`/reports`} className="dropdown-item text-decoration-none">Alle Berichte</Link></li>
+                                </ul>
+                            </li>
                         </ul>
                         <form className="d-flex" role="search">
                             <input className="form-control me-2" type="search" placeholder="Search"
