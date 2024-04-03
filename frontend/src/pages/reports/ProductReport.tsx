@@ -2,20 +2,44 @@ import ReportService from "../../services/ReportService.ts";
 import {useEffect, useState} from "react";
 import {Product} from "../../types/Product.ts";
 import PageHeader from "../../layouts/PageHeader.tsx";
-import {Link} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 
 
 const reportService = new ReportService();
-function ProductsLowStock() {
+function ProductReport() {
+    const { reportType = '' } = useParams<string>();
+    const [pageTitle, setPageTitle] = useState<string>('');
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        reportService.getProductsLowInStock().then((response) => {
-            setProducts(response.data);
-            setLoading(false);
-        });
-    }, []);
+        switch (reportType) {
+            case 'products-low-stock':
+                setPageTitle('Produkte mit niedrigem Lagerbestand');
+                reportService.getProductsLowInStock().then((response) => {
+                    setProducts(response.data);
+                    setLoading(false);
+                }).catch(error => {
+                    console.error("Fehler beim Abrufen von Produkten mit geringem Lagerbestand:", error);
+                    setLoading(false);
+                });
+                break;
+            case 'products-out-of-stock':
+                setPageTitle('Nicht vorrätige Produkte');
+                reportService.getProductsOutOfStock().then((response) => {
+                    setProducts(response.data);
+                    setLoading(false);
+                }).catch(error => {
+                    console.error("Fehler beim Abrufen nicht vorrätiger Produkte:", error);
+                    setLoading(false);
+                });
+                break;
+            default:
+                navigate('*')
+                break;
+        }
+    }, [reportType, navigate]);
 
     if (loading) {
         return <div className={'container'}>
@@ -28,7 +52,7 @@ function ProductsLowStock() {
 
     return (
         <div className={'container'}>
-            <PageHeader title="Nicht vorrätige Produkte" pageType="report"/>
+            <PageHeader title = {pageTitle} pageType="report"/>
             <table className="table table-striped">
                 <thead>
                 <tr>
@@ -60,4 +84,4 @@ function ProductsLowStock() {
     );
 }
 
-export default ProductsLowStock;
+export default ProductReport;
