@@ -62,9 +62,15 @@ function OrderDetails() {
                             return (
                                 <tr key={orderDetail.id}>
                                     <td>{orderDetail.productName}</td>
-                                    <td>{orderDetail.price}</td>
+                                    <td>{orderDetail.price.toLocaleString('de-DE', {
+                                        style: 'currency',
+                                        currency: 'EUR'
+                                    })}</td>
                                     <td>{orderDetail.quantity}</td>
-                                    <td>{orderDetail.totalPrice}</td>
+                                    <td>{orderDetail.totalPrice.toLocaleString('de-DE', {
+                                        style: 'currency',
+                                        currency: 'EUR'
+                                    })}</td>
                                 </tr>
                             );
                         })}

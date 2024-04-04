@@ -10,6 +10,7 @@ function ProductList() {
     const [products, setProducts] = useState<Product[]>([]);
     const [filter, setFilter] = useState("");
     const [productByStatus, setProductByStatus] = useState<Product[]>(products);
+    const [loading, setLoading] = useState(true);
 
     const filteredProducts = productByStatus.filter(
         (product) =>
@@ -31,8 +32,18 @@ function ProductList() {
         productService.getAllProducts().then((response) => {
             setProducts(response.data);
             setProductByStatus(response.data);
+            setLoading(false);
         });
     }, []);
+
+    if (loading) {
+        return <div className={'container'}>
+            <div className={'spinner-border text-primary'}>
+                <span className={'visually-hidden'}></span>
+            </div>
+            <h5>Wird geledan...</h5>
+        </div>;
+    }
 
     return (
         <div className={'container'}>
@@ -87,7 +98,10 @@ function ProductList() {
                     return (
                         <tr key={product.id}>
                             <td className={!product.active ? "text-danger" : "text-black"}>{product.name}</td>
-                            <td>{product.salePrice}</td>
+                            <td>{product.salePrice.toLocaleString('de-DE', {
+                                style: 'currency',
+                                currency: 'EUR'
+                            })}</td>
                             <td>{product.categoryName}</td>
                             <td>
                                 {product.active ?

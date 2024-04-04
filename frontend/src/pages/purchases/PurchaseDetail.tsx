@@ -84,12 +84,12 @@ function PurchaseDetail() {
                             <td>{purchase.purchaseDate ? new Date(purchase.purchaseDate).toLocaleDateString() : '-'}</td>
                         </tr>
                         <tr>
-                            <th scope="row">Datum der Erstellung</th>
-                            <td>{purchase.createdAt ? new Date(purchase.createdAt).toLocaleString('tr-TR') : "-"}</td>
+                            <th scope="row">Erstellung</th>
+                            <td>{purchase.createdAt ? new Date(purchase.createdAt).toLocaleString('de-DE') : "-"}</td>
                         </tr>
                         <tr>
-                            <th scope="row">Datum der Aktualisierung</th>
-                            <td>{purchase.updatedAt ? new Date(purchase.updatedAt).toLocaleString('tr-TR') : "-"}</td>
+                            <th scope="row">Letzte Aktualisierung</th>
+                            <td>{purchase.updatedAt ? new Date(purchase.updatedAt).toLocaleString('de-DE') : "-"}</td>
                         </tr>
                         <tr>
                             <th scope="row">Status</th>

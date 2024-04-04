@@ -23,6 +23,7 @@ function ProductDetail() {
     });
     const navigate = useNavigate();
     const [errorMessage, setErrorMessage] = useState<string>('');
+    const [loading, setLoading] = useState(true);
     const handleStatusChange = (status: boolean) => {
         productService.changeProductStatus(id, status)
             .then(() => {
@@ -49,6 +50,7 @@ function ProductDetail() {
             productService.getProductById(id)
                 .then((response) => {
                     setProduct(response.data);
+                    setLoading(false);
                 })
                 .catch((error) => {
                     console.error('Error fetching product:', error);
@@ -56,6 +58,15 @@ function ProductDetail() {
                 });
         }
     }, [id, navigate]);
+
+    if (loading) {
+        return <div className={'container'}>
+            <div className={'spinner-border text-primary'}>
+                <span className={'visually-hidden'}></span>
+            </div>
+            <h5>Wird geledan...</h5>
+        </div>;
+    }
 
     return (
         <div className="container">
@@ -72,7 +83,10 @@ function ProductDetail() {
                     <tbody>
                     <tr>
                         <th scope="row">Verkaufspreis</th>
-                        <td>{product.salePrice}</td>
+                        <td>{product.salePrice.toLocaleString('de-DE', {
+                            style: 'currency',
+                            currency: 'EUR'
+                        })}</td>
                     </tr>
                     <tr>
                         <th scope="row">Menge des Lagerbestands</th>
@@ -87,12 +101,12 @@ function ProductDetail() {
                         <td>{product.categoryName}</td>
                     </tr>
                     <tr>
-                        <th scope="row">Hergestellt am</th>
-                        <td>{product.createdAt ? product.createdAt.toString() : "-"}</td>
+                        <th scope="row">Erstellung</th>
+                        <td>{product.createdAt ? new Date(product.createdAt).toLocaleString('de-DE') : "-"}</td>
                     </tr>
                     <tr>
-                        <th scope="row">Aktualisiert am</th>
-                        <td>{product.updatedAt ? product.updatedAt.toString() : "-"}</td>
+                        <th scope="row">Letzte Aktualisierung</th>
+                        <td>{product.updatedAt ? new Date(product.updatedAt).toLocaleString('de-DE') : "-"}</td>
                     </tr>
                     <tr>
                         <th scope="row">Status</th>
