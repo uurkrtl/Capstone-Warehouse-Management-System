@@ -11,6 +11,7 @@ function ProductReport() {
     const [pageTitle, setPageTitle] = useState<string>('');
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
+    const [errorMessage, setErrorMessage] = useState<string>('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -20,9 +21,11 @@ function ProductReport() {
                 reportService.getProductsLowInStock().then((response) => {
                     setProducts(response.data);
                     setLoading(false);
+                    setErrorMessage('')
                 }).catch(error => {
-                    console.error("Fehler beim Abrufen von Produkten mit geringem Lagerbestand:", error);
+                    setErrorMessage(`Fehler beim Abrufen von Produkten mit geringem Lagerbestand: ${error.message}`);
                     setLoading(false);
+                    setProducts([]);
                 });
                 break;
             case 'products-out-of-stock':
@@ -30,9 +33,11 @@ function ProductReport() {
                 reportService.getProductsOutOfStock().then((response) => {
                     setProducts(response.data);
                     setLoading(false);
+                    setErrorMessage('')
                 }).catch(error => {
-                    console.error("Fehler beim Abrufen nicht vorrätiger Produkte:", error);
+                    setErrorMessage(`Fehler beim Abrufen nicht vorrätiger Produkte: ${error.message}`);
                     setLoading(false);
+                    setProducts([]);
                 });
                 break;
             default:
@@ -69,7 +74,10 @@ function ProductReport() {
                     return (
                         <tr key={product.id}>
                             <td>{product.name}</td>
-                            <td>{product.salePrice}</td>
+                            <td>{product.salePrice.toLocaleString('de-DE', {
+                                style: 'currency',
+                                currency: 'EUR'
+                            })}</td>
                             <td>{product.categoryName}</td>
                             <td>{product.criticalStock}</td>
                             <td>{product.stock}</td>
@@ -80,6 +88,11 @@ function ProductReport() {
                 })}
                 </tbody>
             </table>
+            {errorMessage && (
+                <div className="alert alert-danger" role="alert">
+                    {errorMessage}
+                </div>
+            )}
         </div>
     );
 }

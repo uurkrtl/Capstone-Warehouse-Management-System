@@ -67,12 +67,12 @@ function SupplierDetail() {
                             <td>{supplier.phone}</td>
                         </tr>
                         <tr>
-                            <th scope="row">Hergestellt am</th>
-                            <td>{supplier.createdAt ? supplier.createdAt.toString() : "-"}</td>
+                            <th scope="row">Erstellung</th>
+                            <td>{supplier.createdAt ? new Date(supplier.createdAt).toLocaleString('de-DE') : "-"}</td>
                         </tr>
                         <tr>
-                            <th scope="row">Aktualisiert am</th>
-                            <td>{supplier.updatedAt ? supplier.updatedAt.toString() : "-"}</td>
+                            <th scope="row">Letzte Aktualisierung</th>
+                            <td>{supplier.updatedAt ? new Date(supplier.updatedAt).toLocaleString('de-DE') : "-"}</td>
                         </tr>
                         <tr>
                             <th scope="row">Status</th>

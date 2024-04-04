@@ -55,12 +55,12 @@ function CategoryDetail() {
                     <table className="table table-striped-columns">
                         <tbody>
                         <tr>
-                            <th scope="row">Hergestellt am</th>
-                            <td>{category.createdAt ? category.createdAt.toString() : "-"}</td>
+                            <th scope="row">Erstellung</th>
+                            <td>{category.createdAt ? new Date(category.createdAt).toLocaleString('de-DE') : "-"}</td>
                         </tr>
                         <tr>
-                            <th scope="row">Aktualisiert am</th>
-                            <td>{category.updatedAt ? category.updatedAt.toString() : "-"}</td>
+                            <th scope="row">Letzte Aktualisierung</th>
+                            <td>{category.updatedAt ? new Date(category.updatedAt).toLocaleString('de-DE') : "-"}</td>
                         </tr>
                         <tr>
                             <th scope="row">Status</th>
