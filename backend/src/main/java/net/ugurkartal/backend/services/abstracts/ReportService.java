@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ReportService {
     List<ProductGetAllResponse> getProductsOutOfStock();
+    List<ProductGetAllResponse> getProductsLowInStock();
 }

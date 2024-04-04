@@ -11,6 +11,8 @@ public class ProductGetAllResponse {
     private String id;
     private String name;
     private double salePrice;
+    private int stock;
+    private int criticalStock;
     private String categoryId;
     private String categoryName;
     private boolean isActive;

@@ -23,4 +23,15 @@ public class ReportManager implements ReportService {
                 .map(product -> modelMapperService.forResponse()
                         .map(product, ProductGetAllResponse.class)).toList();
     }
+
+    @Override
+    public List<ProductGetAllResponse> getProductsLowInStock() {
+        List<Product> products = productRepository.findAll();
+        List<Product> lowInStockProducts = products.stream()
+                .filter(product -> product.getStock() < product.getCriticalStock() && product.getStock() > 0)
+                .toList();
+        return lowInStockProducts.stream()
+                .map(product -> modelMapperService.forResponse()
+                        .map(product, ProductGetAllResponse.class)).toList();
+    }
 }
