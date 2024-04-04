@@ -2,7 +2,7 @@ import PurchaseService from "../../services/PurchaseService.ts";
 import React, {useEffect, useState} from "react";
 import {Purchase} from "../../types/Purchase.ts";
 import PageHeader from "../../layouts/PageHeader.tsx";
-import {Link} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 
 const purchaseService = new PurchaseService();
 function PurchaseList() {
@@ -10,14 +10,30 @@ function PurchaseList() {
     const [filter, setFilter] = useState("");
     const [purchasesByStatus, setPurchasesByStatus] = useState<Purchase[]>(purchases);
     const [loading, setLoading] = useState(true);
+    const [errorMessage, setErrorMessage] = useState<string>('');
+    const { productId = '' } = useParams<string>();
 
     useEffect(() => {
-        purchaseService.getAllPurchases().then((response) => {
+        if (productId) {
+        purchaseService.getPurchaseByProductId(productId).then((response) => {
             setPurchases(response.data);
             setPurchasesByStatus(response.data);
             setLoading(false);
-        });
-    }, []);
+        }).catch(error => {
+            setErrorMessage(`Fehler beim Abrufen von Käufe: ${error.message}`);
+            setLoading(false);
+            setPurchases([]);
+        });}else {
+            purchaseService.getAllPurchases().then((response) => {
+                setPurchases(response.data);
+                setPurchasesByStatus(response.data);
+                setLoading(false);
+            }).catch(error => {
+                setErrorMessage(`Fehler beim Abrufen von Käufe: ${error.message}`);
+                setLoading(false);
+                setPurchases([]);
+            });}
+    }, [productId]);
 
     const handleStatusChange = (e: React.MouseEvent<HTMLInputElement>) => {
         const target = e.target as HTMLElement;
@@ -109,6 +125,11 @@ function PurchaseList() {
                 })}
                 </tbody>
             </table>
+            {errorMessage && (
+                <div className="alert alert-danger" role="alert">
+                    {errorMessage}
+                </div>
+            )}
         </div>
     );
 }

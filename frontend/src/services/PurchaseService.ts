@@ -6,6 +6,10 @@ export default class PurchaseService {
         return axios.get('/api/purchases');
     }
 
+    getPurchaseByProductId(productId: string) {
+        return axios.get(`/api/purchases/product/${productId}`);
+    }
+
     getPurchaseById(id: string) {
         return axios.get(`/api/purchases/${id}`);
     }
