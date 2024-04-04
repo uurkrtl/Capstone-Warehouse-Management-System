@@ -18,6 +18,7 @@ import net.ugurkartal.backend.services.dtos.responses.PurchaseCreatedResponse;
 import net.ugurkartal.backend.services.dtos.responses.PurchaseGetAllResponse;
 import net.ugurkartal.backend.services.rules.ProductBusinessRules;
 import net.ugurkartal.backend.services.rules.PurchaseBusinessRules;
+import net.ugurkartal.backend.services.rules.SupplierBusinessRules;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -34,6 +35,7 @@ public class PurchaseManager implements PurchaseService {
     private final IdService idService;
     private final PurchaseBusinessRules purchaseBusinessRules;
     private final ProductBusinessRules productBusinessRules;
+    private final SupplierBusinessRules supplierBusinessRules;
 
     @Override
     public List<PurchaseGetAllResponse> getAllPurchases() {
@@ -47,6 +49,15 @@ public class PurchaseManager implements PurchaseService {
     public List<PurchaseGetAllResponse> getPurchasesByProductId(String productId) {
         productBusinessRules.checkIfProductByIdNotFound(productId);
         List<Purchase> purchases = purchaseRepository.findAllByProductId(productId);
+        return purchases.stream()
+                .map(purchase -> this.modelMapperService.forResponse()
+                        .map(purchase, PurchaseGetAllResponse.class)).toList();
+    }
+
+    @Override
+    public List<PurchaseGetAllResponse> getPurchasesBySupplierId(String supplierId) {
+        supplierBusinessRules.checkIfSupplierByIdNotFound(supplierId);
+        List<Purchase> purchases = purchaseRepository.findAllBySupplierId(supplierId);
         return purchases.stream()
                 .map(purchase -> this.modelMapperService.forResponse()
                         .map(purchase, PurchaseGetAllResponse.class)).toList();

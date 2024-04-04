@@ -14,6 +14,7 @@ import net.ugurkartal.backend.services.dtos.responses.PurchaseCreatedResponse;
 import net.ugurkartal.backend.services.dtos.responses.PurchaseGetAllResponse;
 import net.ugurkartal.backend.services.rules.ProductBusinessRules;
 import net.ugurkartal.backend.services.rules.PurchaseBusinessRules;
+import net.ugurkartal.backend.services.rules.SupplierBusinessRules;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -51,6 +52,10 @@ class PurchaseManagerTest {
     @SuppressWarnings("unused")
     @Mock
     private ProductBusinessRules productBusinessRules;
+
+    @SuppressWarnings("unused")
+    @Mock
+    private SupplierBusinessRules supplierBusinessRules;
 
     @Mock
     private ModelMapperService modelMapperService;
@@ -108,6 +113,33 @@ class PurchaseManagerTest {
         when(modelMapper.map(purchases.get(1), PurchaseGetAllResponse.class)).thenReturn(expectedResponse.get(1));
 
         List<PurchaseGetAllResponse> response = purchaseManager.getPurchasesByProductId(productId);
+
+        // Then
+        assertEquals(expectedResponse, response);
+    }
+
+    @Test
+    void getPurchasesBySupplierId_whenPurchasesExistForSupplier_shouldReturnThosePurchases() {
+        // Given
+        String supplierId = "1";
+        List<Purchase> purchases = List.of(
+                Purchase.builder().id("1").supplier(Supplier.builder().id(supplierId).build()).build(),
+                Purchase.builder().id("2").supplier(Supplier.builder().id(supplierId).build()).build()
+        );
+
+        List<PurchaseGetAllResponse> expectedResponse = List.of(
+                new PurchaseGetAllResponse(),
+                new PurchaseGetAllResponse()
+        );
+
+        // When
+        when(supplierRepository.findById(supplierId)).thenReturn(Optional.of(Supplier.builder().id(supplierId).build()));
+        when(purchaseRepository.findAllBySupplierId(supplierId)).thenReturn(purchases);
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(modelMapper.map(purchases.get(0), PurchaseGetAllResponse.class)).thenReturn(expectedResponse.get(0));
+        when(modelMapper.map(purchases.get(1), PurchaseGetAllResponse.class)).thenReturn(expectedResponse.get(1));
+
+        List<PurchaseGetAllResponse> response = purchaseManager.getPurchasesBySupplierId(supplierId);
 
         // Then
         assertEquals(expectedResponse, response);

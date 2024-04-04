@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface PurchaseRepository extends MongoRepository<Purchase, String> {
     List<Purchase> findAllByProductId(String productId);
+
+    List<Purchase> findAllBySupplierId(String supplierId);
 }

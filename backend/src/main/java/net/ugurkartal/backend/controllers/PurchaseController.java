@@ -27,6 +27,11 @@ public class PurchaseController {
         return purchaseService.getPurchasesByProductId(productId);
     }
 
+    @GetMapping("/supplier/{supplierId}")
+    public List<PurchaseGetAllResponse> getPurchasesBySupplierId(@PathVariable String supplierId) {
+        return purchaseService.getPurchasesBySupplierId(supplierId);
+    }
+
     @GetMapping("/{id}")
     public PurchaseCreatedResponse getPurchaseById(@PathVariable String id) {
         return purchaseService.getPurchaseById(id);
