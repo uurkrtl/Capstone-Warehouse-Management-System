@@ -110,7 +110,7 @@ function ProductList() {
                             </td>
                             <td><Link to={`/products/detail/${product.id}`}
                                       className="btn btn-outline-info">Detail</Link></td>
-                            <td><Link to={"/"} className="btn btn-outline-secondary">Kaufhistorie</Link></td>
+                            <td><Link to={`/purchases/${product.id}`} className="btn btn-outline-secondary">Kaufhistorie</Link></td>
                             <td><Link to={"/"} className="btn btn-outline-success">Verkaufsübersicht</Link></td>
                         </tr>
                     );

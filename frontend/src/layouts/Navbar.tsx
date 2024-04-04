@@ -74,6 +74,8 @@ function Navbar() {
                                           className="dropdown-item text-decoration-none">Nicht vorrätige Produkte</Link>
                                     <Link to={`/reports/products-low-stock`}
                                           className="dropdown-item text-decoration-none">Produkte mit niedrigem Lagerbestand</Link>
+                                    <Link to={`/products`}
+                                          className="dropdown-item text-decoration-none">Produktkaufhistorie</Link>
                                     <li>
                                         <hr className="dropdown-divider"/>
                                     </li>

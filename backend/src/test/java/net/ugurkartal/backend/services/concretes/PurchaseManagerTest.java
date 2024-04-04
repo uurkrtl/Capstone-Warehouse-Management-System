@@ -12,6 +12,7 @@ import net.ugurkartal.backend.services.abstracts.StockMovementService;
 import net.ugurkartal.backend.services.dtos.requests.PurchaseRequest;
 import net.ugurkartal.backend.services.dtos.responses.PurchaseCreatedResponse;
 import net.ugurkartal.backend.services.dtos.responses.PurchaseGetAllResponse;
+import net.ugurkartal.backend.services.rules.ProductBusinessRules;
 import net.ugurkartal.backend.services.rules.PurchaseBusinessRules;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,6 +48,10 @@ class PurchaseManagerTest {
     @Mock
     private PurchaseBusinessRules purchaseBusinessRules;
 
+    @SuppressWarnings("unused")
+    @Mock
+    private ProductBusinessRules productBusinessRules;
+
     @Mock
     private ModelMapperService modelMapperService;
 
@@ -79,6 +84,33 @@ class PurchaseManagerTest {
 
         // Then
         assertEquals(2, response.size());
+    }
+
+    @Test
+    void getPurchasesByProductId_whenPurchasesExistForProduct_shouldReturnThosePurchases() {
+        // Given
+        String productId = "1";
+        List<Purchase> purchases = List.of(
+                Purchase.builder().id("1").product(Product.builder().id(productId).build()).build(),
+                Purchase.builder().id("2").product(Product.builder().id(productId).build()).build()
+        );
+
+        List<PurchaseGetAllResponse> expectedResponse = List.of(
+                new PurchaseGetAllResponse(),
+                new PurchaseGetAllResponse()
+        );
+
+        // When
+        when(productRepository.findById(productId)).thenReturn(Optional.of(Product.builder().id(productId).build()));
+        when(purchaseRepository.findAllByProductId(productId)).thenReturn(purchases);
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(modelMapper.map(purchases.get(0), PurchaseGetAllResponse.class)).thenReturn(expectedResponse.get(0));
+        when(modelMapper.map(purchases.get(1), PurchaseGetAllResponse.class)).thenReturn(expectedResponse.get(1));
+
+        List<PurchaseGetAllResponse> response = purchaseManager.getPurchasesByProductId(productId);
+
+        // Then
+        assertEquals(expectedResponse, response);
     }
 
     @Test

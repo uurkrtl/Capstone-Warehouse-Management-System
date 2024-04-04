@@ -2,8 +2,10 @@ package net.ugurkartal.backend.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.ugurkartal.backend.models.Product;
+import net.ugurkartal.backend.models.Purchase;
 import net.ugurkartal.backend.models.Supplier;
 import net.ugurkartal.backend.repositories.ProductRepository;
+import net.ugurkartal.backend.repositories.PurchaseRepository;
 import net.ugurkartal.backend.repositories.SupplierRepository;
 import net.ugurkartal.backend.services.abstracts.PurchaseService;
 import net.ugurkartal.backend.services.dtos.requests.PurchaseRequest;
@@ -19,6 +21,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDateTime;
 
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -35,6 +39,9 @@ class PurchaseControllerIntegrationTest {
     private ProductRepository productRepository;
 
     @Autowired
+    private PurchaseRepository purchaseRepository;
+
+    @Autowired
     private SupplierRepository supplierRepository;
 
     @Autowired
@@ -48,6 +55,27 @@ class PurchaseControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+    }
+
+    @Test
+    void getPurchasesByProductId_whenPurchasesExistForProduct_shouldReturnThosePurchases() throws Exception {
+        // Given
+        Product product = productRepository.save(Product.builder().build());
+        Purchase purchase1 = Purchase.builder().id("1").quantity(5).purchasePrice(10).build();
+        Purchase purchase2 = Purchase.builder().id("2").quantity(10).purchasePrice(20).build();
+        purchase1.setProduct(product);
+        purchase2.setProduct(product);
+        purchaseRepository.save(purchase1);
+        purchaseRepository.save(purchase2);
+
+        // When & Then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/purchases/product/" + product.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id", is("1")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].id", is("2")));
     }
 
     @Test
