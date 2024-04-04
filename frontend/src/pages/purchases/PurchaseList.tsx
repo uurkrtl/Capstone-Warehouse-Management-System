@@ -12,6 +12,7 @@ function PurchaseList() {
     const [loading, setLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState<string>('');
     const { productId = '' } = useParams<string>();
+    const { supplierId = '' } = useParams<string>();
 
     useEffect(() => {
         if (productId) {
@@ -23,7 +24,16 @@ function PurchaseList() {
             setErrorMessage(`Fehler beim Abrufen von Käufe: ${error.message}`);
             setLoading(false);
             setPurchases([]);
-        });}else {
+        });}else if (supplierId) {
+            purchaseService.getPurchaseBySupplierId(supplierId).then((response) => {
+                setPurchases(response.data);
+                setPurchasesByStatus(response.data);
+                setLoading(false);
+            }).catch(error => {
+                setErrorMessage(`Fehler beim Abrufen von Käufe: ${error.message}`);
+                setLoading(false);
+                setPurchases([]);
+            });}else {
             purchaseService.getAllPurchases().then((response) => {
                 setPurchases(response.data);
                 setPurchasesByStatus(response.data);
@@ -33,7 +43,7 @@ function PurchaseList() {
                 setLoading(false);
                 setPurchases([]);
             });}
-    }, [productId]);
+    }, [productId, supplierId]);
 
     const handleStatusChange = (e: React.MouseEvent<HTMLInputElement>) => {
         const target = e.target as HTMLElement;

@@ -10,6 +10,10 @@ export default class PurchaseService {
         return axios.get(`/api/purchases/product/${productId}`);
     }
 
+    getPurchaseBySupplierId(supplierId: string) {
+        return axios.get(`/api/purchases/supplier/${supplierId}`);
+    }
+
     getPurchaseById(id: string) {
         return axios.get(`/api/purchases/${id}`);
     }

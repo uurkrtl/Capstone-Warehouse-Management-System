@@ -79,6 +79,27 @@ class PurchaseControllerIntegrationTest {
     }
 
     @Test
+    void getPurchasesBySupplierId_whenPurchasesExistForSupplier_shouldReturnThosePurchases() throws Exception {
+        // Given
+        Supplier supplier = supplierRepository.save(Supplier.builder().build());
+        Purchase purchase1 = Purchase.builder().id("1").build();
+        Purchase purchase2 = Purchase.builder().id("2").build();
+        purchase1.setSupplier(supplier);
+        purchase2.setSupplier(supplier);
+        purchaseRepository.save(purchase1);
+        purchaseRepository.save(purchase2);
+
+        // When & Then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/purchases/supplier/" + supplier.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id", is("1")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].id", is("2")));
+    }
+
+    @Test
     void getPurchaseById_whenPurchaseExists_shouldReturnPurchase() throws Exception {
         //Given
         String productId = productRepository.save(Product.builder().build()).getId();

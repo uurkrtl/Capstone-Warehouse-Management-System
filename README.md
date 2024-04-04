@@ -30,19 +30,25 @@ Das Projekt ist mit Docker containerisiert und wird mit einer CI/CD-Pipeline üb
 ## Screenshots
 
 > Homepage
-![enter image description here](https://i.ibb.co/8NvM9MS/homepage-2024-04-04-12-13-36.png)
+
+![enter image description here](https://github.com/uurkrtl/Capstone-Warehouse-Management-System/assets/52300746/311446bf-8b98-4f84-862c-4c2712c7599d)
 
 > Produktlistenseite
-![enter image description here](https://i.ibb.co/H4366tz/Produktliste-2024-04-04-12-36-42.png)
+
+![enter image description here](https://github.com/uurkrtl/Capstone-Warehouse-Management-System/assets/52300746/0d849a29-ae94-426b-861e-e39a0562677a)
 
 > Produktdetailseite
-![enter image description here](https://i.ibb.co/cg7sXKT/product-detail-2024-04-04-12-44-22.png)
+
+![enter image description here](https://github.com/uurkrtl/Capstone-Warehouse-Management-System/assets/52300746/5660da01-75f0-4019-ad96-01fb017b3523)
 
 > Berichtsseite
-![enter image description here](https://i.ibb.co/6Y98BGK/report-tool-2024-04-04-13-30-37.png)
+
+![enter image description here](https://github.com/uurkrtl/Capstone-Warehouse-Management-System/assets/52300746/65f09a33-5dd9-45bc-b8db-46060783bb65)
 
 > Backend-Struktur
-![enter image description here](https://i.ibb.co/Qf0fVHw/Ekran-Resmi-2024-04-04-00-08-16.png)
+
+![enter image description here](https://github.com/uurkrtl/Capstone-Warehouse-Management-System/assets/52300746/2cde1b6e-8186-44e0-b37e-d0feebe7d6c2)
 
 > Frontend-Struktur
-![enter image description here](https://i.ibb.co/QrygsQs/Ekran-Resmi-2024-04-04-00-13-19.png)
+
+![enter image description here](https://github.com/uurkrtl/Capstone-Warehouse-Management-System/assets/52300746/f37e71b3-f19c-40e2-9504-cca1b8e860d4)
