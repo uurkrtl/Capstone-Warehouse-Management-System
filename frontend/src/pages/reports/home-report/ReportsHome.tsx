@@ -1,11 +1,16 @@
 import './ReportHome.css'
 import {Link} from "react-router-dom";
+import {useEffect} from "react";
 
 function ReportsHome() {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     return (
-        <div className="container px-4 py-5" id="featured-3">
+        <div className="container px-4 py-4" id="featured-3">
             <h2 className="pb-2 border-bottom">Report Tools</h2>
-            <div className="row g-4 py-5 row-cols-1 row-cols-lg-3">
+            <div className="row g-4 py-4 row-cols-1 row-cols-lg-3">
                 <div className="feature col">
                     <div
                         className="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
@@ -89,21 +94,43 @@ function ReportsHome() {
                 <div className="feature col">
                     <div
                         className="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 64 64">
-                            <path stroke="#ffffff" fill="none"
-                                  d="M27 51.87A3.9916 3.9916 0 0030 48V28a3.9916 3.9916 0 00-3-3.87A3.65643 3.65643 0 0026 24H6a3.99887 3.99887 0 00-4 4V48a3.99891 3.99891 0 004 4H26A3.65874 3.65874 0 0027 51.87zM11 48H7a1.00011 1.00011 0 01.00006-2H11A1.00011 1.00011 0 0111 48zm2-4H7a1.00011 1.00011 0 01.00006-2H13A1.00011 1.00011 0 0113 44zm9-15a3.00883 3.00883 0 01-3 3H13a3.00883 3.00883 0 01-3-3V26h2v3a1.003 1.003 0 001 1h6a1.003 1.003 0 001-1V26h2zM36 17H46a3.01107 3.01107 0 003-3V9a3.00879 3.00879 0 00-3-3H36a3.00879 3.00879 0 00-3 3v5A3.01309 3.01309 0 0036 17z"></path>
-                            <path stroke="#ffffff" fill="none"
-                                  d="M57 10H51v4h4a2.00587 2.00587 0 012 2V52a2.00591 2.00591 0 01-2 2c-5.10565.00378-30.35992-.004-34.9 0A5.00051 5.00051 0 0025 58H57a5.00181 5.00181 0 005-5V15A5.00181 5.00181 0 0057 10zM25 16a2.00587 2.00587 0 012-2h4V10H25a5.00181 5.00181 0 00-5 5v7h5z"></path>
-                            <path stroke="#ffffff" fill="none"
-                                  d="M27,22.08A5.99882,5.99882,0,0,1,32,28V48a5.979,5.979,0,0,1-1.53,4H55V16H50.58A5.05069,5.05069,0,0,1,46,19H36a5.01743,5.01743,0,0,1-4.57-3H27Zm17.79,2.21a1.008,1.008,0,0,1,1.42,0l1.29,1.3,3.79-3.8a1.00429,1.00429,0,0,1,1.42,1.42L48.21,27.71a1.01673,1.01673,0,0,1-1.42,0l-2-2A1.008,1.008,0,0,1,44.79,24.29Zm0,9a1.008,1.008,0,0,1,1.42,0l1.29,1.3,3.79-3.8a1.00429,1.00429,0,0,1,1.42,1.42L48.21,36.71a1.01673,1.01673,0,0,1-1.42,0l-2-2A1.008,1.008,0,0,1,44.79,33.29Zm0,9a1.008,1.008,0,0,1,1.42,0l1.29,1.3,3.79-3.8a1.00429,1.00429,0,0,1,1.42,1.42L48.21,45.71a1.01673,1.01673,0,0,1-1.42,0l-2-2A1.008,1.008,0,0,1,44.79,42.29ZM33.5,25c.08313.00183,8.02789-.00134,8.00006,0a1.00011,1.00011,0,0,1-.00012,2H33.5A1.00011,1.00011,0,0,1,33.5,25Zm0,9c.08313.00183,8.02789-.00134,8.00006,0a1.00011,1.00011,0,0,1-.00012,2H33.5A1.00011,1.00011,0,0,1,33.5,34Zm0,9c.08313.00183,8.02789-.00134,8.00006,0a1.00011,1.00011,0,0,1-.00012,2H33.5A1.00011,1.00011,0,0,1,33.5,43Z"></path>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor"
+                             className="bi bi-person-video2" viewBox="0 0 16 16">
+                            <path d="M10 9.05a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+                            <path
+                                d="M2 1a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zM1 3a1 1 0 0 1 1-1h2v2H1zm4 10V2h9a1 1 0 0 1 1 1v9c0 .285-.12.543-.31.725C14.15 11.494 12.822 10 10 10c-3.037 0-4.345 1.73-4.798 3zm-4-2h3v2H2a1 1 0 0 1-1-1zm3-1H1V8h3zm0-3H1V5h3z"/>
                         </svg>
 
                     </div>
                     <h3 className="fs-2 text-body-emphasis">Kaufhistorie des Lieferanten</h3>
-                    <p>Sie können die Liste der Kaufhistorie des Lieferanten sehen. Klicken Sie in der sich öffnenden Liste
+                    <p>Sie können die Liste der Kaufhistorie des Lieferanten sehen. Klicken Sie in der sich öffnenden
+                        Liste
                         auf die Schaltfläche „Kaufhistorie“ neben dem Lieferant, dessen Bericht Sie sehen möchten.</p>
                     <Link to={`/suppliers`} className="icon-link">
                         Gehen zum Bericht
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
+                             className="bi bi-chevron-double-right" viewBox="0 0 16 16">
+                            <path fillRule="evenodd"
+                                  d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708"></path>
+                            <path fillRule="evenodd"
+                                  d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708"></path>
+                        </svg>
+                    </Link>
+                </div>
+                <div className="feature col">
+                    <div
+                        className="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor"
+                             className="bi bi-arrow-left-right" viewBox="0 0 16 16">
+                            <path fillRule="evenodd"
+                                  d="M1 11.5a.5.5 0 0 0 .5.5h11.793l-3.147 3.146a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 11H1.5a.5.5 0 0 0-.5.5m14-7a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H14.5a.5.5 0 0 1 .5.5"/>
+                        </svg>
+
+                    </div>
+                    <h3 className="fs-2 text-body-emphasis">Lagerbewegung</h3>
+                    <p>Sie können alle Lagerein- und -ausgänge einsehen.</p>
+                    <Link to={`/suppliers`} className="icon-link">
+                    Gehen zum Bericht
                         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
                              className="bi bi-chevron-double-right" viewBox="0 0 16 16">
                             <path fillRule="evenodd"
