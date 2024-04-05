@@ -46,6 +46,7 @@ function Dashboard() {
                     <Route path={'/suppliers/update/:id'} element={<SupplierUpdate/>}/>
                     <Route path={'/suppliers/detail/:id'} element={<SupplierDetail/>}/>
                     <Route path={'/suppliers/add'} element={<SupplierAdd/>}/>
+                    <Route path={'/purchases'} element={<PurchaseList/>}/>
                     <Route path={'/purchases/product/:productId?'} element={<PurchaseList/>}/>
                     <Route path={'/purchases/supplier/:supplierId?'} element={<PurchaseList/>}/>
                     <Route path={'/purchases/update/:id'} element={<PurchaseUpdate/>}/>

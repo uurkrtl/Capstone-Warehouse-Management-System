@@ -12,6 +12,13 @@ function ProductList() {
     const [productByStatus, setProductByStatus] = useState<Product[]>(products);
     const [loading, setLoading] = useState(true);
 
+    const truncateText = (text: string, maxLength: number) => {
+        if (text.length > maxLength) {
+            return text.substring(0, maxLength - 3) + '...';
+        }
+        return text;
+    };
+
     const filteredProducts = productByStatus.filter(
         (product) =>
             product.name.toLowerCase().includes(filter.toLowerCase())
@@ -90,14 +97,13 @@ function ProductList() {
                     <th scope="col">Status</th>
                     <th scope="col">Detail</th>
                     <th scope="col">Kaufhistorie</th>
-                    <th scope="col">Verkaufsübersicht</th>
                 </tr>
                 </thead>
                 <tbody>
                 {filteredProducts.map((product) => {
                     return (
                         <tr key={product.id}>
-                            <td className={!product.active ? "text-danger" : "text-black"}>{product.name}</td>
+                            <td className={!product.active ? "text-danger" : "text-black"}>{truncateText(product.name, 40)}</td>
                             <td>{product.salePrice.toLocaleString('de-DE', {
                                 style: 'currency',
                                 currency: 'EUR'
@@ -111,7 +117,6 @@ function ProductList() {
                             <td><Link to={`/products/detail/${product.id}`}
                                       className="btn btn-outline-info">Detail</Link></td>
                             <td><Link to={`/purchases/product/${product.id}`} className="btn btn-outline-secondary">Kaufhistorie</Link></td>
-                            <td><Link to={"/"} className="btn btn-outline-success">Verkaufsübersicht</Link></td>
                         </tr>
                     );
                 })}

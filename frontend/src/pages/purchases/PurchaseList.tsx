@@ -1,24 +1,27 @@
 import PurchaseService from "../../services/PurchaseService.ts";
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {Purchase} from "../../types/Purchase.ts";
 import PageHeader from "../../layouts/PageHeader.tsx";
 import {Link, useParams} from "react-router-dom";
+import DatePicker from "react-datepicker";
 
 const purchaseService = new PurchaseService();
 function PurchaseList() {
     const [purchases, setPurchases] = useState<Purchase[]>([]);
     const [filter, setFilter] = useState("");
-    const [purchasesByStatus, setPurchasesByStatus] = useState<Purchase[]>(purchases);
+    const [purchasesByDate, setPurchasesByDate] = useState<Purchase[]>(purchases);
     const [loading, setLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState<string>('');
     const { productId = '' } = useParams<string>();
     const { supplierId = '' } = useParams<string>();
+    const [startDate, setStartDate] = useState(new Date('2024-03-01'));
+    const [endDate, setEndDate] = useState(new Date());
 
     useEffect(() => {
         if (productId) {
         purchaseService.getPurchaseByProductId(productId).then((response) => {
             setPurchases(response.data);
-            setPurchasesByStatus(response.data);
+            setPurchasesByDate(response.data);
             setLoading(false);
         }).catch(error => {
             setErrorMessage(`Fehler beim Abrufen von Käufe: ${error.message}`);
@@ -27,7 +30,7 @@ function PurchaseList() {
         });}else if (supplierId) {
             purchaseService.getPurchaseBySupplierId(supplierId).then((response) => {
                 setPurchases(response.data);
-                setPurchasesByStatus(response.data);
+                setPurchasesByDate(response.data);
                 setLoading(false);
             }).catch(error => {
                 setErrorMessage(`Fehler beim Abrufen von Käufe: ${error.message}`);
@@ -36,7 +39,7 @@ function PurchaseList() {
             });}else {
             purchaseService.getAllPurchases().then((response) => {
                 setPurchases(response.data);
-                setPurchasesByStatus(response.data);
+                setPurchasesByDate(response.data);
                 setLoading(false);
             }).catch(error => {
                 setErrorMessage(`Fehler beim Abrufen von Käufe: ${error.message}`);
@@ -45,18 +48,13 @@ function PurchaseList() {
             });}
     }, [productId, supplierId]);
 
-    const handleStatusChange = (e: React.MouseEvent<HTMLInputElement>) => {
-        const target = e.target as HTMLElement;
-        if (target.id === "activePurchases") {
-            setPurchasesByStatus(purchases.filter((purchase) => purchase.active));
-        } else if (target.id === "passivePurchases") {
-            setPurchasesByStatus(purchases.filter((purchase) => !purchase.active));
-        } else {
-            setPurchasesByStatus(purchases);
-        }
-    };
+    const handleDateFilter = (handleStartDate: Date, handleEndDate: Date) => {
+        setPurchasesByDate(purchases.filter((purchase) => new Date(purchase.purchaseDate) >= handleStartDate && new Date(purchase.purchaseDate) <= handleEndDate));
+        setStartDate(handleStartDate);
+        setEndDate(handleEndDate);
+    }
 
-    const filteredPurchases = purchasesByStatus.filter(
+    const filteredPurchases = purchasesByDate.filter(
         (purchase) =>
             purchase.productName?.toLowerCase().includes(filter.toLowerCase())
     );
@@ -78,21 +76,36 @@ function PurchaseList() {
                 <Link to={"/purchases/add"} className="btn btn-outline-secondary">Kauf erstellen</Link>
             </div>
 
-            <div className="form-check form-check-inline mb-3">
-                <input className="form-check-input" type="radio" name="inlineRadioOptions" id="allPurchases"
-                       value="allPurchases" onClick={handleStatusChange} defaultChecked/>
-                <label className="form-check-label" htmlFor="allSuppliers">Alle Einkäufe</label>
+            <div className="form-check-inline mb-3">
+                <label className="form-check-label mx-1" htmlFor="purchaseStartDate">Startdatum</label>
+                <DatePicker className="form-control" id="purchaseStartDate"
+                            selected={startDate}
+                            onChange={(date: Date) => {
+                                const adjustedDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+                                handleDateFilter(adjustedDate, endDate);
+                            }}
+                            dateFormat={'dd.MM.yyyy'}
+                            minDate={new Date('2024-03-01')}
+                            maxDate={new Date()}/>
             </div>
 
-            <div className="form-check form-check-inline mb-3">
-                <input className="form-check-input" type="radio" name="inlineRadioOptions" id="activePurchases"
-                       value="activePurchases" onClick={handleStatusChange}/>
-                <label className="form-check-label" htmlFor="activePurchases">Aktive Einkäufe</label>
+            <div className="form-check-inline mb-3">
+                <label className="form-check-label mx-1" htmlFor="purchaseStartDate">Enddatum</label>
+                <DatePicker className="form-control" id="purchaseEndDate"
+                            selected={endDate}
+                            onChange={(date: Date) => {
+                                const adjustedDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+                                handleDateFilter(startDate, adjustedDate);
+                            }}
+                            dateFormat={'dd.MM.yyyy'}
+                            minDate={new Date('2024-03-01')}
+                            maxDate={new Date()}/>
             </div>
-            <div className="form-check form-check-inline mb-3">
-                <input className="form-check-input" type="radio" name="inlineRadioOptions" id="passivePurchases"
-                       value="passivePurchases" onClick={handleStatusChange}/>
-                <label className="form-check-label" htmlFor="passivePurchases">Passive Einkäufe</label>
+
+            <div className="form-check-inline mb-3">
+                <button className="btn btn-warning"
+                        onClick={() => handleDateFilter(new Date('2024-03-01'), new Date())}>Zurücksetzen
+                </button>
             </div>
 
             <div className="input-group">
