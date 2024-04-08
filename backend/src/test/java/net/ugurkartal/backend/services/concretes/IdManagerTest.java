@@ -59,6 +59,14 @@ class IdManagerTest {
     }
 
     @Test
+    void generateUserIdReturnsUniqueId() {
+        String id1 = idManager.generateUserId();
+        String id2 = idManager.generateUserId();
+
+        assertNotEquals(id1, id2);
+    }
+
+    @Test
     void generateProductIdReturnsIdWithCorrectPrefix() {
         String id = idManager.generateProductId();
 
@@ -91,5 +99,12 @@ class IdManagerTest {
         String id = idManager.generateStockMovementId();
 
         assertTrue(id.startsWith("SMV-"));
+    }
+
+    @Test
+    void generateUserIdReturnsIdWithCorrectPrefix() {
+        String id = idManager.generateUserId();
+
+        assertTrue(id.startsWith("USR-"));
     }
 }

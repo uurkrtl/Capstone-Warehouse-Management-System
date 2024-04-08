@@ -1,7 +1,30 @@
-import {Link} from "react-router-dom";
-
+import {Link, useNavigate} from "react-router-dom";
+import {useEffect, useState} from "react";
+import {User} from "../types/User.ts";
+import UserService from "../services/UserService.ts";
 
 function Navbar() {
+    const userService = new UserService();
+    const [user, setUser] = useState<User | null>(null);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        userService.getLoggedInUser()
+            .then((response) => {
+                setUser(response.data);
+            })
+            .catch(() => {
+                setUser(null);
+            });
+    }, []);
+
+    function logout() {
+        userService.logout()
+            .then(() => navigate('/login'))
+            .catch((error) => console.error('Etwas ist schief gelaufen:', error))
+            .finally(() => setUser(null));
+    }
+
     return (
         <header data-bs-theme="dark">
             <nav className="navbar navbar-expand-md navbar-dark fixed-top bg-dark" aria-label="Fourth navbar example">
@@ -113,10 +136,51 @@ function Navbar() {
                                     </li>
                                 </ul>
                             </li>
+                            {user && user.role === 'ADMIN' && (
+                                <li className="nav-item dropdown">
+                                    <Link to={'/'} className="nav-link dropdown-toggle text-decoration-none"
+                                          data-bs-toggle="dropdown"
+                                          aria-expanded="false">Benutzer</Link>
+                                    <ul className="dropdown-menu">
+                                        <li><Link to={'/users'}
+                                                  className="dropdown-item text-decoration-none">Benutzerliste</Link>
+                                        </li>
+                                        <li><Link to={'/users/add'} className="dropdown-item text-decoration-none">Benutzer
+                                            erstellen</Link>
+                                        </li>
+                                    </ul>
+                                </li>
+                            )}
                         </ul>
-                        <form role="search">
-                            <input className="form-control" type="search" placeholder="Search" aria-label="Search"/>
-                        </form>
+                        <div>
+                            {!user && (
+
+                                <Link to={'/login'} className="btn btn-outline-primary me-2">Anmelden</Link>
+                            )}
+                            {user && (
+                                <li className="nav-item dropdown">
+                                    <Link to={'/'} className="dropdown-toggle text-decoration-none"
+                                          data-bs-toggle="dropdown"
+                                          aria-expanded="false">
+                                        <img height="32" width="52"
+                                             src={'https://static.vecteezy.com/system/resources/thumbnails/019/879/186/small/user-icon-on-transparent-background-free-png.png'}
+                                             alt="user information">
+                                        </img>
+                                    </Link>
+                                    <ul className="dropdown-menu dropdown-menu-end">
+                                        <li><Link to={'/'}
+                                                  className="dropdown-item text-decoration-none">Mein Konto ({user.username})</Link>
+                                        </li>
+                                        <li>
+                                            <button onClick={logout}
+                                                    className="dropdown-item text-decoration-none text-danger">Abmelden
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                            )}
+                        </div>
                     </div>
                 </div>
             </nav>
