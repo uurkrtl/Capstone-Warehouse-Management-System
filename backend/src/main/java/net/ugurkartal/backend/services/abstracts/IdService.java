@@ -8,4 +8,5 @@ public interface IdService {
     String generateOrderId();
     String generateOrderDetailId();
     String generateStockMovementId();
+    String generateUserId();
 }

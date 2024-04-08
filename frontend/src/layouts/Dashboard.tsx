@@ -26,6 +26,9 @@ import OrderDetails from "../pages/orders/OrderDetails.tsx";
 import StockMovementList from "../pages/stock-movements/StockMovementList.tsx";
 import ReportsHome from "../pages/reports/home-report/ReportsHome.tsx";
 import ProductReport from "../pages/reports/ProductReport.tsx";
+import Login from "../pages/login/Login.tsx";
+import UserList from "../pages/users/UserList.tsx";
+import UserAdd from "../pages/users/UserAdd.tsx";
 
 function Dashboard() {
     return (
@@ -59,6 +62,9 @@ function Dashboard() {
                     <Route path={'/stock-movements'} element={<StockMovementList/>}/>
                     <Route path={'/reports'} element={<ReportsHome/>}/>
                     <Route path={'/reports/:reportType'} element={<ProductReport/>}/>
+                    <Route path={'/users'} element={<UserList/>}/>
+                    <Route path={'/users/add'} element={<UserAdd/>}/>
+                    <Route path="/login" element={<Login />} />
                     <Route path={'*'} element={<PageNotFound404/>}/>
                 </Routes>
                 <Footer />

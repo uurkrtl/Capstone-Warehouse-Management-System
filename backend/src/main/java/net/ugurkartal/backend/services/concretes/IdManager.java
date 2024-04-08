@@ -41,4 +41,9 @@ public class IdManager implements IdService {
     public String generateStockMovementId() {
         return "SMV-" + UUID.randomUUID();
     }
+
+    @Override
+    public String generateUserId() {
+        return "USR-" + UUID.randomUUID();
+    }
 }

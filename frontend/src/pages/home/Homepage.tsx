@@ -1,7 +1,23 @@
 import './Homepage.css'
 import {Link} from "react-router-dom";
+import UserService from "../../services/UserService.ts";
+import {useEffect, useState} from "react";
+import {User} from "../../types/User.ts";
 
 function Homepage() {
+    const userService = new UserService();
+    const [user, setUser] = useState<User | null>(null);
+
+    useEffect(() => {
+        userService.getLoggedInUser()
+            .then((response) => {
+                setUser(response.data);
+            })
+            .catch(() => {
+                setUser(null);
+            });
+    }, []);
+
     return (
         <main>
             <div id="myCarousel" className="carousel slide mb-6" data-bs-ride="carousel">
@@ -94,6 +110,19 @@ function Homepage() {
                             <h3 className="fw-normal">Berichte</h3>
                         </Link>
                     </div>
+
+                    {user && user.role === 'ADMIN' && (
+                        <div className="col-lg-3">
+                            <Link to={`/users`} className="nav-link active text-decoration-none" aria-current="page">
+                                <img
+                                    src="https://www.iconpacks.net/icons/1/free-user-group-icon-296-thumb.png"
+                                    className="bd-placeholder-img" width="140" height="140"
+                                    alt="Einkaufsmanagement"/>
+                                <h3 className="fw-normal">Benutzerverwaltung</h3>
+                            </Link>
+                        </div>
+                    )}
+
 
                 </div>
 
