@@ -13,4 +13,8 @@ public class UserCreatedResponse {
     private String id;
     private String username;
     private String role;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String imageUrl;
 }

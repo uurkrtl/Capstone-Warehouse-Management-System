@@ -162,14 +162,14 @@ function Navbar() {
                                     <Link to={'/'} className="dropdown-toggle text-decoration-none"
                                           data-bs-toggle="dropdown"
                                           aria-expanded="false">
-                                        <img height="32" width="52"
-                                             src={'https://static.vecteezy.com/system/resources/thumbnails/019/879/186/small/user-icon-on-transparent-background-free-png.png'}
+                                        <img height="38" width="38" className={'rounded-circle'}
+                                             src={user.imageUrl}
                                              alt="user information">
                                         </img>
                                     </Link>
                                     <ul className="dropdown-menu dropdown-menu-end">
-                                        <li><Link to={'/'}
-                                                  className="dropdown-item text-decoration-none">Mein Konto ({user.username})</Link>
+                                        <li><Link to={`/users/detail/${user.id}`}
+                                                  className="dropdown-item text-decoration-none">{`Mein Konto (${user.firstName} ${user.lastName})`}</Link>
                                         </li>
                                         <li>
                                             <button onClick={logout}

@@ -1,6 +1,7 @@
 package net.ugurkartal.backend.controllers;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import net.ugurkartal.backend.services.abstracts.UserService;
 import net.ugurkartal.backend.services.dtos.requests.UserRequest;
@@ -31,7 +32,7 @@ public class UserController {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserCreatedResponse registerUser(@RequestBody UserRequest userRequest) {
+    public UserCreatedResponse registerUser(@Valid @RequestBody UserRequest userRequest) {
         return userService.registerUser(userRequest);
     }
 
@@ -45,5 +46,10 @@ public class UserController {
     @GetMapping
     public List<UserGetAllResponse> getAllUsers() {
         return userService.getAllUsers();
+    }
+
+    @GetMapping("/{id}")
+    public UserCreatedResponse getUserById(@RequestParam String ownId, @RequestParam String role, @PathVariable String id) {
+        return userService.getUserById(ownId, role, id);
     }
 }

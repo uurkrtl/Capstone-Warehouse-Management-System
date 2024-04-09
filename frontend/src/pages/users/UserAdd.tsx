@@ -11,7 +11,11 @@ function UserAdd() {
         id: '',
         username: '',
         password: '',
-        role: 'USER'
+        role: 'USER',
+        firstName: '',
+        lastName: '',
+        email: '',
+        imageUrl: ''
     });
     const navigate = useNavigate();
     const userService = new UserService();
