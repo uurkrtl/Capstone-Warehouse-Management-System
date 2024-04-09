@@ -8,6 +8,7 @@ import net.ugurkartal.backend.services.abstracts.IdService;
 import net.ugurkartal.backend.services.dtos.requests.UserRequest;
 import net.ugurkartal.backend.services.dtos.responses.UserCreatedResponse;
 import net.ugurkartal.backend.services.dtos.responses.UserGetAllResponse;
+import net.ugurkartal.backend.services.rules.UserBusinessRules;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -32,6 +33,9 @@ class UserManagerTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private UserBusinessRules userBusinessRules;
 
     @Mock
     private ModelMapperService modelMapperService;
@@ -73,6 +77,7 @@ class UserManagerTest {
                 .username("testUser")
                 .password("testPassword")
                 .role(UserRole.USER)
+                .imageUrl("testImageUrl")
                 .build();
 
         UserCreatedResponse expectedResponse = UserCreatedResponse.builder()
@@ -117,5 +122,24 @@ class UserManagerTest {
 
         // Then
         assertEquals(2, response.size());
+    }
+
+    @Test
+    void getUserById_whenUserExists_shouldReturnUser() {
+        // Given
+        User user = User.builder().id("1").build();
+        User ownUser = User.builder().id("1").role(UserRole.ADMIN).build();
+        UserCreatedResponse expectedResponse = UserCreatedResponse.builder().id("1").build();
+
+        // When
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(modelMapper.map(user, UserCreatedResponse.class)).thenReturn(expectedResponse);
+        when(userRepository.findById("1")).thenReturn(Optional.of(user));
+
+        UserCreatedResponse actual = userManager.getUserById(ownUser.getId(), ownUser.getRole().toString(),"1");
+
+        // Then
+        verify(userBusinessRules, times(1)).checkIfUnauthorizedUser(anyString(), anyString(), anyString());
+        assertEquals(expectedResponse.getId(), actual.getId());
     }
 }

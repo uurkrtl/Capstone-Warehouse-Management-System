@@ -61,6 +61,8 @@ function UserList() {
             <table className="table table-striped">
                 <thead>
                 <tr>
+                    <th scope="col">Vorname</th>
+                    <th scope="col">Nachname</th>
                     <th scope="col">Benutzername</th>
                     <th scope="col">Rolle</th>
                     <th scope="col">Detail</th>
@@ -70,9 +72,11 @@ function UserList() {
                 {filteredUsers.map((user) => {
                     return (
                         <tr key={user.id}>
+                            <td>{user.firstName}</td>
+                            <td>{user.lastName}</td>
                             <td>{user.username}</td>
                             <td>{user.role.charAt(0).toUpperCase() + user.role.slice(1).toLowerCase()}</td>
-                            <td><Link to={`/`}
+                            <td><Link to={`/users/detail/${user.id}`}
                                       className="btn btn-outline-info">Detail</Link></td>
                         </tr>
                     );

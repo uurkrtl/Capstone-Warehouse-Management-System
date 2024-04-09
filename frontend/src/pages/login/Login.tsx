@@ -11,7 +11,8 @@ function Login() {
     const [user, setUser] = useState<User>({
         id: '',
         username: '',
-        password: ''
+        password: '',
+        role: 'USER'
     });
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

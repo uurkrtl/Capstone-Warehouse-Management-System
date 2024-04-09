@@ -11,4 +11,6 @@ public class UserGetAllResponse {
     private String id;
     private String username;
     private String role;
+    private String firstName;
+    private String lastName;
 }

@@ -26,4 +26,8 @@ export default class UserService {
     getAllUsers() {
         return axios.get('/api/users');
     }
+
+    getUserById(ownId: string, role: string, id: string) {
+        return axios.get(`/api/users/${id}?ownId=${ownId}&role=${role}`);
+    }
 }

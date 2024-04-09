@@ -9,6 +9,7 @@ import net.ugurkartal.backend.services.abstracts.UserService;
 import net.ugurkartal.backend.services.dtos.requests.UserRequest;
 import net.ugurkartal.backend.services.dtos.responses.UserCreatedResponse;
 import net.ugurkartal.backend.services.dtos.responses.UserGetAllResponse;
+import net.ugurkartal.backend.services.rules.UserBusinessRules;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +23,7 @@ public class UserManager implements UserService {
     private final UserRepository userRepository;
     private final ModelMapperService modelMapperService;
     private final IdService idService;
+    private final UserBusinessRules userBusinessRules;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -38,9 +40,14 @@ public class UserManager implements UserService {
 
     @Override
     public UserCreatedResponse registerUser(UserRequest userRequest) {
+        userBusinessRules.checkIfUsernameExists(userRequest.getUsername());
+        userBusinessRules.checkIfEmailExists(userRequest.getEmail());
         User user = modelMapperService.forRequest().map(userRequest, User.class);
         user.setId(idService.generateUserId());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (user.getImageUrl().isEmpty()){
+            user.setImageUrl("https://i.ibb.co/z7DKLLh/user-icon-on-transparent-background-free-png.webp");
+        }
         user = userRepository.save(user);
         return modelMapperService.forResponse().map(user, UserCreatedResponse.class);
     }
@@ -51,5 +58,12 @@ public class UserManager implements UserService {
         return users.stream()
                 .map(user->this.modelMapperService.forResponse()
                         .map(user, UserGetAllResponse.class)).toList();
+    }
+
+    @Override
+    public UserCreatedResponse getUserById(String ownId, String  role, String searchId) {
+        userBusinessRules.checkIfUnauthorizedUser(ownId, role, searchId);
+        User user = userRepository.findById(searchId).orElseThrow(() -> new UsernameNotFoundException("Benutzer nicht gefunden"));
+        return modelMapperService.forResponse().map(user, UserCreatedResponse.class);
     }
 }
