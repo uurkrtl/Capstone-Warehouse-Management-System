@@ -13,4 +13,5 @@ public interface UserService {
     UserCreatedResponse registerUser(UserRequest userRequest);
     List<UserGetAllResponse> getAllUsers();
     UserCreatedResponse getUserById(String ownId, String role, String searchId);
+    UserCreatedResponse updateUser(String ownId, String role, String updateId, UserRequest userRequest);
 }

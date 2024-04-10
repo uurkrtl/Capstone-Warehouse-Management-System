@@ -142,4 +142,59 @@ class UserManagerTest {
         verify(userBusinessRules, times(1)).checkIfUnauthorizedUser(anyString(), anyString(), anyString());
         assertEquals(expectedResponse.getId(), actual.getId());
     }
+
+    @Test
+    void updateUser_whenUserRequestIsValid_shouldReturnSUserCreatedResponse() {
+        // Given
+        String id = "1";
+        UserRequest request = UserRequest.builder()
+                .username("Updated Test")
+                .password("Updated Test")
+                .role("ADMIN")
+                .firstName("Updated Test")
+                .lastName("Updated Test")
+                .email("test@test.com")
+                .imageUrl("testImageUrl")
+                .build();
+
+        User updatedUser = User.builder()
+                .id(id)
+                .username("Updated Test")
+                .password("Updated Test")
+                .role(UserRole.ADMIN)
+                .firstName("Updated Test")
+                .lastName("Updated Test")
+                .email("test@test.com")
+                .imageUrl("testImageUrl")
+                .build();
+
+        UserCreatedResponse expectedResponse = UserCreatedResponse.builder()
+                .id(id)
+                .username("Updated Test")
+                .role("ADMIN")
+                .firstName("Updated Test")
+                .lastName("Updated Test")
+                .email("test@test.com")
+                .imageUrl("testImageUrl")
+                .build();
+
+        // When
+        when(modelMapperService.forRequest()).thenReturn(modelMapper);
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(modelMapper.map(request, User.class)).thenReturn(updatedUser);
+        when(userRepository.findById(id)).thenReturn(Optional.of(User.builder().id(id).build()));
+        when(userRepository.save(updatedUser)).thenReturn(updatedUser);
+        when(modelMapper.map(updatedUser, UserCreatedResponse.class)).thenReturn(expectedResponse);
+
+        UserCreatedResponse actualResponse = userManager.updateUser(id, "ADMIN", id, request);
+
+        // Then
+        verify(userBusinessRules, times(1)).checkIfUnauthorizedUser(anyString(), anyString(), anyString());
+        verify(userBusinessRules, times(1)).checkIfUsernameExists(anyString(), anyString());
+        verify(userBusinessRules, times(1)).checkIfEmailExists(anyString(), anyString());
+        verify(userRepository, times(1)).save(updatedUser);
+        assertEquals(expectedResponse.getId(), actualResponse.getId());
+        assertEquals(expectedResponse.getUsername(), actualResponse.getUsername());
+        assertEquals(expectedResponse.getEmail(), actualResponse.getEmail());
+    }
 }

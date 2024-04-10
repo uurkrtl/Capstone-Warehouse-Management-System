@@ -52,4 +52,9 @@ public class UserController {
     public UserCreatedResponse getUserById(@RequestParam String ownId, @RequestParam String role, @PathVariable String id) {
         return userService.getUserById(ownId, role, id);
     }
+
+    @PutMapping("/{id}")
+    public UserCreatedResponse updateUser(@RequestParam String ownId, @RequestParam String role, @PathVariable String id, @Valid @RequestBody UserRequest userRequest) {
+        return userService.updateUser(ownId, role, id, userRequest);
+    }
 }

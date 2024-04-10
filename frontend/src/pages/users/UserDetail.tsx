@@ -18,7 +18,9 @@ function UserDetail() {
         firstName: '',
         lastName: '',
         email: '',
-        imageUrl: ''
+        imageUrl: '',
+        createdAt: new Date(),
+        updatedAt: new Date()
     });
 
     useEffect(() => {
@@ -78,19 +80,27 @@ function UserDetail() {
                             <th scope="row">E-Mail-Adresse</th>
                             <td>{searchUser.email}</td>
                         </tr>
+                        <tr>
+                            <th scope="row">Erstellung</th>
+                            <td>{searchUser.createdAt ? new Date(searchUser.createdAt).toLocaleString('de-DE') : "-"}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Letzte Aktualisierung</th>
+                            <td>{searchUser.updatedAt ? new Date(searchUser.updatedAt).toLocaleString('de-DE') : "-"}</td>
+                        </tr>
                         </tbody>
                     </table>
 
                     <div className="d-grid gap-2 d-md-flex justify-content-md-start">
-                        <Link to={`/`} type="button"
+                        <Link to={`/users/update/${searchUser.id}`} type="button"
                               className="btn btn-primary btn-lg px-4 me-md-2">Aktualisieren</Link>
-                        {searchUser.role === 'ADMIN' && (
+                        {user?.role === 'ADMIN' && (
                             <button type="button"
                                     className={'btn btn-danger px-4 me-md-2'}
                             >
                                 Löschen</button>
                         )}
-                        {searchUser.role === 'ADMIN' && (
+                        {user?.role === 'ADMIN' && (
                             <Link to={`/users`} type="button"
                                   className="btn btn-outline-secondary btn-lg px-4">Benutzerliste</Link>
                         )}
