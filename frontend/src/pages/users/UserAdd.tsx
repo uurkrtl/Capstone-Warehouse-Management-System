@@ -15,7 +15,9 @@ function UserAdd() {
         firstName: '',
         lastName: '',
         email: '',
-        imageUrl: ''
+        imageUrl: '',
+        createdAt: new Date(),
+        updatedAt: new Date()
     });
     const navigate = useNavigate();
     const userService = new UserService();

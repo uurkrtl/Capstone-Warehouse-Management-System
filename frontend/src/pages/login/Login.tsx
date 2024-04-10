@@ -12,7 +12,13 @@ function Login() {
         id: '',
         username: '',
         password: '',
-        role: 'USER'
+        role: 'USER',
+        firstName: '',
+        lastName: '',
+        email: '',
+        imageUrl: '',
+        createdAt: new Date(),
+        updatedAt: new Date()
     });
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

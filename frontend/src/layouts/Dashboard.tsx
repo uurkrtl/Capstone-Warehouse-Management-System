@@ -30,6 +30,7 @@ import Login from "../pages/login/Login.tsx";
 import UserList from "../pages/users/UserList.tsx";
 import UserAdd from "../pages/users/UserAdd.tsx";
 import UserDetail from "../pages/users/UserDetail.tsx";
+import UserUpdate from "../pages/users/UserUpdate.tsx";
 
 function Dashboard() {
     return (
@@ -64,6 +65,7 @@ function Dashboard() {
                     <Route path={'/reports'} element={<ReportsHome/>}/>
                     <Route path={'/reports/:reportType'} element={<ProductReport/>}/>
                     <Route path={'/users'} element={<UserList/>}/>
+                    <Route path={'/users/update/:id'} element={<UserUpdate/>}/>
                     <Route path={'/users/add'} element={<UserAdd/>}/>
                     <Route path={'/users/detail/:id'} element={<UserDetail/>}/>
                     <Route path="/login" element={<Login />} />

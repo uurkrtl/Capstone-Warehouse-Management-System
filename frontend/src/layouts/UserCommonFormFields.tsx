@@ -36,7 +36,7 @@ function UserCommonFormFields({ user, setUser}: Readonly<{ user: User, setUser: 
             <div className="col-sm-5">
                 <label htmlFor="password" className="form-label">Passwort</label>
                 <input type="password" className="form-control" id="password"
-                       placeholder="Schreiben Sie das Passwort" value={user.password}
+                       placeholder="Schreiben Sie das Passwort" value={user.password || ''}
                        onChange={(e) => setUser({...user, password: e.target.value})}/>
             </div>
 

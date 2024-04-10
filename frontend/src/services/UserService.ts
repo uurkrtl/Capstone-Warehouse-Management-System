@@ -30,4 +30,8 @@ export default class UserService {
     getUserById(ownId: string, role: string, id: string) {
         return axios.get(`/api/users/${id}?ownId=${ownId}&role=${role}`);
     }
+
+    updateUser(ownId: string, role: string, id: string, user: User) {
+        return axios.put(`/api/users/${id}?ownId=${ownId}&role=${role}`, user);
+    }
 }

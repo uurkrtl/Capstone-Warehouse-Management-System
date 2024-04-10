@@ -8,6 +8,8 @@ import net.ugurkartal.backend.models.enums.UserRole;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
+
 @Document(collection = "users")
 @Data
 @AllArgsConstructor
@@ -23,4 +25,6 @@ public class User {
     private String lastName;
     private String email;
     private String imageUrl;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

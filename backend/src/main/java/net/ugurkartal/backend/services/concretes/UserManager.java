@@ -9,12 +9,14 @@ import net.ugurkartal.backend.services.abstracts.UserService;
 import net.ugurkartal.backend.services.dtos.requests.UserRequest;
 import net.ugurkartal.backend.services.dtos.responses.UserCreatedResponse;
 import net.ugurkartal.backend.services.dtos.responses.UserGetAllResponse;
+import net.ugurkartal.backend.services.messages.UserMessage;
 import net.ugurkartal.backend.services.rules.UserBusinessRules;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -28,7 +30,7 @@ public class UserManager implements UserService {
 
     @Override
     public User getUserByUsername(String username) {
-        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Benutzer nicht gefunden"));
+        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(UserMessage.USER_NOT_FOUND));
     }
 
     @Override
@@ -63,7 +65,25 @@ public class UserManager implements UserService {
     @Override
     public UserCreatedResponse getUserById(String ownId, String  role, String searchId) {
         userBusinessRules.checkIfUnauthorizedUser(ownId, role, searchId);
-        User user = userRepository.findById(searchId).orElseThrow(() -> new UsernameNotFoundException("Benutzer nicht gefunden"));
+        User user = userRepository.findById(searchId).orElseThrow(() -> new UsernameNotFoundException(UserMessage.USER_NOT_FOUND));
+        user.setCreatedAt(LocalDateTime.now());
+        return modelMapperService.forResponse().map(user, UserCreatedResponse.class);
+    }
+
+    @Override
+    public UserCreatedResponse updateUser(String ownId, String role, String updateId, UserRequest userRequest) {
+        userBusinessRules.checkIfUnauthorizedUser(ownId, role, updateId);
+        userBusinessRules.checkIfUsernameExists(userRequest.getUsername(), updateId);
+        userBusinessRules.checkIfEmailExists(userRequest.getEmail(), updateId);
+        User foundedUser = userRepository.findById(updateId).orElseThrow(() -> new UsernameNotFoundException(UserMessage.USER_NOT_FOUND));
+        User user = modelMapperService.forRequest().map(userRequest, User.class);
+        user.setId(updateId);
+        user.setCreatedAt(foundedUser.getCreatedAt());
+        user.setUpdatedAt(LocalDateTime.now());
+        if (user.getImageUrl().isEmpty()){
+            user.setImageUrl("https://i.ibb.co/z7DKLLh/user-icon-on-transparent-background-free-png.webp");
+        }
+        user = userRepository.save(user);
         return modelMapperService.forResponse().map(user, UserCreatedResponse.class);
     }
 }
