@@ -11,6 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -30,6 +31,7 @@ public class SecurityConfig {
                 authorizeRequests
                         .requestMatchers(HttpMethod.POST, "/api/users/register").hasRole(UserRole.ADMIN.name())
                         .requestMatchers(HttpMethod.GET, "/api/users").hasRole(UserRole.ADMIN.name())
+                        .requestMatchers(RegexRequestMatcher.regexMatcher("^(?!/api).*$")).permitAll()
                         .anyRequest().authenticated()
             )
                 .httpBasic(httpSecurityHttpBasicConfigurer -> httpSecurityHttpBasicConfigurer.authenticationEntryPoint(((request, response, authException) -> response.sendError(401, authException.getMessage()))));
