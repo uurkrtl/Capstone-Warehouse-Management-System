@@ -40,6 +40,15 @@ public class ProductManager implements ProductService {
     }
 
     @Override
+    public List<ProductGetAllResponse> getProductsByCategoryId(String categoryId) {
+        categoryBusinessRules.checkIfCategoryByIdNotFound(categoryId);
+        List<Product> products = productRepository.findByCategoryId(categoryId);
+        return products.stream()
+                .map(product -> modelMapperService.forResponse()
+                        .map(product, ProductGetAllResponse.class)).toList();
+    }
+
+    @Override
     public ProductCreatedResponse getProductById(String id) {
         productBusinessRules.checkIfProductByIdNotFound(id);
         Optional<Product> productOptional = this.productRepository.findById(id);

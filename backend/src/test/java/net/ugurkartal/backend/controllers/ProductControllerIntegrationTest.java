@@ -47,6 +47,16 @@ class ProductControllerIntegrationTest {
     }
 
     @Test
+    void getProductsByCategoryIdReturnsListOfProductsByCategoryId() throws Exception {
+        String categoryId = categoryRepository.save(Category.builder().build()).getId();
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/products/by-category/" + categoryId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+    }
+
+    @Test
     void getProductByIdReturnsProductWhenProductExists() throws Exception {
         String categoryId = categoryRepository.save(Category.builder().build()).getId();
         ProductRequest productRequest = ProductRequest.builder()

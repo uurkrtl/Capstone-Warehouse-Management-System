@@ -23,6 +23,6 @@ public class ProductRequest {
     @PositiveOrZero(message = "Der kritische Bestand muss größer oder gleich 0 sein")
     private int criticalStock;
     private String imageUrl;
-    @NotNull(message = "Die Kategorie-ID darf nicht null sein")
+    @NotNull(message = "Die Kategorie darf nicht leer sein")
     private String categoryId;
 }

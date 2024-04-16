@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {Product} from "../../types/Product.ts";
 import ProductService from "../../services/ProductService.ts";
-import {Link} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import PageHeader from "../../layouts/PageHeader.tsx";
 
 const productService = new ProductService();
@@ -11,6 +11,8 @@ function ProductList() {
     const [filter, setFilter] = useState("");
     const [productByStatus, setProductByStatus] = useState<Product[]>(products);
     const [loading, setLoading] = useState(true);
+    const [errorMessage, setErrorMessage] = useState<string>('');
+    const { categoryId = '' } = useParams<string>();
 
     const truncateText = (text: string, maxLength: number) => {
         if (text.length > maxLength) {
@@ -36,12 +38,25 @@ function ProductList() {
     };
 
     useEffect(() => {
+        if (categoryId) {
+            productService.getProductsByCategoryId(categoryId).then((response) => {
+                setProducts(response.data);
+                setProductByStatus(response.data);
+                setLoading(false);
+            }).catch(error => {
+                setErrorMessage(`Fehler beim Abrufen von Produkte: ${error.message}`);
+                setLoading(false);
+            });
+        }else {
         productService.getAllProducts().then((response) => {
             setProducts(response.data);
             setProductByStatus(response.data);
             setLoading(false);
-        });
-    }, []);
+        }).catch(error => {
+            setErrorMessage(`Fehler beim Abrufen von Produkte: ${error.message}`);
+            setLoading(false);
+        });}
+    }, [categoryId]);
 
     if (loading) {
         return <div className={'container'}>
@@ -122,6 +137,11 @@ function ProductList() {
                 })}
                 </tbody>
             </table>
+            {errorMessage && (
+                <div className="alert alert-danger" role="alert">
+                    {errorMessage}
+                </div>
+            )}
         </div>
     );
 }

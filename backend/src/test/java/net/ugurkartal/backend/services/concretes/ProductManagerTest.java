@@ -71,6 +71,22 @@ class ProductManagerTest {
     }
 
     @Test
+    void getProductsByCategoryIdReturnsListOfProductsByCategoryId() {
+        Category category = Category.builder().id("1").build();
+        List<Product> products = List.of(
+                Product.builder().id("1").category(category).build(),
+                Product.builder().id("2").category(category).build()
+        );
+
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(productRepository.findByCategoryId("1")).thenReturn(products);
+
+        List<ProductGetAllResponse> response = productManager.getProductsByCategoryId("1");
+
+        assertEquals(2, response.size());
+    }
+
+    @Test
     void getProductByIdReturnsProductWhenProductExists() {
         Product product = Product.builder()
                 .id("1")
