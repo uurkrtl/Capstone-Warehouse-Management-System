@@ -197,4 +197,18 @@ class UserManagerTest {
         assertEquals(expectedResponse.getUsername(), actualResponse.getUsername());
         assertEquals(expectedResponse.getEmail(), actualResponse.getEmail());
     }
+
+    @Test
+    void deleteUser_whenUserIdIsValid_shouldDeleteUser() {
+        // Given
+        String userId = "1";
+
+        doNothing().when(userRepository).deleteById(userId);
+
+        // When
+        userManager.deleteUser(userId);
+
+        // Then
+        verify(userRepository, times(1)).deleteById(userId);
+    }
 }
