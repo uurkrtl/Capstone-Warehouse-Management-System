@@ -57,4 +57,10 @@ public class UserController {
     public UserCreatedResponse updateUser(@RequestParam String ownId, @RequestParam String role, @PathVariable String id, @Valid @RequestBody UserRequest userRequest) {
         return userService.updateUser(ownId, role, id, userRequest);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUser(@PathVariable String id) {
+        userService.deleteUser(id);
+    }
 }

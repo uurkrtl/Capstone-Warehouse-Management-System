@@ -54,7 +54,7 @@ function Homepage() {
                                 src="https://westerngrocer.com/wp-content/uploads/2016/10/Shopping-Cart-Logo-lg-891x1024.jpg"
                                 className="bd-placeholder-img" width="140" height="140"
                                 alt="Kategorienverwaltung"/>
-                            <h3 className="fw-normal">Kategorienverwaltung</h3>
+                            <h3 className="fw-normal">Kategorien-<br/>verwaltung</h3>
                         </Link>
                     </div>
 
@@ -63,7 +63,7 @@ function Homepage() {
                             <img src="https://i.ibb.co/RQSGwG4/suppliermanagement.png"
                                  className="bd-placeholder-img" width="140" height="140"
                                  alt="Lieferantenverwaltung"/>
-                            <h3 className="fw-normal">Lieferantenverwaltung</h3>
+                            <h3 className="fw-normal">Lieferanten-<br/>verwaltung</h3>
                         </Link>
                     </div>
 
@@ -87,7 +87,7 @@ function Homepage() {
                                 src="https://cdn3.iconfinder.com/data/icons/tools-and-materials-ecommerce-hazel-vol-2/256/Work_Order_Management-512.png"
                                 className="bd-placeholder-img" width="140" height="140"
                                 alt="Bestellungsverwaltung"/>
-                            <h3 className="fw-normal">Bestellungsverwaltung</h3>
+                            <h3 className="fw-normal">Bestellungs-<br/>verwaltung</h3>
                         </Link>
                     </div>
 
@@ -118,7 +118,7 @@ function Homepage() {
                                     src="https://www.iconpacks.net/icons/1/free-user-group-icon-296-thumb.png"
                                     className="bd-placeholder-img" width="140" height="140"
                                     alt="Einkaufsmanagement"/>
-                                <h3 className="fw-normal">Benutzerverwaltung</h3>
+                                <h3 className="fw-normal">Benutzer-<br/>verwaltung</h3>
                             </Link>
                         </div>
                     )}

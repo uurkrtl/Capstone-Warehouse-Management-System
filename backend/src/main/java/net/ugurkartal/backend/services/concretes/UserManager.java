@@ -47,6 +47,7 @@ public class UserManager implements UserService {
         User user = modelMapperService.forRequest().map(userRequest, User.class);
         user.setId(idService.generateUserId());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setCreatedAt(LocalDateTime.now());
         if (user.getImageUrl().isEmpty()){
             user.setImageUrl("https://i.ibb.co/z7DKLLh/user-icon-on-transparent-background-free-png.webp");
         }
@@ -66,7 +67,6 @@ public class UserManager implements UserService {
     public UserCreatedResponse getUserById(String ownId, String  role, String searchId) {
         userBusinessRules.checkIfUnauthorizedUser(ownId, role, searchId);
         User user = userRepository.findById(searchId).orElseThrow(() -> new UsernameNotFoundException(UserMessage.USER_NOT_FOUND));
-        user.setCreatedAt(LocalDateTime.now());
         return modelMapperService.forResponse().map(user, UserCreatedResponse.class);
     }
 
@@ -80,10 +80,16 @@ public class UserManager implements UserService {
         user.setId(updateId);
         user.setCreatedAt(foundedUser.getCreatedAt());
         user.setUpdatedAt(LocalDateTime.now());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         if (user.getImageUrl().isEmpty()){
             user.setImageUrl("https://i.ibb.co/z7DKLLh/user-icon-on-transparent-background-free-png.webp");
         }
         user = userRepository.save(user);
         return modelMapperService.forResponse().map(user, UserCreatedResponse.class);
+    }
+
+    @Override
+    public void deleteUser(String id) {
+        userRepository.deleteById(id);
     }
 }
