@@ -10,6 +10,7 @@ function UserDetail() {
     const navigate = useNavigate();
     const { id = '' } = useParams<string>();
     const [user, setUser] = useState<User | null>(null);
+    const [errorMessage, setErrorMessage] = useState<string>('');
     const [searchUser, setSearchUser] = useState<User>({
         id: '',
         username: '',
@@ -32,6 +33,21 @@ function UserDetail() {
                 setUser(null);
             });
     }, []);
+
+    const handleUserDelete = (id: string) => {
+        userService.deleteUser(id)
+            .then(() => {
+                navigate('/users');
+                setErrorMessage('');
+            })
+            .catch((error) => {
+                if (error.response) {
+                    setErrorMessage(error.response.data.message);
+                } else {
+                    setErrorMessage('Etwas ist schief gelaufen: ' + error.message);
+                }
+            });
+    }
 
     useEffect(() => {
         if (id && user) {
@@ -97,6 +113,7 @@ function UserDetail() {
                         {user?.role === 'ADMIN' && (
                             <button type="button"
                                     className={'btn btn-danger px-4 me-md-2'}
+                                    onClick={() => handleUserDelete(searchUser.id)}
                             >
                                 Löschen</button>
                         )}
@@ -107,6 +124,11 @@ function UserDetail() {
                     </div>
                 </div>
             </div>
+            {errorMessage && (
+                <div className="alert alert-danger" role="alert">
+                    {errorMessage}
+                </div>
+            )}
         </div>
     );
 }

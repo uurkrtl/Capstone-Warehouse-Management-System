@@ -9,7 +9,7 @@ function ReportsHome() {
 
     return (
         <div className="container px-4 py-4" id="featured-3">
-            <h2 className="pb-2 border-bottom">Report Tools</h2>
+            <h2 className="pb-2 border-bottom">Berichtstool</h2>
             <div className="row g-4 py-4 row-cols-1 row-cols-lg-3">
                 <div className="feature col">
                     <div

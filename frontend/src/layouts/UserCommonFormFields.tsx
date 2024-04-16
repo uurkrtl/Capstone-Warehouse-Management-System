@@ -1,7 +1,20 @@
 import {User} from "../types/User.ts";
+import UserService from "../services/UserService.ts";
+import {useEffect, useState} from "react";
 
 
 function UserCommonFormFields({ user, setUser}: Readonly<{ user: User, setUser: (user: User) => void }>) {
+    const userService = new UserService();
+    const [ownUser, setOwnUser] = useState<User | null>(null);
+    useEffect(() => {
+        userService.getLoggedInUser()
+            .then((response) => {
+                setOwnUser(response.data);
+            })
+            .catch(() => {
+                setOwnUser(null);
+            });
+    }, []);
     return (
         <div className="row g-3">
 
@@ -40,14 +53,17 @@ function UserCommonFormFields({ user, setUser}: Readonly<{ user: User, setUser: 
                        onChange={(e) => setUser({...user, password: e.target.value})}/>
             </div>
 
-            <div className="col-sm-2">
-                <label htmlFor="role" className="form-label">Rolle</label>
-                <select className="form-select" id="role"
-                        onChange={(e) => setUser({...user, role: e.target.value as "ADMIN" | "USER"})}>
-                    <option value="USER">USER</option>
-                    <option value="ADMIN">ADMIN</option>
-                </select>
-            </div>
+            {ownUser && ownUser.role === 'ADMIN' && (
+                <div className="col-sm-2">
+                    <label htmlFor="role" className="form-label">Rolle</label>
+                    <select className="form-select" id="role"
+                            value={user.role ? user.role : ""}
+                            onChange={(e) => setUser({...user, role: e.target.value as "ADMIN" | "USER"})}>
+                        <option value="USER">USER</option>
+                        <option value="ADMIN">ADMIN</option>
+                    </select>
+                </div>
+            )}
 
             <div className="col-sm-12">
                 <label htmlFor="imageUrl" className="form-label">Bild URL</label>

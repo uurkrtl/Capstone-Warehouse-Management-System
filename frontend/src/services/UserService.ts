@@ -34,4 +34,8 @@ export default class UserService {
     updateUser(ownId: string, role: string, id: string, user: User) {
         return axios.put(`/api/users/${id}?ownId=${ownId}&role=${role}`, user);
     }
+
+    deleteUser(id: string) {
+        return axios.delete(`/api/users/${id}`);
+    }
 }
