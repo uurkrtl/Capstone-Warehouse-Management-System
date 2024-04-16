@@ -11,4 +11,6 @@ public interface ProductRepository extends MongoRepository<Product, String> {
     boolean existsByCategoryIdAndIsActiveTrue(String categoryId);
 
     List<Product> findByIsActiveAndStock(boolean isActive, int stock);
+
+    List<Product> findByCategoryId(String categoryId);
 }

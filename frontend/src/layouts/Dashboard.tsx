@@ -40,6 +40,7 @@ function Dashboard() {
                 <Routes>
                     <Route path={'/'} element={<Homepage/>}/>
                     <Route path={'/products'} element={<ProductList/>}/>
+                    <Route path={'/products/:categoryId?'} element={<ProductList/>}/>
                     <Route path={'/products/update/:id'} element={<ProductUpdate/>}/>
                     <Route path={'/products/detail/:id'} element={<ProductDetail/>}/>
                     <Route path={'/products/add'} element={<ProductAdd/>}/>

@@ -91,7 +91,7 @@ function CategoryList() {
                             </td>
                             <td><Link to={`/categories/detail/${category.id}`}
                                       className="btn btn-outline-info">Detail</Link></td>
-                            <td><Link to={"/"} className="btn btn-outline-secondary">Produkte der Kategorie</Link></td>
+                            <td><Link to={`/products/${category.id}`} className="btn btn-outline-secondary">Produkte der Kategorie</Link></td>
                         </tr>
                     );
                 })}
