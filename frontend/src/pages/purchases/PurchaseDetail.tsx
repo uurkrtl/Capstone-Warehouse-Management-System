@@ -42,7 +42,6 @@ function PurchaseDetail() {
                     }
                 } else {
                     setErrorMessage('Fehler beim Ändern des Status: ' + error.message);
-                    return;
                 }
             });
     }

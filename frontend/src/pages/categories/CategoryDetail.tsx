@@ -35,7 +35,6 @@ function CategoryDetail() {
                     }
                 } else {
                     setErrorMessage('Fehler beim Ändern des Status: ' + error.message);
-                    return;
                 }
             });
     }

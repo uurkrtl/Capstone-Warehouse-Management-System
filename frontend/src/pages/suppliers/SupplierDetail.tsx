@@ -36,7 +36,6 @@ function SupplierDetail() {
                     }
                 } else {
                     setErrorMessage('Fehler beim Ändern des Status: ' + error.message);
-                    return;
                 }
             });
     }
