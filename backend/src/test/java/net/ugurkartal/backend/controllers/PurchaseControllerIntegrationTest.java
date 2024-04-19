@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-@WithMockUser
+@WithMockUser(roles = {"ADMIN"})
 class PurchaseControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
@@ -239,5 +239,30 @@ class PurchaseControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.active").value(newStatus));
+    }
+
+    @Test
+    @WithMockUser
+    void changePurchaseStatus_whenRoleUser_shouldReturn403() throws Exception {
+        // Given
+        String productId = productRepository.save(Product.builder().build()).getId();
+        String supplierId = supplierRepository.save(Supplier.builder().build()).getId();
+        PurchaseRequest purchaseRequest = PurchaseRequest.builder()
+                .productId(productId)
+                .supplierId(supplierId)
+                .purchasePrice(100.0)
+                .quantity(10)
+                .purchaseDate(LocalDateTime.now())
+                .build();
+
+        String purchaseId = purchaseService.addPurchase(purchaseRequest).getId();
+        boolean newStatus = false;
+
+        // When & Then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/api/purchases/status/" + purchaseId)
+                        .param("status", String.valueOf(newStatus))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 }

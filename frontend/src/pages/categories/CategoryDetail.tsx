@@ -27,8 +27,15 @@ function CategoryDetail() {
                 });
             })
             .catch((error) => {
-                console.error('Fehler beim Ändern des Kategoriestatus:', error);
-                setErrorMessage(error.response.data.message);
+                if (error.response) {
+                    if (error.response.status === 403) {
+                        setErrorMessage('Sie haben keine Berechtigung, den Status zu ändern.');
+                    }else {
+                        setErrorMessage(error.response.data.message)
+                    }
+                } else {
+                    setErrorMessage('Fehler beim Ändern des Status: ' + error.message);
+                }
             });
     }
 

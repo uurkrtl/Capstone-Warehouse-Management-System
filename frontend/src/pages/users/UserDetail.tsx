@@ -110,18 +110,43 @@ function UserDetail() {
                     <div className="d-grid gap-2 d-md-flex justify-content-md-start">
                         <Link to={`/users/update/${searchUser.id}`} type="button"
                               className="btn btn-primary btn-lg px-4 me-md-2">Aktualisieren</Link>
-                        {user?.role === 'ADMIN' && (
-                            <button type="button"
-                                    className={'btn btn-danger px-4 me-md-2'}
-                                    onClick={() => handleUserDelete(searchUser.id)}
-                            >
-                                Löschen</button>
+
+                        {user?.role === 'ADMIN' && user?.username !== searchUser.username && (
+                            <button type="button" className="btn btn-danger px-4 me-md-2" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal">
+                                Löschen
+                            </button>
+
                         )}
                         {user?.role === 'ADMIN' && (
                             <Link to={`/users`} type="button"
                                   className="btn btn-outline-secondary btn-lg px-4">Benutzerliste</Link>
                         )}
                     </div>
+
+                    <div className="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel"
+                         aria-hidden="true">
+                        <div className="modal-dialog">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h1 className="modal-title fs-5" id="exampleModalLabel">Achtung!</h1>
+                                    <button type="button" className="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div className="modal-body">
+                                    Sind Sie sicher, dass Sie löschen möchten?
+                                </div>
+                                <div className="modal-footer">
+                                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Stornieren
+                                    </button>
+                                    <button type="button" className="btn btn-danger"
+                                            onClick={() => handleUserDelete(searchUser.id)}
+                                            data-bs-dismiss="modal">Löschen</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
             {errorMessage && (

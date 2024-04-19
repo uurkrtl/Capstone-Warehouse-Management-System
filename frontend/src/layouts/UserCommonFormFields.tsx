@@ -46,14 +46,16 @@ function UserCommonFormFields({ user, setUser}: Readonly<{ user: User, setUser: 
                        onChange={(e) => setUser({...user, username: e.target.value})}/>
             </div>
 
-            <div className="col-sm-5">
-                <label htmlFor="password" className="form-label">Passwort</label>
-                <input type="password" className="form-control" id="password"
-                       placeholder="Schreiben Sie das Passwort" value={user.password || ''}
-                       onChange={(e) => setUser({...user, password: e.target.value})}/>
-            </div>
+            {ownUser && ownUser.username !== "demo" && (
+                <div className="col-sm-5">
+                    <label htmlFor="password" className="form-label">Passwort</label>
+                    <input type="password" className="form-control" id="password"
+                           placeholder="Schreiben Sie das Passwort" value={user.password || ''}
+                           onChange={(e) => setUser({...user, password: e.target.value})}/>
+                </div>
+            )}
 
-            {ownUser && ownUser.role === 'ADMIN' && (
+            {ownUser && ownUser.role === 'ADMIN' && ownUser.username !== user.username && (
                 <div className="col-sm-2">
                     <label htmlFor="role" className="form-label">Rolle</label>
                     <select className="form-select" id="role"

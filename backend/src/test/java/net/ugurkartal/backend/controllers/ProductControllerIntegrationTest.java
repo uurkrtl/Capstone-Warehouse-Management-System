@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-@WithMockUser
+@WithMockUser(roles = {"ADMIN"})
 class ProductControllerIntegrationTest {
 
     @Autowired
@@ -198,5 +198,28 @@ class ProductControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.active").value(newStatus));
+    }
+
+    @Test
+    @WithMockUser
+    void changeProductStatus_whenRoleUser_thenReturn403() throws Exception {
+        String categoryId = categoryRepository.save(Category.builder().build()).getId();
+        ProductRequest productRequest = ProductRequest.builder()
+                .name("Test")
+                .description("Test")
+                .salePrice(10.0)
+                .criticalStock(5)
+                .categoryId(categoryId)
+                .imageUrl("https://test.com")
+                .build();
+
+        String productId = productService.addProduct(productRequest).getId();
+        boolean newStatus = false;
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/api/products/status/" + productId)
+                        .param("status", String.valueOf(newStatus))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 }

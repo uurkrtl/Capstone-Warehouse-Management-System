@@ -36,11 +36,13 @@ function ProductDetail() {
             })
             .catch((error) => {
                 if (error.response) {
-                    console.log(error.response.data);
-                    setErrorMessage(error.response.data.message);
+                    if (error.response.status === 403) {
+                        setErrorMessage('Sie haben keine Berechtigung, den Status zu ändern.');
+                    }else {
+                        setErrorMessage(error.response.data.message)
+                    }
                 } else {
-                    console.log('Etwas ist schief gelaufen:', error.message);
-                    setErrorMessage('Etwas ist schief gelaufen: ' + error.message);
+                    setErrorMessage('Fehler beim Ändern des Status: ' + error.message);
                 }
             });
     }
