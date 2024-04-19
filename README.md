@@ -3,7 +3,6 @@
 Dieses Lagerverwaltungssystem ist eine moderne Anwendung, die entwickelt wurde, um den Bestandsverwaltungsprozess für Unternehmen zu optimieren. Es bietet eine benutzerfreundliche Oberfläche für die Verwaltung von Produkten, Kategorien und Bestellungen, um die Effizienz und Genauigkeit der Lagerverwaltung zu erhöhen. Die Anwendung bietet außerdem verschiedene Reporting-Tools.
 
 Das Projekt ist mit Docker containerisiert und wird mit einer CI/CD-Pipeline über GitHub Actions bereitgestellt. Auf die Anwendung kann unter [ugurkartal.net](https://ugurkartal.net/) zugegriffen werden.
-(Benutzername: `demo`, Passwort: `useruser`)
 
 ## Funktionen
 

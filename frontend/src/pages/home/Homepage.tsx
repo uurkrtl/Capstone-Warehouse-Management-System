@@ -21,16 +21,10 @@ function Homepage() {
     return (
         <main>
             <div id="myCarousel" className="carousel slide mb-6" data-bs-ride="carousel">
-                <div className="carousel-indicators">
-                    <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" className="active"
-                            aria-label="Slide 1"></button>
-                </div>
                 <div className="carousel-inner">
                     <div className="carousel-item active">
                         <img src="https://www.epg.com/fileadmin/_processed_/e/3/csm_EPG_Warehouse-Management-System_Keyvisual_77109d926d.jpg"
                              className="d-block w-100" alt="Warehouse Management"/>
-                        <div className="container">
-                        </div>
                     </div>
                 </div>
             </div>
