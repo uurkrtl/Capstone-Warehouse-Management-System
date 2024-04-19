@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-@WithMockUser
+@WithMockUser(roles = {"ADMIN"})
 class OrderControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
@@ -99,5 +99,22 @@ class OrderControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.orderStatus").value(newStatus));
+    }
+
+    @Test
+    @WithMockUser
+    void changeOrderStatus_whenRoleUser_shouldReurn403() throws Exception {
+        //Given
+        OrderRequest orderRequest = OrderRequest.builder().customerName("Test").build();
+
+        String orderId = orderService.addOrder(orderRequest).getId();
+        String newStatus = OrderStatus.CONFIRMED.name();
+
+        //When & Then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/api/orders/status/" + orderId)
+                        .param("status", newStatus)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 }

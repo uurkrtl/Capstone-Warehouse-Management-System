@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @SpringBootTest
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-@WithMockUser
+@WithMockUser(roles = {"ADMIN"})
 class CategoryControllerIntegrationTest {
 
     @Autowired
@@ -117,5 +117,23 @@ class CategoryControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.active").value(newStatus));
+    }
+
+    @Test
+    @WithMockUser
+    void changeCategoryStatus_whenRoleUser_thenReturn403() throws Exception {
+        CategoryRequest categoryRequest = CategoryRequest.builder()
+                .name("Test")
+                .description("Test")
+                .build();
+
+        String categoryId = categoryService.addCategory(categoryRequest).getId();
+        boolean newStatus = false;
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/api/categories/status/" + categoryId)
+                        .param("status", String.valueOf(newStatus))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 }

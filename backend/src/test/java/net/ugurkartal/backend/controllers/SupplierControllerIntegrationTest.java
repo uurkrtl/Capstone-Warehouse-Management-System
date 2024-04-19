@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-@WithMockUser
+@WithMockUser(roles = {"ADMIN"})
 class SupplierControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
@@ -162,5 +162,27 @@ class SupplierControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.active").value(newStatus));
+    }
+
+    @Test
+    @WithMockUser
+    void changeSupplierStatus_whenRoleUser_shouldReurn403() throws Exception {
+        //Given
+        SupplierRequest supplierRequest = SupplierRequest.builder()
+                .name("Test")
+                .contactName("Test")
+                .email("mail@mail.com")
+                .phone("1234567890")
+                .build();
+
+        String supplierId = supplierService.addSupplier(supplierRequest).getId();
+        boolean newStatus = false;
+
+        //When & Then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/api/suppliers/status/" + supplierId)
+                        .param("status", String.valueOf(newStatus))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 }

@@ -30,6 +30,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests
                         .requestMatchers(HttpMethod.POST, "/api/users/register").hasRole(UserRole.ADMIN.name())
+                        .requestMatchers(HttpMethod.PUT, "/api/*/status/{id}").hasRole(UserRole.ADMIN.name())
                         .requestMatchers(HttpMethod.GET, "/api/users").hasRole(UserRole.ADMIN.name())
                         .requestMatchers(RegexRequestMatcher.regexMatcher("^(?!/api).*$")).permitAll()
                         .anyRequest().authenticated()
