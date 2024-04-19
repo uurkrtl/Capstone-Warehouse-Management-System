@@ -5,6 +5,8 @@ import UserService from "../../services/UserService.ts";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
+    const userName: string = 'demo';
+    const password: string = 'useruser';
     const navigate = useNavigate();
     const userService = new UserService();
     const [errorMessage, setErrorMessage] = useState<string>('');
@@ -65,7 +67,12 @@ function Login() {
 
                     <button className="btn btn-primary w-100 py-2" type="submit">Anmelden</button>
                     <button className="btn btn-success w-100 py-2 mt-3"
-                            onClick={() => setUser({...user, password: 'useruser', username: 'demo'})} type="submit">Demo-Login (ohne Benutzer)</button>
+                            onClick={() => setUser({
+                                ...user,
+                                password: password,
+                                username: userName
+                            })} type="submit">Demo-Login (ohne Benutzer)
+                    </button>
                     {errorMessage && (
                         <div className="alert alert-danger mt-3" role="alert">
                             {errorMessage}
