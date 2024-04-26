@@ -2,7 +2,7 @@ import './Login.css';
 import React, { useState } from "react";
 import { User } from "../../types/User.ts";
 import UserService from "../../services/UserService.ts";
-import { useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 function Login() {
     const userName: string = 'demo';
@@ -78,7 +78,10 @@ function Login() {
                             {errorMessage}
                         </div>
                     )}
-                    <p className="mt-5 mb-3 text-body-secondary">© 2024 Ugur Kartal</p>
+                    <Link to={`http://ugurkartal.de/`} target="_blank"
+                          className="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
+                        <p className="mt-5 mb-3 text-body-secondary">© 2024 Ugur Kartal</p>
+                    </Link>
                 </form>
             </main>
         </div>
